@@ -1,0 +1,16 @@
+{
+    "dest": "./Frontech Guidelines",
+    "shortcutIcon": "https://www.everis.com/sites/all/themes/everis/logo.png",
+    "display": {
+      "access": ["public", "private"],
+      "alias": false,
+      "watermark": false
+    },
+  
+    "package": "./package.json",
+    "theme": "default",
+    "groups": {
+      "undefined": "General"
+    },
+    "descriptionPath":"./API/INIT.md"
+  }

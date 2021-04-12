@@ -1,0 +1,90 @@
+/// Mixin whose objective is to create the media-query based on the cut points established in the configuration file
+///
+///
+/// @example scss
+///
+///      .test{
+///         width: 100%;
+///         @include screen-sm(){
+///           width: auto;
+///         }
+///      }
+///
+/// @example css
+///
+///      .test {
+///         width: 100%;
+///       }
+///
+///      @media only screen and (min-width: 360px) {
+///         .test {
+///           width: auto;
+///         }
+///      }
+///
+/// @group media-queries 
+@mixin screen-sm{
+   @media only screen and (min-width: 360px) {
+     @content
+   }
+};
+/// Mixin whose objective is to create the media-query based on the cut points established in the configuration file
+///
+///
+/// @example scss
+///
+///      .test{
+///         width: 100%;
+///         @include screen-md(){
+///           width: auto;
+///         }
+///      }
+///
+/// @example css
+///
+///      .test {
+///         width: 100%;
+///       }
+///
+///      @media only screen and (min-width: 768px) {
+///         .test {
+///           width: auto;
+///         }
+///      }
+///
+/// @group media-queries 
+@mixin screen-md{
+   @media only screen and (min-width: 768px) {
+     @content
+   }
+};
+/// Mixin whose objective is to create the media-query based on the cut points established in the configuration file
+///
+///
+/// @example scss
+///
+///      .test{
+///         width: 100%;
+///         @include screen-lg(){
+///           width: auto;
+///         }
+///      }
+///
+/// @example css
+///
+///      .test {
+///         width: 100%;
+///       }
+///
+///      @media only screen and (min-width: 1440px) {
+///         .test {
+///           width: auto;
+///         }
+///      }
+///
+/// @group media-queries 
+@mixin screen-lg{
+   @media only screen and (min-width: 1440px) {
+     @content
+   }
+};

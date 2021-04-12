@@ -1,0 +1,1174 @@
+<html lang="en">
+
+<head>
+    <!-- <meta> tags> -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Design Systems Utils</title>
+    <link rel="stylesheet" type="text/css" href="./styles/css/style.css">
+
+</head>
+
+<body>
+    <header class="header">
+
+        <h1 class="header__title">Design Systems Utils</h1>
+
+    </header>
+    <div class="container">
+        <nav class="nav" id="sidenav">
+            <div class="nav__content">
+                <div class="nav__header">
+                    <fieldset class="nav__fieldset">
+                        <legend class="nav__legend">Search</legend>
+                        <label for="search" class="nav__label"></label>
+                        <input id="search" type="text" autocomplete="off" class="nav__input" placeholder="Search">
+                    </fieldset>
+                </div>
+                <div class="nav__body">
+                    <div class="nav__subsection">
+                        <h3 class="nav__title">
+                            <a href="#configuration">Design Systems Utils</a>
+                        </h3>
+                        <ul>
+                            <li class="nav__item">
+                                <a href="#configuration">Configuration</a>
+                            </li>
+                            <li class="nav__item">
+                                <a href="#">Changelog</a>
+                            </li>
+                            <li class="nav__item">
+                                <a href="#">Contributing</a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="nav__subsection">
+                        <h3 class="nav__title">
+                            <a href="#fonts">API Publica</a>
+                        </h3>
+                        <ul>
+                            <li class="nav__item">
+                                <a href="#fonts">fonts</a>
+                            </li>
+                            <li class="nav__item">
+                                <a href="#media-queries"
+                                    data-nav="is-active">media-queries</a>
+                            </li>
+                            <li class="nav__item">
+                                <a href="#grid">grid</a>
+                            </li>
+                            <li class="nav__item">
+                                <a href="#animations">animations</a>
+                            </li>
+                            <li class="nav__item">
+                                <a href="#spacing">spacing</a>
+                            </li>
+                            <li class="nav__item">
+                                <a href="#functions">functions</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+        </nav>
+        <main class="main">
+            <div class="indice" id="configuration">
+                <div class="indice__body">
+                    <h3 class="indice__title">DESIGN SYSTEMS UTILS</h3>
+                    <p>Design Systems Utils aims to provide a series of common utilities at the beginning of any front
+                        project as well as certain mixins that facilitate day-to-day development such as margin,
+                        padding, grid classes, base animations and common elements. For more information launch the
+                        command <code>npm run start</code> and access the documentation in the browser under the port
+                        <code>http://localhost:3000/</code>.
+                    </p>
+                    <p>For the correct functioning of the library it is necessary to create a configuration file in the
+                        project called <code>.frontech.json</code>, which will determine the utilities of margin,
+                        padding and custom grid. This configuration must maintain the following structure:</p>
+                    <pre>
+                <code>
+{
+  "colors": {
+    "secondary_3": {
+      "value": "rgba(203.00000309944153, 223.00000190734863, 144.00000661611557, 1)",
+      "type": "color"
+    },
+    "secondary_2": {
+      "value": "rgba(143.00000667572021, 173.00000488758087, 136.00000709295273, 1)",
+      "type": "color"
+    },
+    "secondary_1": {
+      "value": "rgba(127.00000002980232, 156.00000590085983, 150.0000062584877, 1)",
+      "type": "color"
+    },
+    "primary_3": {
+      "value": "rgba(155.00000596046448, 193.00000369548798, 219.0000021457672, 1)",
+      "type": "color"
+    },
+    "primary_2": {
+      "value": "rgba(20.000000707805157, 131.00000739097595, 187.00000405311584, 1)",
+      "type": "color"
+    },
+    "primary_1": {
+      "value": "rgba(0, 102.00000151991844, 153.00000607967377, 1)",
+      "type": "color"
+    }
+  },
+  "breakpoints": {
+    "sm": {
+      "gutter": {
+        "value": "30px",
+        "type": "grid"
+      },
+      "offset": {
+        "value": "50px",
+        "type": "grid"
+      },
+      "columns": {
+        "value": 4,
+        "type": "grid"
+      },
+      "width": {
+        "value": "360px",
+        "type": "grid"
+      }
+    },
+    "md": {
+      "gutter": {
+        "value": "30px",
+        "type": "grid"
+      },
+      "offset": {
+        "value": "50px",
+        "type": "grid"
+      },
+      "columns": {
+        "value": 6,
+        "type": "grid"
+      },
+      "width": {
+        "value": "768px",
+        "type": "grid"
+      }
+    },
+    "lg": {
+      "gutter": {
+        "value": "30px",
+        "type": "grid"
+      },
+      "offset": {
+        "value": "50px",
+        "type": "grid"
+      },
+      "columns": {
+        "value": 12,
+        "type": "grid"
+      },
+      "width": {
+        "value": "1440px",
+        "type": "grid"
+      }
+    }
+  },
+  "spacing":{
+      "increase":{
+          "value": 5,
+          "type":"spacing"
+      },
+      "limit": {
+          "value": 20,
+          "type":"spacing"
+      }
+  },
+  "outputCSS":{
+    "path": "style.css"
+  }
+}
+                </code>
+        </pre>
+                    <p>To use the library, it will simply be necessary to import the following file into your sass
+                        stylesheet:
+                    </p>
+                    <p><code>@use '~frontech-library/sass/abstracts.scss' with ($font-path:'public/assets/fonts/'); ;</code></p>
+
+                    <p>We can also generate a css output of the library specifying in the configuration file the path
+                        where we want to export said file:
+                    </p>
+                    <p><code>"outputCSS":{<br/>
+                              "path": "style.css"<br/>
+                        }</code></p>
+                </div>
+            </div>
+            <div class="section" id="fonts">
+                <div class="section__header">
+                    <h2>fonts</h2>
+                </div>
+                <div class="section__body">
+                    <h3 class="section__title">
+                        <span class="section__title--name">
+                            font-face
+                        </span>
+                        <span class="section__title--type">
+                            (mixin)
+                        </span>
+                    </h3>
+                    <div class="section__information">
+                        <div class="section__code-wrapper" onclick="openCode('font',0)">
+                            <pre id="font-0" aria-expanded="false" data-type="mixin">
+
+                                <span class="section__code-wrapper--title">
+                                    <span>$mixin</span>
+                                    <span>font-face(</span>
+                                    <span>$name, $path, $weight, $style, exts</span>)
+                                </span>
+                                <span id="font-content-0" class="section__code-wrapper--code">
+                                    <span>
+	$src: null;
+
+	$extmods: (
+		eot: &quot;?&quot;,
+		svg: &quot;#&quot; + tools.str-replace($name, &quot; &quot;, &quot;_&quot;)
+	);
+
+	$formats: (
+		otf: &quot;opentype&quot;,
+		ttf: &quot;truetype&quot;
+	);
+
+	@each $ext in $exts {
+		$extmod: if(map.has-key($extmods, $ext), $ext + map.get($extmods, $ext), $ext);
+		$format: if(map.has-key($formats, $ext), map.get($formats, $ext), $ext);
+		$src: append($src, url(string.quote(settings.$font-path + $name + &quot;.&quot; + $extmod)) format(string.quote($format)), comma);
+	}
+
+	@font-face {
+		font-family: string.quote($name);
+		font-style: $style;
+		font-weight: $weight;
+		src: $src;
+	}
+</span>
+                                </span>
+                            </pre>
+
+                        </div>
+                        <h3 class="section__subtitle">
+                            Descripción
+                        </h3>
+                        <p class="section__description">
+                            Mixin whose objective is to create a source starting from an established route
+
+
+                        </p>
+                        <h3 class="section__subtitle">
+                            Parametros
+                        </h3>
+                        <table class="section__parameters">
+                            <thead>
+                                <tr>
+                                    <th class="section__parameters--name">Nombre</th>
+                                    <th class="section__parameters--description">Descripción</th>
+                                    <th class="section__parameters--type">Tipo</th>
+                                    <th class="section__parameters--default">Valor por defecto</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="section__parameters--name">$name</td>
+                                    <td class="section__parameters--description">Font name.</td>
+                                    <td class="section__parameters--type">string</td>
+                                    <td class="section__parameters--default"></td>
+                                </tr>
+                                <tr>
+                                    <td class="section__parameters--name">$path</td>
+                                    <td class="section__parameters--description">Font path.</td>
+                                    <td class="section__parameters--type">string</td>
+                                    <td class="section__parameters--default"></td>
+                                </tr>
+                                <tr>
+                                    <td class="section__parameters--name">$weight</td>
+                                    <td class="section__parameters--description">Font weight.</td>
+                                    <td class="section__parameters--type">string</td>
+                                    <td class="section__parameters--default"></td>
+                                </tr>
+                                <tr>
+                                    <td class="section__parameters--name">$style</td>
+                                    <td class="section__parameters--description">Font style.</td>
+                                    <td class="section__parameters--type">string</td>
+                                    <td class="section__parameters--default"></td>
+                                </tr>
+                                <tr>
+                                    <td class="section__parameters--name">$exts</td>
+                                    <td class="section__parameters--description">Font format.
+</td>
+                                    <td class="section__parameters--type">string</td>
+                                    <td class="section__parameters--default">eot woff2 woff ttf svg</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                    </div>
+                    <h3 class="section__title">
+                        <span class="section__title--name">
+                            font-path
+                        </span>
+                        <span class="section__title--type">
+                            (variable)
+                        </span>
+                    </h3>
+                    <div class="section__information">
+                        <div class="section__code-wrapper" onclick="openCode('font',1)">
+                            <pre id="font-1" aria-expanded="false" data-type="variable">
+
+                                <span class="section__code-wrapper--title">
+                                    <span>$font-path:</span>
+                                    <span> &#x27;assets/fonts/&#x27;</span>
+                                                                    </span>
+                                <span id="font-content-1" class="section__code-wrapper--code">
+                                    <span></span>
+                                </span>
+                            </pre>
+
+                        </div>
+                        <h3 class="section__subtitle">
+                            Descripción
+                        </h3>
+                        <p class="section__description">
+                            Variable path by default of the sources defined in the .frontech.json file.
+To modify the path, simply set the variable in the import as follows: @use &#x27;frontech-library/library/web/abstracts&#x27; with($font-path:&#x27;public/assets/fonts/&#x27;);
+
+                        </p>
+                    </div>
+                    <h3 class="section__title">
+                        <span class="section__title--name">
+                            fonts
+                        </span>
+                        <span class="section__title--type">
+                            (variable)
+                        </span>
+                    </h3>
+                    <div class="section__information">
+                        <div class="section__code-wrapper" onclick="openCode('font',2)">
+                            <pre id="font-2" aria-expanded="false" data-type="variable">
+
+                                <span class="section__code-wrapper--title">
+                                    <span>$fonts:</span>
+                                    <span> (
+Helvetica--Neue--35: (
+name:helvetica--Neue--35,
+weight:400,
+style:normal
+),
+Helvetica--Neue--55: (
+name:helvetica--Neue--55,
+weight:400,
+style:normal
+),
+Lato-regular: (
+name:lato-regular,
+weight:400,
+style:normal
+),
+Gotham-italic: (
+name:gotham-italic,
+weight:300,
+style:italic
+),)</span>
+                                                                    </span>
+                                <span id="font-content-2" class="section__code-wrapper--code">
+                                    <span></span>
+                                </span>
+                            </pre>
+
+                        </div>
+                        <h3 class="section__subtitle">
+                            Descripción
+                        </h3>
+                        <p class="section__description">
+                             Font map defined in the .frontech.json file
+
+                        </p>
+                    </div>
+                    <h3 class="section__title">
+                        <span class="section__title--name">
+                            :root
+                        </span>
+                        <span class="section__title--type">
+                            (css)
+                        </span>
+                    </h3>
+                    <div class="section__information">
+                        <div class="section__code-wrapper" onclick="openCode('font',3)">
+                            <pre id="font-3" aria-expanded="false" data-type="css">
+
+                                <span class="section__code-wrapper--title">
+                                        <span>:root:{</span>
+                                        <span>--Helvetica--Neue--35:helvetica--Neue--35;
+--Helvetica--Neue--55:helvetica--Neue--55;
+--Lato-regular:lato-regular;
+--Gotham-italic:gotham-italic; <p>}</p></span>
+                                </span>
+                                <span id="font-content-3" class="section__code-wrapper--code">
+                                    <span></span>
+                                </span>
+                            </pre>
+
+                        </div>
+                        <h3 class="section__subtitle">
+                            Descripción
+                        </h3>
+                        <p class="section__description">
+                            Custom properties cuyo valor es el nombre aportado en el fichero .frontech.json
+
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="section" id="media-queries">
+                <div class="section__header">
+                    <h2>media-queries</h2>
+                </div>
+                <div class="section__body">
+                    <h3 class="section__title">
+                        <span class="section__title--name">
+                            screen-sm
+                        </span>
+                        <span class="section__title--type">
+                            (mixin)
+                        </span>
+                    </h3>
+                    <div class="section__information">
+                        <div class="section__code-wrapper"
+                            onclick="openCode('mediaquerie',0,'mixin')">
+                            <pre id="mediaquerie-0" aria-expanded="false">
+                                <span class="section__code-wrapper--title">
+                                    <span>@mixin</span>
+                                    <span>screen-sm(</span>
+                                    <span></span>)
+                                </span>
+                                <span id="mediaquerie-content-0" class="section__code-wrapper--code">
+                                    
+   @media only screen and (min-width: 360px) {
+     @content
+   }
+
+                                </span>
+                            </pre>
+
+                        </div>
+                        <h3 class="section__subtitle">
+                            Descripción
+                        </h3>
+                        <p class="section__description">
+                            Mixin whose objective is to create the media-query based on the cut points established in the configuration file
+
+
+
+                        </p>
+
+                        <h3 class="section__subtitle">
+                            Example
+                        </h3>
+                        <div class="section__code-wrapper example">
+                            <pre>
+                                <span>.test{
+   width: 100%;
+   @include screen-sm(){
+     width: auto;
+   }
+}</span>
+                            </pre>
+                        </div>
+                        <div class="section__code-wrapper example">
+                            <pre>
+                                <span>.test {
+   width: 100%;
+ }
+
+@media only screen and (min-width: 360px) {
+   .test {
+     width: auto;
+   }
+}</span>
+                            </pre>
+                        </div>
+                    </div>
+                    <h3 class="section__title">
+                        <span class="section__title--name">
+                            screen-md
+                        </span>
+                        <span class="section__title--type">
+                            (mixin)
+                        </span>
+                    </h3>
+                    <div class="section__information">
+                        <div class="section__code-wrapper"
+                            onclick="openCode('mediaquerie',1,'mixin')">
+                            <pre id="mediaquerie-1" aria-expanded="false">
+                                <span class="section__code-wrapper--title">
+                                    <span>@mixin</span>
+                                    <span>screen-md(</span>
+                                    <span></span>)
+                                </span>
+                                <span id="mediaquerie-content-1" class="section__code-wrapper--code">
+                                    
+   @media only screen and (min-width: 768px) {
+     @content
+   }
+
+                                </span>
+                            </pre>
+
+                        </div>
+                        <h3 class="section__subtitle">
+                            Descripción
+                        </h3>
+                        <p class="section__description">
+                            Mixin whose objective is to create the media-query based on the cut points established in the configuration file
+
+
+
+                        </p>
+
+                        <h3 class="section__subtitle">
+                            Example
+                        </h3>
+                        <div class="section__code-wrapper example">
+                            <pre>
+                                <span>.test{
+   width: 100%;
+   @include screen-md(){
+     width: auto;
+   }
+}</span>
+                            </pre>
+                        </div>
+                        <div class="section__code-wrapper example">
+                            <pre>
+                                <span>.test {
+   width: 100%;
+ }
+
+@media only screen and (min-width: 768px) {
+   .test {
+     width: auto;
+   }
+}</span>
+                            </pre>
+                        </div>
+                    </div>
+                    <h3 class="section__title">
+                        <span class="section__title--name">
+                            screen-lg
+                        </span>
+                        <span class="section__title--type">
+                            (mixin)
+                        </span>
+                    </h3>
+                    <div class="section__information">
+                        <div class="section__code-wrapper"
+                            onclick="openCode('mediaquerie',2,'mixin')">
+                            <pre id="mediaquerie-2" aria-expanded="false">
+                                <span class="section__code-wrapper--title">
+                                    <span>@mixin</span>
+                                    <span>screen-lg(</span>
+                                    <span></span>)
+                                </span>
+                                <span id="mediaquerie-content-2" class="section__code-wrapper--code">
+                                    
+   @media only screen and (min-width: 1440px) {
+     @content
+   }
+
+                                </span>
+                            </pre>
+
+                        </div>
+                        <h3 class="section__subtitle">
+                            Descripción
+                        </h3>
+                        <p class="section__description">
+                            Mixin whose objective is to create the media-query based on the cut points established in the configuration file
+
+
+
+                        </p>
+
+                        <h3 class="section__subtitle">
+                            Example
+                        </h3>
+                        <div class="section__code-wrapper example">
+                            <pre>
+                                <span>.test{
+   width: 100%;
+   @include screen-lg(){
+     width: auto;
+   }
+}</span>
+                            </pre>
+                        </div>
+                        <div class="section__code-wrapper example">
+                            <pre>
+                                <span>.test {
+   width: 100%;
+ }
+
+@media only screen and (min-width: 1440px) {
+   .test {
+     width: auto;
+   }
+}</span>
+                            </pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="section" id="grid">
+                <div class="section__header">
+                    <h2>grid</h2>
+                </div>
+                <div class="section__body">
+                    <h3 class="section__title">
+                        <span class="section__title--name">
+                            breakpoints
+                        </span>
+                        <span class="section__title--type">
+                            (variable)
+                        </span>
+                    </h3>
+                    <div class="section__information">
+                        <div class="section__code-wrapper"
+                            onclick="openCode('grid',0,'variable')">
+                            <pre id="grid-0" aria-expanded="false" data-type="variable">
+                                <span class="section__code-wrapper--title">
+                                    <span>$breakpoints:</span>
+                                    <span> (
+                    sm:(
+                gutter:30px,
+                offset:50px,
+                columns:4,
+                width:360px
+              ),md:(
+                gutter:30px,
+                offset:50px,
+                columns:6,
+                width:768px
+              ),lg:(
+                gutter:30px,
+                offset:50px,
+                columns:12,
+                width:1440px
+              ),
+                )</span>
+                                </span>
+                                <span id="grid-content-0" class="section__code-wrapper--code">
+                                    <span></span>
+                                </span>
+                            </pre>
+
+                        </div>
+                        <h3 class="section__subtitle">
+                            Descripción
+                        </h3>
+                        <p class="section__description">
+                            Dynamically created map based on the configuration file. Define the breakpoints of the different breakpoints
+
+                        </p>
+
+                        <h3 class="section__subtitle">
+                            Example
+                        </h3>
+                    </div>
+                    <h3 class="section__title">
+                        <span class="section__title--name">
+                            get-grid
+                        </span>
+                        <span class="section__title--type">
+                            (mixin)
+                        </span>
+                    </h3>
+                    <div class="section__information">
+                        <div class="section__code-wrapper"
+                            onclick="openCode('grid',1,'mixin')">
+                            <pre id="grid-1" aria-expanded="false" data-type="mixin">
+                                <span class="section__code-wrapper--title">
+                                    <span>$mixin</span>
+                                    <span>get-grid(</span>
+                                    <span>breakpoints</span>)
+                                </span>
+                                <span id="grid-content-1" class="section__code-wrapper--code">
+                                    <span>
+  @each $break, $breakpoint in $breakpoints {
+    $columns: map.get($breakpoint, &quot;columns&quot;);
+    @media only screen and (min-width: map.get($breakpoint,&quot;width&quot;)) {
+      @for $i from 1 through $columns {
+        $valor: unquote((100 / $columns * $i) + &quot;%&quot;);
+        .col-#{$break}-#{$i} {
+          box-sizing: border-box;
+          padding: 0 map.get($breakpoint, &quot;gutter&quot;);
+          flex: 0 0 $valor;
+          min-width: $valor;
+          max-width: $valor;
+        }
+      }
+    }
+  }
+</span>
+                                </span>
+                            </pre>
+
+                        </div>
+                        <h3 class="section__subtitle">
+                            Descripción
+                        </h3>
+                        <p class="section__description">
+                            Mixin that, starting from the breakpoints established in the configuration file, generates the classes of the grid system.
+
+
+                        </p>
+
+                        <h3 class="section__subtitle">
+                            Parametros
+                        </h3>
+                        <table class="section__parameters">
+                            <thead>
+                                <tr>
+                                    <th class="section__parameters--name">Nombre</th>
+                                    <th class="section__parameters--description">Descripción</th>
+                                    <th class="section__parameters--type">Tipo</th>
+                                    <th class="section__parameters--default">Valor por defecto</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="section__parameters--name">$breakpoints</td>
+                                    <td class="section__parameters--description">Map set in initial setup</td>
+                                    <td class="section__parameters--type">map</td>
+                                    <td class="section__parameters--default">$breakpoints</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <h3 class="section__subtitle">
+                            Example
+                        </h3>
+                        <div class="section__code-wrapper example">
+                            <pre>
+                                <span>@include get-grid();</span>
+                            </pre>
+                        </div>
+                        <div class="section__code-wrapper example">
+                            <pre>
+                                <span>@media only screen and (min-width: 0px) {
+ .col-sm-1 {
+   box-sizing: border-box;
+   padding: 0 30px;
+   flex: 0 0 25%;
+   min-width: 25%;
+   max-width: 25%;
+ }
+}...
+@media only screen and (min-width: 768px) {
+ .col-md-1 {
+   box-sizing: border-box;
+   padding: 0 30px;
+   flex: 0 0 16.6666666667%;
+   min-width: 16.6666666667%;
+   max-width: 16.6666666667%;
+ }
+}...
+@media only screen and (min-width: 1440px) {
+ .col-lg-1 {
+   box-sizing: border-box;
+   padding: 0 30px;
+   flex: 0 0 8.3333333333%;
+   min-width: 8.3333333333%;
+   max-width: 8.3333333333%;
+ }
+}...
+</span>
+                            </pre>
+                        </div>
+                        <h3 class="section__subtitle">
+                            Dependencias
+                        </h3>
+                        <li class="section__require">
+                            <span>
+                                [variable]
+                            </span>
+                            <span>
+                                breakpoints
+                            </span>
+                        </li>
+                    </div>
+                </div>
+            </div>
+            <div class="section" id="animations">
+                <div class="section__header">
+                    <h2>animations</h2>
+                </div>
+                <div class="section__body">
+                    <h3 class="section__title">
+                        <span class="section__title--name">
+                            animation-example
+                        </span>
+                        <span class="section__title--type">
+                            (mixin)
+                        </span>
+                    </h3>
+                    <div class="section__information">
+                        <div class="section__code-wrapper"
+                            onclick="openCode('animations',0,'mixin')">
+                            <pre id="animations-0" aria-expanded="false" data-type="mixin">
+                                <span class="section__code-wrapper--title">
+                                    <span>@mixin</span>
+                                    <span>animation-example(</span>
+                                    <span></span>)
+                                </span>
+                                <span id="animations-content-0" class="section__code-wrapper--code">
+                                    
+    @keyframes animation-example {
+        0%{
+            transform: translate(0);
+        }
+
+        100%{
+            transform: translate(100px);
+        }
+    }
+
+                                </span>
+                            </pre>
+
+                        </div>
+                        <h3 class="section__subtitle">
+                            Descripción
+                        </h3>
+                        <p class="section__description">
+                            Mixin example of animations
+
+                        </p>
+
+
+                        <h3 class="section__subtitle">
+                            Example
+                        </h3>
+                        <div class="section__code-wrapper example example--animation">
+                            <pre>
+                                <span class="demo-animation" style="animation: animation-example 500ms ease alternate infinite"></span>
+                            </pre>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="section" id="spacing">
+                <div class="section__header">
+                    <h2>spacing</h2>
+                </div>
+                <div class="section__body">
+                    <h3 class="section__title">
+                        <span class="section__title--name">
+                            spacing
+                        </span>
+                        <span class="section__title--type">
+                            (variable)
+                        </span>
+                    </h3>
+                    <div class="section__information">
+                        <div class="section__code-wrapper"
+                            onclick="openCode('spacing',0,'variable')">
+                            <pre id="spacing-0" aria-expanded="false" data-type="variable">
+                                <span class="section__code-wrapper--title">
+                                    <span>$spacing:</span>
+                                    <span>(
+                increase:5,
+                limit:20
+            )</span>
+                                </span>
+                                <span id="spacing-content-0" class="section__code-wrapper--code">
+                                    
+                                </span>
+                            </pre>
+
+                        </div>
+                        <h3 class="section__subtitle">
+                            Descripción
+                        </h3>
+                        <p class="section__description">
+                            Dynamically created map based on the configuration file. Define the attributes to create the margin and padding utility classes
+
+                        </p>
+
+                        <h3 class="section__subtitle">
+                            Example
+                        </h3>
+                    </div>
+                    <h3 class="section__title">
+                        <span class="section__title--name">
+                            types
+                        </span>
+                        <span class="section__title--type">
+                            (variable)
+                        </span>
+                    </h3>
+                    <div class="section__information">
+                        <div class="section__code-wrapper"
+                            onclick="openCode('spacing',1,'variable')">
+                            <pre id="spacing-1" aria-expanded="false" data-type="variable">
+                                <span class="section__code-wrapper--title">
+                                    <span>$types:</span>
+                                    <span>(
+  mt: margin-top,
+  mr: margin-right,
+  mb: margin-bottom,
+  ml: margin-left,
+  pt: padding-top,
+  pr: padding-right,
+  pb: padding-bottom,
+  pl: padding-left
+)</span>
+                                </span>
+                                <span id="spacing-content-1" class="section__code-wrapper--code">
+                                    
+                                </span>
+                            </pre>
+
+                        </div>
+                        <h3 class="section__subtitle">
+                            Descripción
+                        </h3>
+                        <p class="section__description">
+                            Map that defines the prefix of the CSS class and property of the margins and padding mixin
+
+                        </p>
+
+                        <h3 class="section__subtitle">
+                            Example
+                        </h3>
+                    </div>
+                    <h3 class="section__title">
+                        <span class="section__title--name">
+                            get-utilities-spacing
+                        </span>
+                        <span class="section__title--type">
+                            (mixin)
+                        </span>
+                    </h3>
+                    <div class="section__information">
+                        <div class="section__code-wrapper"
+                            onclick="openCode('spacing',2,'mixin')">
+                            <pre id="spacing-2" aria-expanded="false" data-type="mixin">
+                                <span class="section__code-wrapper--title">
+                                    <span>@mixin</span>
+                                    <span>get-utilities-spacing(</span>
+                                    <span>$breakpoints, spacing</span>)
+                                </span>
+                                <span id="spacing-content-2" class="section__code-wrapper--code">
+                                    
+  @each $break, $breakpoint in $breakpoints {
+    @media only screen and (min-width: map.get($breakpoint,&quot;width&quot;)) {
+      $limit: map.get($spacing, &quot;limit&quot;);
+      @each $type, $property in $types {
+        @for $i from 1 through $limit {
+          $value: string.unquote($i*map.get($spacing,increase) + &quot;px&quot;);
+          .#{$type}-#{$break}-#{$i} {
+            #{$property}: $value;
+          }
+        }
+      }
+    }
+  }
+
+                                </span>
+                            </pre>
+
+                        </div>
+                        <h3 class="section__subtitle">
+                            Descripción
+                        </h3>
+                        <p class="section__description">
+                            Mixin that, starting from the breakpoints established in the configuration file, generates the classes of the grid system.
+
+
+                        </p>
+
+                        <h3 class="section__subtitle">
+                            Parametros
+                        </h3>
+                        <table class="section__parameters">
+                            <thead>
+                                <tr>
+                                    <th class="section__parameters--name">Nombre</th>
+                                    <th class="section__parameters--description">Descripción</th>
+                                    <th class="section__parameters--type">Tipo</th>
+                                    <th class="section__parameters--default">Valor por defecto</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="section__parameters--name">$breakpoints</td>
+                                    <td class="section__parameters--description">Map set in initial setup</td>
+                                    <td class="section__parameters--type">map</td>
+                                    <td class="section__parameters--default">$breakpoints</td>
+                                </tr>
+                                <tr>
+                                    <td class="section__parameters--name">$spacing</td>
+                                    <td class="section__parameters--description">Map set in initial setup</td>
+                                    <td class="section__parameters--type">map</td>
+                                    <td class="section__parameters--default">$spacing</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <h3 class="section__subtitle">
+                            Example
+                        </h3>
+                        <div class="section__code-wrapper example">
+                            <pre>
+                                <span>@include get-utilities-spacing()</span>
+                            </pre>
+                        </div>
+                        <div class="section__code-wrapper example">
+                            <pre>
+                                <span>@media only screen and (min-width: 0px) {
+ .mt-sm-1 {
+     margin-top: 5px;
+  }...
+@media only screen and (min-width: 768px) {
+ .pb-md-2 {
+     padding-bottom: 10px;
+  }...
+@media only screen and (min-width: 1440px) {
+ .ml-lg-3 {
+     margin-left: 15px;
+  }...</span>
+                            </pre>
+                        </div>
+                        <h3 class="section__subtitle">
+                            Dependencias
+                        </h3>
+                        <li class="section__require">
+                            <span>
+                                [variable]
+                            </span>
+                            <span>
+                                breakpoints
+                            </span>
+                        </li>
+                        <li class="section__require">
+                            <span>
+                                [variable]
+                            </span>
+                            <span>
+                                spacing
+                            </span>
+                        </li>
+                        <li class="section__require">
+                            <span>
+                                [variable]
+                            </span>
+                            <span>
+                                types
+                            </span>
+                        </li>
+                    </div>
+                </div>
+            </div>
+            <div class="section" id="functions">
+                <div class="section__header">
+                    <h2>functions</h2>
+                </div>
+                <div class="section__body">
+                    <h3 class="section__title">
+                        <span class="section__title--name">
+                            str-replace
+                        </span>
+                        <span class="section__title--type">
+                            (function)
+                        </span>
+                    </h3>
+                    <div class="section__information">
+                        <div class="section__code-wrapper">
+                            <pre id="functions-0" aria-expanded="false" data-type="function">
+                                <span class="section__code-wrapper--title">
+                                    
+                                </span>
+                                <span id="functions-content-0" class="section__code-wrapper--code">
+                                    
+$index: str-index($string, $search);
+
+@if $index {
+	@return string.slice($string, 1, $index - 1) + $replace + string.replace(string.slice($string, $index + str-length($search)), $search, $replace);
+}
+
+@return $string;
+
+                                </span>
+                            </pre>
+
+                        </div>
+                        <h3 class="section__subtitle">
+                            Descripción
+                        </h3>
+                        <p class="section__description">
+                            Mixin whose objective is starting from a string to replace one character with another
+
+
+                        </p>
+
+                        <h3 class="section__subtitle">
+                            Parametros
+                        </h3>
+                        <table class="section__parameters">
+                            <thead>
+                                <tr>
+                                    <th class="section__parameters--name">Nombre</th>
+                                    <th class="section__parameters--description">Descripción</th>
+                                    <th class="section__parameters--type">Tipo</th>
+                                    <th class="section__parameters--default">Valor por defecto</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="section__parameters--name">$string</td>
+                                    <td class="section__parameters--description">String to modify.</td>
+                                    <td class="section__parameters--type">string</td>
+                                    <td class="section__parameters--default"></td>
+                                </tr>
+                                <tr>
+                                    <td class="section__parameters--name">$search</td>
+                                    <td class="section__parameters--description">Character to look for.</td>
+                                    <td class="section__parameters--type">string</td>
+                                    <td class="section__parameters--default"></td>
+                                </tr>
+                                <tr>
+                                    <td class="section__parameters--name">$replace</td>
+                                    <td class="section__parameters--description">Character that will replace the established string.
+</td>
+                                    <td class="section__parameters--type">string</td>
+                                    <td class="section__parameters--default">&quot;&quot;</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <h3 class="section__subtitle">
+                            Example
+                        </h3>
+                        <div class="section__code-wrapper example">
+                            <pre>
+                                <span>
+str-replace($name, &quot; &quot;, &quot;_&quot;)</span>
+                            </pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+
+    </div>
+    <script src="scripts/script.js"></script>
+</body>
+
+</html>   

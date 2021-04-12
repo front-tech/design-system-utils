@@ -1,0 +1,32 @@
+/// Font map defined in the .frontech.json file
+///@group fonts
+$fonts:(
+Helvetica--Neue--35: (
+name:helvetica--Neue--35,
+weight:400,
+style:normal
+),
+Helvetica--Neue--55: (
+name:helvetica--Neue--55,
+weight:400,
+style:normal
+),
+Lato-regular: (
+name:lato-regular,
+weight:400,
+style:normal
+),
+Gotham-italic: (
+name:gotham-italic,
+weight:300,
+style:italic
+),);
+
+/// Custom properties cuyo valor es el nombre aportado en el fichero .frontech.json
+/// @group fonts
+:root{
+--Helvetica--Neue--35:helvetica--Neue--35;
+--Helvetica--Neue--55:helvetica--Neue--55;
+--Lato-regular:lato-regular;
+--Gotham-italic:gotham-italic;
+};
