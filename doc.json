@@ -1,0 +1,646 @@
+{
+  "animations": [
+    {
+      "description": "Mixin example of animations\n",
+      "commentRange": {
+        "start": 3,
+        "end": 4
+      },
+      "context": {
+        "type": "mixin",
+        "name": "animation-example",
+        "code": "\n    @keyframes animation-example {\n        0%{\n            transform: translate(0);\n        }\n\n        100%{\n            transform: translate(100px);\n        }\n    }\n",
+        "line": {
+          "start": 6,
+          "end": 16
+        }
+      },
+      "group": [
+        "animations"
+      ],
+      "access": "public",
+      "require": [],
+      "file": {
+        "path": "tools/_animations.scss",
+        "name": "_animations.scss"
+      }
+    }
+  ],
+  "colors": [
+    {
+      "description": " Color variables defined in the .frontech.json file\n",
+      "commentRange": {
+        "start": 1,
+        "end": 2
+      },
+      "context": {
+        "type": "css",
+        "name": ":root",
+        "value": "--secondary_3:#cbdf90;\n--secondary_2:#8fad88;\n--secondary_1:#7f9c96;\n--primary_3:#9bc1db;\n--primary_2:#1483bb;\n--primary_1:#006699;",
+        "line": {
+          "start": 3,
+          "end": 10
+        }
+      },
+      "group": [
+        "colors"
+      ],
+      "access": "public",
+      "file": {
+        "path": "settings/_color.scss",
+        "name": "_color.scss"
+      }
+    }
+  ],
+  "fonts": [
+    {
+      "description": "Mixin whose objective is to create a source starting from an established route\n\n",
+      "commentRange": {
+        "start": 6,
+        "end": 35
+      },
+      "context": {
+        "type": "mixin",
+        "name": "font-face",
+        "code": "\n\t$src: null;\n\n\t$extmods: (\n\t\teot: \"?\",\n\t\tsvg: \"#\" + tools.str-replace($name, \" \", \"_\")\n\t);\n\n\t$formats: (\n\t\totf: \"opentype\",\n\t\tttf: \"truetype\"\n\t);\n\n\t@each $ext in $exts {\n\t\t$extmod: if(map.has-key($extmods, $ext), $ext + map.get($extmods, $ext), $ext);\n\t\t$format: if(map.has-key($formats, $ext), map.get($formats, $ext), $ext);\n\t\t$src: append($src, url(string.quote(settings.$font-path + $name + \".\" + $extmod)) format(string.quote($format)), comma);\n\t}\n\n\t@font-face {\n\t\tfont-family: string.quote($name);\n\t\tfont-style: $style;\n\t\tfont-weight: $weight;\n\t\tsrc: $src;\n\t}\n",
+        "line": {
+          "start": 37,
+          "end": 62
+        }
+      },
+      "parameter": [
+        {
+          "type": "string",
+          "name": "name",
+          "description": "Font name."
+        },
+        {
+          "type": "string",
+          "name": "path",
+          "description": "Font path."
+        },
+        {
+          "type": "string",
+          "name": "weight",
+          "description": "Font weight."
+        },
+        {
+          "type": "string",
+          "name": "style",
+          "description": "Font style."
+        },
+        {
+          "type": "string",
+          "name": "exts",
+          "default": "eot woff2 woff ttf svg",
+          "description": "Font format.\n"
+        }
+      ],
+      "example": [
+        {
+          "type": "scss",
+          "code": "@include font-face(\"Helvetica--Neue--35\", 500, normal);"
+        },
+        {
+          "type": "css",
+          "code": "@font-face {\n     font-family: \"Helvetica--Neue--35\";\n     font-style: normal;\n     font-weight: 500;\n     src: url(\"fonts/helvetica--neue/HelvNeue35.eot?\") format(\"eot\"),\n     url(\"fonts/helvetica--neue/HelvNeue35.woff2\") format(\"woff2\"),\n     url(\"fonts/helvetica--neue/HelvNeue35.woff\") format(\"woff\"),\n     url(\"fonts/helvetica--neue/HelvNeue35.ttf\") format(\"truetype\"),\n     url(\"fonts/helvetica--neue/HelvNeue35.svg#Helvetica--Neue--35\") format(\"svg\");\n}"
+        }
+      ],
+      "group": [
+        "fonts"
+      ],
+      "access": "public",
+      "require": [
+        {
+          "type": "function",
+          "name": "str-replace"
+        },
+        {
+          "type": "variable",
+          "name": "font-path"
+        }
+      ],
+      "file": {
+        "path": "base/_fonts.scss",
+        "name": "_fonts.scss"
+      }
+    },
+    {
+      "description": "Variable path by default of the sources defined in the .frontech.json file.\nTo modify the path, simply set the variable in the import as follows: @use 'frontech-library/library/web/abstracts' with($font-path:'public/assets/fonts/');\n",
+      "commentRange": {
+        "start": 1,
+        "end": 3
+      },
+      "context": {
+        "type": "variable",
+        "name": "font-path",
+        "value": "'assets/fonts/'",
+        "scope": "default",
+        "line": {
+          "start": 4,
+          "end": 4
+        }
+      },
+      "group": [
+        "fonts"
+      ],
+      "access": "public",
+      "file": {
+        "path": "settings/_general.scss",
+        "name": "_general.scss"
+      },
+      "usedBy": [
+        {
+          "description": "Mixin whose objective is to create a source starting from an established route\n\n",
+          "context": {
+            "type": "mixin",
+            "name": "font-face",
+            "code": "\n\t$src: null;\n\n\t$extmods: (\n\t\teot: \"?\",\n\t\tsvg: \"#\" + tools.str-replace($name, \" \", \"_\")\n\t);\n\n\t$formats: (\n\t\totf: \"opentype\",\n\t\tttf: \"truetype\"\n\t);\n\n\t@each $ext in $exts {\n\t\t$extmod: if(map.has-key($extmods, $ext), $ext + map.get($extmods, $ext), $ext);\n\t\t$format: if(map.has-key($formats, $ext), map.get($formats, $ext), $ext);\n\t\t$src: append($src, url(string.quote(settings.$font-path + $name + \".\" + $extmod)) format(string.quote($format)), comma);\n\t}\n\n\t@font-face {\n\t\tfont-family: string.quote($name);\n\t\tfont-style: $style;\n\t\tfont-weight: $weight;\n\t\tsrc: $src;\n\t}\n",
+            "line": {
+              "start": 37,
+              "end": 62
+            }
+          }
+        }
+      ]
+    },
+    {
+      "description": " Font map defined in the .frontech.json file\n",
+      "commentRange": {
+        "start": 1,
+        "end": 2
+      },
+      "context": {
+        "type": "variable",
+        "name": "fonts",
+        "value": "(\nHelvetica--Neue--35: (\nname:helvetica--Neue--35,\nweight:400,\nstyle:normal\n),\nHelvetica--Neue--55: (\nname:helvetica--Neue--55,\nweight:400,\nstyle:normal\n),\nLato-regular: (\nname:lato-regular,\nweight:400,\nstyle:normal\n),\nGotham-italic: (\nname:gotham-italic,\nweight:300,\nstyle:italic\n),)",
+        "scope": "private",
+        "line": {
+          "start": 3,
+          "end": 23
+        }
+      },
+      "group": [
+        "fonts"
+      ],
+      "access": "public",
+      "file": {
+        "path": "settings/_typography.scss",
+        "name": "_typography.scss"
+      }
+    },
+    {
+      "description": "Custom properties cuyo valor es el nombre aportado en el fichero .frontech.json\n",
+      "commentRange": {
+        "start": 25,
+        "end": 26
+      },
+      "context": {
+        "type": "css",
+        "name": ":root",
+        "value": "--Helvetica--Neue--35:helvetica--Neue--35;\n--Helvetica--Neue--55:helvetica--Neue--55;\n--Lato-regular:lato-regular;\n--Gotham-italic:gotham-italic;",
+        "line": {
+          "start": 27,
+          "end": 32
+        }
+      },
+      "group": [
+        "fonts"
+      ],
+      "access": "public",
+      "file": {
+        "path": "settings/_typography.scss",
+        "name": "_typography.scss"
+      }
+    }
+  ],
+  "functions": [
+    {
+      "description": "Mixin whose objective is starting from a string to replace one character with another\n\n",
+      "commentRange": {
+        "start": 1,
+        "end": 14
+      },
+      "context": {
+        "type": "function",
+        "name": "str-replace",
+        "code": "\n$index: str-index($string, $search);\n\n@if $index {\n\t@return string.slice($string, 1, $index - 1) + $replace + string.replace(string.slice($string, $index + str-length($search)), $search, $replace);\n}\n\n@return $string;\n",
+        "line": {
+          "start": 16,
+          "end": 24
+        }
+      },
+      "parameter": [
+        {
+          "type": "string",
+          "name": "string",
+          "description": "String to modify."
+        },
+        {
+          "type": "string",
+          "name": "search",
+          "description": "Character to look for."
+        },
+        {
+          "type": "string",
+          "name": "replace",
+          "default": "\"\"",
+          "description": "Character that will replace the established string.\n"
+        }
+      ],
+      "example": [
+        {
+          "type": "scss",
+          "code": "\nstr-replace($name, \" \", \"_\")"
+        }
+      ],
+      "group": [
+        "functions"
+      ],
+      "access": "public",
+      "require": [],
+      "file": {
+        "path": "tools/_functions.scss",
+        "name": "_functions.scss"
+      },
+      "usedBy": [
+        {
+          "description": "Mixin whose objective is to create a source starting from an established route\n\n",
+          "context": {
+            "type": "mixin",
+            "name": "font-face",
+            "code": "\n\t$src: null;\n\n\t$extmods: (\n\t\teot: \"?\",\n\t\tsvg: \"#\" + tools.str-replace($name, \" \", \"_\")\n\t);\n\n\t$formats: (\n\t\totf: \"opentype\",\n\t\tttf: \"truetype\"\n\t);\n\n\t@each $ext in $exts {\n\t\t$extmod: if(map.has-key($extmods, $ext), $ext + map.get($extmods, $ext), $ext);\n\t\t$format: if(map.has-key($formats, $ext), map.get($formats, $ext), $ext);\n\t\t$src: append($src, url(string.quote(settings.$font-path + $name + \".\" + $extmod)) format(string.quote($format)), comma);\n\t}\n\n\t@font-face {\n\t\tfont-family: string.quote($name);\n\t\tfont-style: $style;\n\t\tfont-weight: $weight;\n\t\tsrc: $src;\n\t}\n",
+            "line": {
+              "start": 37,
+              "end": 62
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "grid": [
+    {
+      "description": "Dynamically created map based on the configuration file. Define the breakpoints of the different breakpoints\n",
+      "commentRange": {
+        "start": 1,
+        "end": 3
+      },
+      "context": {
+        "type": "variable",
+        "name": "breakpoints",
+        "value": "(\n                    sm:(\n                gutter:30px,\n                offset:50px,\n                columns:4,\n                width:360px\n              ),md:(\n                gutter:30px,\n                offset:50px,\n                columns:6,\n                width:768px\n              ),lg:(\n                gutter:30px,\n                offset:50px,\n                columns:12,\n                width:1440px\n              ),\n                )",
+        "scope": "private",
+        "line": {
+          "start": 4,
+          "end": 21
+        }
+      },
+      "type": "map",
+      "group": [
+        "grid"
+      ],
+      "access": "public",
+      "file": {
+        "path": "settings/_grid.scss",
+        "name": "_grid.scss"
+      },
+      "usedBy": [
+        {
+          "description": "Mixin that, starting from the breakpoints established in the configuration file, generates the classes of the grid system.\n\n",
+          "context": {
+            "type": "mixin",
+            "name": "get-grid",
+            "code": "\n  @each $break, $breakpoint in $breakpoints {\n    $columns: map.get($breakpoint, \"columns\");\n    @media only screen and (min-width: map.get($breakpoint,\"width\")) {\n      @for $i from 1 through $columns {\n        $valor: unquote((100 / $columns * $i) + \"%\");\n        .col-#{$break}-#{$i} {\n          box-sizing: border-box;\n          padding: 0 map.get($breakpoint, \"gutter\");\n          flex: 0 0 $valor;\n          min-width: $valor;\n          max-width: $valor;\n        }\n      }\n    }\n  }\n",
+            "line": {
+              "start": 44,
+              "end": 60
+            }
+          }
+        },
+        {
+          "description": "Mixin that, starting from the breakpoints established in the configuration file, generates the classes of the grid system.\n\n",
+          "context": {
+            "type": "mixin",
+            "name": "get-utilities-spacing",
+            "code": "\n  @each $break, $breakpoint in $breakpoints {\n    @media only screen and (min-width: map.get($breakpoint,\"width\")) {\n      $limit: map.get($spacing, \"limit\");\n      @each $type, $property in $types {\n        @for $i from 1 through $limit {\n          $value: string.unquote($i*map.get($spacing,increase) + \"px\");\n          .#{$type}-#{$break}-#{$i} {\n            #{$property}: $value;\n          }\n        }\n      }\n    }\n  }\n",
+            "line": {
+              "start": 49,
+              "end": 63
+            }
+          }
+        }
+      ]
+    },
+    {
+      "description": "Mixin that, starting from the breakpoints established in the configuration file, generates the classes of the grid system.\n\n",
+      "commentRange": {
+        "start": 4,
+        "end": 42
+      },
+      "context": {
+        "type": "mixin",
+        "name": "get-grid",
+        "code": "\n  @each $break, $breakpoint in $breakpoints {\n    $columns: map.get($breakpoint, \"columns\");\n    @media only screen and (min-width: map.get($breakpoint,\"width\")) {\n      @for $i from 1 through $columns {\n        $valor: unquote((100 / $columns * $i) + \"%\");\n        .col-#{$break}-#{$i} {\n          box-sizing: border-box;\n          padding: 0 map.get($breakpoint, \"gutter\");\n          flex: 0 0 $valor;\n          min-width: $valor;\n          max-width: $valor;\n        }\n      }\n    }\n  }\n",
+        "line": {
+          "start": 44,
+          "end": 60
+        }
+      },
+      "parameter": [
+        {
+          "type": "map",
+          "name": "breakpoints",
+          "default": "$breakpoints",
+          "description": "Map set in initial setup"
+        }
+      ],
+      "require": [
+        {
+          "type": "variable",
+          "name": "breakpoints",
+          "external": false,
+          "description": "Map defining break, gutter and offset points"
+        }
+      ],
+      "example": [
+        {
+          "type": "scss",
+          "code": "@include get-grid();"
+        },
+        {
+          "type": "css",
+          "code": "@media only screen and (min-width: 0px) {\n .col-sm-1 {\n   box-sizing: border-box;\n   padding: 0 30px;\n   flex: 0 0 25%;\n   min-width: 25%;\n   max-width: 25%;\n }\n}...\n@media only screen and (min-width: 768px) {\n .col-md-1 {\n   box-sizing: border-box;\n   padding: 0 30px;\n   flex: 0 0 16.6666666667%;\n   min-width: 16.6666666667%;\n   max-width: 16.6666666667%;\n }\n}...\n@media only screen and (min-width: 1440px) {\n .col-lg-1 {\n   box-sizing: border-box;\n   padding: 0 30px;\n   flex: 0 0 8.3333333333%;\n   min-width: 8.3333333333%;\n   max-width: 8.3333333333%;\n }\n}...\n"
+        }
+      ],
+      "group": [
+        "grid"
+      ],
+      "access": "public",
+      "file": {
+        "path": "utilities/_grid.scss",
+        "name": "_grid.scss"
+      }
+    }
+  ],
+  "media-queries": [
+    {
+      "description": "Mixin whose objective is to create the media-query based on the cut points established in the configuration file\n\n\n",
+      "commentRange": {
+        "start": 1,
+        "end": 25
+      },
+      "context": {
+        "type": "mixin",
+        "name": "screen-sm",
+        "code": "\n   @media only screen and (min-width: 360px) {\n     @content\n   }\n",
+        "line": {
+          "start": 26,
+          "end": 30
+        }
+      },
+      "example": [
+        {
+          "type": "scss",
+          "code": ".test{\n   width: 100%;\n   @include screen-sm(){\n     width: auto;\n   }\n}"
+        },
+        {
+          "type": "css",
+          "code": ".test {\n   width: 100%;\n }\n\n@media only screen and (min-width: 360px) {\n   .test {\n     width: auto;\n   }\n}"
+        }
+      ],
+      "group": [
+        "media-queries"
+      ],
+      "access": "public",
+      "content": "",
+      "require": [],
+      "file": {
+        "path": "tools/_media-queries.scss",
+        "name": "_media-queries.scss"
+      }
+    },
+    {
+      "description": "Mixin whose objective is to create the media-query based on the cut points established in the configuration file\n\n\n",
+      "commentRange": {
+        "start": 31,
+        "end": 55
+      },
+      "context": {
+        "type": "mixin",
+        "name": "screen-md",
+        "code": "\n   @media only screen and (min-width: 768px) {\n     @content\n   }\n",
+        "line": {
+          "start": 56,
+          "end": 60
+        }
+      },
+      "example": [
+        {
+          "type": "scss",
+          "code": ".test{\n   width: 100%;\n   @include screen-md(){\n     width: auto;\n   }\n}"
+        },
+        {
+          "type": "css",
+          "code": ".test {\n   width: 100%;\n }\n\n@media only screen and (min-width: 768px) {\n   .test {\n     width: auto;\n   }\n}"
+        }
+      ],
+      "group": [
+        "media-queries"
+      ],
+      "access": "public",
+      "content": "",
+      "require": [],
+      "file": {
+        "path": "tools/_media-queries.scss",
+        "name": "_media-queries.scss"
+      }
+    },
+    {
+      "description": "Mixin whose objective is to create the media-query based on the cut points established in the configuration file\n\n\n",
+      "commentRange": {
+        "start": 61,
+        "end": 85
+      },
+      "context": {
+        "type": "mixin",
+        "name": "screen-lg",
+        "code": "\n   @media only screen and (min-width: 1440px) {\n     @content\n   }\n",
+        "line": {
+          "start": 86,
+          "end": 90
+        }
+      },
+      "example": [
+        {
+          "type": "scss",
+          "code": ".test{\n   width: 100%;\n   @include screen-lg(){\n     width: auto;\n   }\n}"
+        },
+        {
+          "type": "css",
+          "code": ".test {\n   width: 100%;\n }\n\n@media only screen and (min-width: 1440px) {\n   .test {\n     width: auto;\n   }\n}"
+        }
+      ],
+      "group": [
+        "media-queries"
+      ],
+      "access": "public",
+      "content": "",
+      "require": [],
+      "file": {
+        "path": "tools/_media-queries.scss",
+        "name": "_media-queries.scss"
+      }
+    }
+  ],
+  "spacing": [
+    {
+      "description": "Dynamically created map based on the configuration file. Define the attributes to create the margin and padding utility classes\n",
+      "commentRange": {
+        "start": 1,
+        "end": 3
+      },
+      "context": {
+        "type": "variable",
+        "name": "spacing",
+        "value": "(\n                increase:5,\n                limit:20\n            )",
+        "scope": "private",
+        "line": {
+          "start": 4,
+          "end": 7
+        }
+      },
+      "type": "number",
+      "group": [
+        "spacing"
+      ],
+      "access": "public",
+      "file": {
+        "path": "settings/_spacing.scss",
+        "name": "_spacing.scss"
+      },
+      "usedBy": [
+        {
+          "description": "Mixin that, starting from the breakpoints established in the configuration file, generates the classes of the grid system.\n\n",
+          "context": {
+            "type": "mixin",
+            "name": "get-utilities-spacing",
+            "code": "\n  @each $break, $breakpoint in $breakpoints {\n    @media only screen and (min-width: map.get($breakpoint,\"width\")) {\n      $limit: map.get($spacing, \"limit\");\n      @each $type, $property in $types {\n        @for $i from 1 through $limit {\n          $value: string.unquote($i*map.get($spacing,increase) + \"px\");\n          .#{$type}-#{$break}-#{$i} {\n            #{$property}: $value;\n          }\n        }\n      }\n    }\n  }\n",
+            "line": {
+              "start": 49,
+              "end": 63
+            }
+          }
+        }
+      ]
+    },
+    {
+      "description": "Map that defines the prefix of the CSS class and property of the margins and padding mixin\n",
+      "commentRange": {
+        "start": 5,
+        "end": 7
+      },
+      "context": {
+        "type": "variable",
+        "name": "types",
+        "value": "(\n  mt: margin-top,\n  mr: margin-right,\n  mb: margin-bottom,\n  ml: margin-left,\n  pt: padding-top,\n  pr: padding-right,\n  pb: padding-bottom,\n  pl: padding-left\n)",
+        "scope": "private",
+        "line": {
+          "start": 9,
+          "end": 18
+        }
+      },
+      "type": "map",
+      "group": [
+        "spacing"
+      ],
+      "access": "public",
+      "file": {
+        "path": "utilities/_spacing.scss",
+        "name": "_spacing.scss"
+      },
+      "usedBy": [
+        {
+          "description": "Mixin that, starting from the breakpoints established in the configuration file, generates the classes of the grid system.\n\n",
+          "context": {
+            "type": "mixin",
+            "name": "get-utilities-spacing",
+            "code": "\n  @each $break, $breakpoint in $breakpoints {\n    @media only screen and (min-width: map.get($breakpoint,\"width\")) {\n      $limit: map.get($spacing, \"limit\");\n      @each $type, $property in $types {\n        @for $i from 1 through $limit {\n          $value: string.unquote($i*map.get($spacing,increase) + \"px\");\n          .#{$type}-#{$break}-#{$i} {\n            #{$property}: $value;\n          }\n        }\n      }\n    }\n  }\n",
+            "line": {
+              "start": 49,
+              "end": 63
+            }
+          }
+        }
+      ]
+    },
+    {
+      "description": "Mixin that, starting from the breakpoints established in the configuration file, generates the classes of the grid system.\n\n",
+      "commentRange": {
+        "start": 20,
+        "end": 47
+      },
+      "context": {
+        "type": "mixin",
+        "name": "get-utilities-spacing",
+        "code": "\n  @each $break, $breakpoint in $breakpoints {\n    @media only screen and (min-width: map.get($breakpoint,\"width\")) {\n      $limit: map.get($spacing, \"limit\");\n      @each $type, $property in $types {\n        @for $i from 1 through $limit {\n          $value: string.unquote($i*map.get($spacing,increase) + \"px\");\n          .#{$type}-#{$break}-#{$i} {\n            #{$property}: $value;\n          }\n        }\n      }\n    }\n  }\n",
+        "line": {
+          "start": 49,
+          "end": 63
+        }
+      },
+      "parameter": [
+        {
+          "type": "map",
+          "name": "breakpoints",
+          "default": "$breakpoints",
+          "description": "Map set in initial setup"
+        },
+        {
+          "type": "map",
+          "name": "spacing",
+          "default": "$spacing",
+          "description": "Map set in initial setup"
+        }
+      ],
+      "require": [
+        {
+          "type": "variable",
+          "name": "breakpoints",
+          "external": false,
+          "description": "Map defining break, gutter and offset points"
+        },
+        {
+          "type": "variable",
+          "name": "spacing",
+          "external": false,
+          "description": "Map that defines the exponential value from one class to the next and the number of these classes to create"
+        },
+        {
+          "type": "variable",
+          "name": "types",
+          "external": false,
+          "description": "Map that defines the prefix of the CSS class and property of the margins and padding mixin"
+        }
+      ],
+      "example": [
+        {
+          "type": "scss",
+          "code": "@include get-utilities-spacing()"
+        },
+        {
+          "type": "css",
+          "code": "@media only screen and (min-width: 0px) {\n .mt-sm-1 {\n     margin-top: 5px;\n  }...\n@media only screen and (min-width: 768px) {\n .pb-md-2 {\n     padding-bottom: 10px;\n  }...\n@media only screen and (min-width: 1440px) {\n .ml-lg-3 {\n     margin-left: 15px;\n  }..."
+        }
+      ],
+      "group": [
+        "spacing"
+      ],
+      "access": "public",
+      "file": {
+        "path": "utilities/_spacing.scss",
+        "name": "_spacing.scss"
+      }
+    }
+  ]
+}
