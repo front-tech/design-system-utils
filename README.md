@@ -1,5 +1,5 @@
-### FRONTECH LIBRARY
-Frontech Library aims to provide a series of common utilities at the beginning of any front project as well as certain mixins that facilitate day-to-day development such as margin, padding, grid classes, base animations and common elements. For more information launch the command ```npm run start``` and access the documentation in the browser under the port ```http://localhost:3000/```.
+### Design Systems Utils
+Design Systems Utils aims to provide a series of common utilities at the beginning of any front project as well as certain mixins that facilitate day-to-day development such as margin, padding, grid classes, base animations and common elements. For more information launch the command ```npm run start``` and access the documentation in the browser under the port ```http://localhost:3000/```.
 
 For the proper functioning of the library it is necessary to create a configuration file in the project called ```.frontech.json```, which will determine the utilities of margin, padding and custom grid. This configuration must maintain the following structure:
 ```
