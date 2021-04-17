@@ -441,6 +441,10 @@ select {
   font-size: 37.5px;
   text-transform: capitalize;
 }
+.indice__link {
+  color: #dd5a6f;
+  text-decoration: none;
+}
 .indice p {
   display: block;
   margin-block-start: 1em;
@@ -502,6 +506,9 @@ select {
   padding-right: 0.35rem;
   align-items: baseline;
   font-size: calc(1rem + 2vw);
+}
+.header__title a {
+  text-decoration: none;
 }
 
 main div[class*=body] {
@@ -668,6 +675,17 @@ main div[class*=body] {
 }
 .section__require span:nth-child(2) {
   color: #dd5a66;
+}
+
+.introduction h3 {
+  font-size: 3rem;
+  font-weight: 600;
+  margin-bottom: 0.7rem;
+  color: #3b4042;
+}
+.introduction ul {
+  list-style: inherit;
+  margin: 0 0 3rem 3rem;
 }
 
 :root {
@@ -1022,14 +1040,6 @@ main div[class*=body] {
   }
   100% {
     transform: translate(100px);
-  }
-}
-@keyframes animation-example-2 {
-  0% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 1;
   }
 }
 html {

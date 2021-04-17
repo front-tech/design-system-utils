@@ -9,35 +9,35 @@
 </head>
 
 <body>
-    <header class="header">
+    <header class="header" id="header">
 
-        <h1 class="header__title">Design Systems Utils</h1>
+        <h1 class="header__title"><a href="#top">Design Systems Utils</a></h1>
 
     </header>
     <div class="container">
         <nav class="nav" id="sidenav">
             <div class="nav__content">
-                <div class="nav__header">
+                {{!-- <div class="nav__header">
                     <fieldset class="nav__fieldset">
                         <legend class="nav__legend">Search</legend>
                         <label for="search" class="nav__label"></label>
                         <input id="search" type="text" autocomplete="off" class="nav__input" placeholder="Search">
                     </fieldset>
-                </div>
+                </div> --}}
                 <div class="nav__body">
                     <div class="nav__subsection">
                         <h3 class="nav__title">
-                            <a href="#configuration">Design Systems Utils</a>
+                            <a href="#top">Design Systems Utils</a>
                         </h3>
                         <ul>
                             <li class="nav__item">
                                 <a href="#configuration">Configuration</a>
                             </li>
                             <li class="nav__item">
-                                <a href="#">Changelog</a>
+                                <a href="#changelog">Changelog</a>
                             </li>
                             <li class="nav__item">
-                                <a href="#">Contributing</a>
+                                <a href="#contributing">Contributing</a>
                             </li>
                         </ul>
                     </div>
@@ -76,16 +76,28 @@
             <div class="indice" id="configuration">
                 <div class="indice__body">
                     <h3 class="indice__title">DESIGN SYSTEMS UTILS</h3>
-                    <p>Design Systems Utils aims to provide a series of common utilities at the beginning of any front
-                        project as well as certain mixins that facilitate day-to-day development such as margin,
-                        padding, grid classes, base animations and common elements. For more information launch the
-                        command <code>npm run start</code> and access the documentation in the browser under the port
-                        <code>http://localhost:3000/</code>.
+                    <p>Design Systems Utils aims to provide a series of common utilities at the beginning of any web
+                        project, which will facilitate and speed up the day-to-day development. For more information
+                        click on the following <a class="indice__link" href="#fonts">link</a>.
                     </p>
-                    <p>For the correct functioning of the library it is necessary to create a configuration file in the
-                        project called <code>.frontech.json</code>, which will determine the utilities of margin,
-                        padding and custom grid. This configuration must maintain the following structure:</p>
-                    <pre>
+                </div>
+            </div>
+            <div class="section" id="configuration">
+                <div class="section__header">
+                    <h2>Configuration</h2>
+                </div>
+                <div class="section__body indice">
+                    <div>
+                        <p>
+                            Initially it will be necessary to install the <i>@front-tech/design-systems-utils</i>
+                            dependency
+                            by executing the following command <code>npm install @front-tech/design-systems-utils</code>
+                        </p>
+                        <p>For the correct functioning of the library it is necessary to create a configuration file in
+                            the
+                            project called <code>.frontech.json</code>, which will determine the utilities of margin,
+                            padding and custom grid. This configuration must maintain the following structure:</p>
+                        <pre>
                 <code>
 {
   "colors": {
@@ -186,17 +198,77 @@
 }
                 </code>
         </pre>
-                    <p>To use the library, it will simply be necessary to import the following file into your sass
-                        stylesheet:
-                    </p>
-                    <p><code>@use '~frontech-library/sass/abstracts.scss' with ($font-path:'public/assets/fonts/'); ;</code></p>
+                        <p>To use the library, it will simply be necessary to create an npm script with the following
+                            syntax:
+                        </p>
+                        <p><code>design-systems-utils .frontech.json</code></p>
+                        <p>And then import the following file to your sass
+                            style sheet:</p>
+                        <p><code>@use '~frontech-library/sass/abstracts.scss' with ($font-path:'public/assets/fonts/');</code>
+                        </p>
 
-                    <p>We can also generate a css output of the library specifying in the configuration file the path
-                        where we want to export said file:
-                    </p>
-                    <p><code>"outputCSS":{<br/>
+                        <p>We can also generate a css output of the library specifying in the configuration file the
+                            path
+                            where we want to export said file:
+                        </p>
+                        <p><code>"outputCSS":{<br/>
                               "path": "style.css"<br/>
                         }</code></p>
+
+                    </div>
+                </div>
+            </div>
+            <div class="section introduction" id="changelog">
+                <div class="section__header">
+                    <h2>Changelog</h2>
+                </div>
+                <div class="section__body">
+                    <h3>1.0.0:2021-04-15</h3>
+                    <ul>
+                        <li>Color palette established in the configuration file where it generates custom properties
+                            within the selector :root</li>
+                        <li>Icon and text font</li>
+                        <li>Grid</li>
+                        <li>Margin utilities</li>
+                        <li>Mixin media queries</li>
+                        <li>Custom Animations</li>
+                        <li>Function str-replace whose objective is starting from a string to replace one character with
+                            another</li>
+                        <li>Path output to export the CSS stylesheet based on the configuration specified in the
+                            .frontech.json file</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="section introduction indice" id="contributing">
+                <div class="section__header">
+                    <h2>Contributing</h2>
+                </div>
+                <div class="section__body">
+                    <h3>Contributing to Front-tech
+                    </h3>
+                    <p>Thanks for contributing to front-tech<span class="widont">&nbsp;</span>development!</p>
+                    <p>Feature requests and bug reports
+                        can be filed on <a class="indice__link" target="_blank"
+                            href="https://github.com/front-tech/design-system-utils">GitHub</a>:
+                    </p>
+                    <p>If you are contributing code
+                        with new features or<span class="widont">&nbsp;</span>bug-fixes:</p>
+                    <ul>
+                        <li>Fork the project, and create a branch for your<span class="widont">&nbsp;</span>contribution
+                        </li>
+                        <li>Follow the development guide below to get Herman running<span
+                                class="widont">&nbsp;</span>locally</li>
+                        <li>Write tests and documentation as necessary,
+                            and make sure all tests are<span class="widont">&nbsp;</span>passing</li>
+                        <li>Open a pull request on <a class="indice__link" target="_blank"
+                                href="https://github.com/front-tech/design-system-utils/issues">GitHub</a></li>
+                    </ul>
+                    <h3>Development</h3>
+                    <p>To install the necessary Node dependencies, run
+                        <code>npm install</code>.
+                    </p>
+                    <p>You can start up a local development server with <code>npm run serve</code>.</p>
+                    <p>Access the running server at <code>http://localhost:3000</code>.</p>
                 </div>
             </div>
             <div class="section" id="{{posts.fonts.0.group}}">
@@ -774,4 +846,4 @@
     <script src="scripts/script.js"></script>
 </body>
 
-</html>   
+</html>

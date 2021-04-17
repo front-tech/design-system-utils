@@ -180,5 +180,22 @@
     & span:nth-child(2) {
       color: #dd5a66;
     }
+  }  
+}
+
+
+.introduction {
+  h3{
+    font-size: 3rem;
+    font-weight: 600;
+    margin-bottom: .7rem;
+    color: #3b4042;
   }
+
+  ul{
+    list-style: inherit;
+    margin: 0 0 3rem 3rem;
+
+  }
+
 }

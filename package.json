@@ -1,18 +1,25 @@
 {
-  "name": "design-systems-utils",
+  "name": "@front-tech/design-systems-utils",
   "version": "1.0.0",
   "description": "Sass utility library",
   "main": "index.js",
   "bin": {
     "design-systems-utils": "./index.js"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Jsamper92/utilities-sass.git"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
   "scripts": {
     "start": "node theme/app.js",
     "build": "node .frontech/compile.js && cpx -v \"./theme/public/styles/css/*.css\" \"./docs/styles/css/\" && cpx -v \"./theme/public/scripts/*.js\" \"./docs/scripts\"",
-    "serve": "nodemon theme/app.js",
+    "serve": "concurrently 'nodemon theme/app.js' 'npm run sass:theme-watch'",
     "sassdoc": "sassdoc2md 'library/web/settings/*.scss' ./README.md -s && sassdoc2md 'library/web/tools/_media-queries.scss' ./README.md -s && node .frontech/readme.js",
     "sass": "sass --no-source-map library/web/abstracts.scss:library/web/abstracts.css",
-    "sass:theme": "sass --watch --no-source-map theme/public/styles/scss/main.scss theme/public/styles/css/style.css",
+    "sass:theme": "sass --no-source-map theme/public/styles/scss/main.scss theme/public/styles/css/style.css",
     "sass:theme-watch": "sass --watch --no-source-map theme/public/styles/scss/main.scss theme/public/styles/css/style.css",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
