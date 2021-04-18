@@ -126,7 +126,7 @@
       }
     },
     {
-      "description": "Variable path by default of the sources defined in the .frontech.json file.\nTo modify the path, simply set the variable in the import as follows: @use 'frontech-library/library/web/abstracts' with($font-path:'public/assets/fonts/');\n",
+      "description": "Variable path by default of the sources defined in the .frontech.json file.\nTo modify the path, simply set the variable in the import as follows: @use '~@front-tech/design-systems-utils/library/web/abstracts' with ($font-path:'public/assets/fonts/');\n",
       "commentRange": {
         "start": 1,
         "end": 3
