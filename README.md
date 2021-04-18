@@ -200,12 +200,10 @@ Thanks for contributing to front-tech development!
 Feature requests and bug reports can be filed on [Github](https://github.com/front-tech/design-system-utils)
 
 If you are contributing code with new features or bug-fixes:
-Fork the project, and create a branch for your contribution
-
-Follow the development guide below to get Herman running locally
-Write tests and documentation as necessary,
-and make sure all tests are passing
-Open a pull request on [Github](https://github.com/front-tech/design-system-utils/issues)
+- Fork the project, and create a branch for your contribution.
+- Follow the development guide below to get design-systems-utils to work.
+- Write the necessary documentation in ```library/web/**/*.scss```.
+- Open a pull request on [Github](https://github.com/front-tech/design-system-utils/issues)
 
 ## Development
 To install the necessary Node dependencies, run ```npm install```.
