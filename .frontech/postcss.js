@@ -13,10 +13,10 @@ const file = `${__dirname.slice(
 
 module.exports.buildCSS = (config) => {
   const path = () => {
-    const existFolder = config.outputCSS.path.search('/');
+    
     const file = config.outputCSS.path.match(/([^\/]+$)/);
     const folder = config.outputCSS.path.slice(0,config.outputCSS.path.length - file[0].length - 1);
-    if(existFolder === 0){
+    if(config.outputCSS.path.indexOf("/") > -1){
       return {
         file: file[0],
         folder

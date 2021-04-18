@@ -1,7 +1,11 @@
-### Design Systems Utils
-Design Systems Utils aims to provide a series of common utilities at the beginning of any front project as well as certain mixins that facilitate day-to-day development such as margin, padding, grid classes, base animations and common elements. For more information launch the command ```npm run start``` and access the documentation in the browser under the port ```http://localhost:3000/```.
+# Design Systems Utils
 
-For the proper functioning of the library it is necessary to create a configuration file in the project called ```.frontech.json```, which will determine the utilities of margin, padding and custom grid. This configuration must maintain the following structure:
+Design Systems Utils aims to provide a series of common utilities at the beginning of any web project, which will facilitate and speed up the day-to-day development. For more information click on the following [link](https://front-tech.github.io/design-system-utils/).
+
+Initially it will be necessary to install the ***@front-tech/design-systems-utils*** dependency by executing the following command ```npm install @front-tech/design-systems-utils```
+
+For the correct functioning of the library it is necessary to create a configuration file in the project called ```.frontech.json``` which will determine the utilities of margin, padding and custom grid. This configuration must maintain the following structure:
+
 ```
 {
   "color": {
@@ -176,9 +180,11 @@ For the proper functioning of the library it is necessary to create a configurat
 }
 ```
 
-To use the library, it will simply be necessary to import the following file into your sass stylesheet:
+To use the library, it will simply be necessary to create an npm script with the following syntax:
+`design-systems-utils .frontech.json`
 
-```@use '~frontech-library/library/web/abstracts';```
+And then import the following file to your sass stylesheet:
+`@use '~@front-tech/design-systems-utils/library/web/abstracts' with ($font-path:'public/assets/fonts/');`
 
 We can also generate a css output of the library specifying in the configuration file the path where we want to export said file:
 
@@ -188,98 +194,21 @@ We can also generate a css output of the library specifying in the configuration
   }
 ```
 
- <a id="media-queries-mixin-screen-sm"></a>
+## Contributing to Front-tech
 
-# @mixin screen-sm
+Thanks for contributing to front-tech development!
+Feature requests and bug reports can be filed on [Github](https://github.com/front-tech/design-system-utils)
 
-Mixin whose objective is to create the media-query based on the cut points established in the configuration file
+If you are contributing code with new features or bug-fixes:
+Fork the project, and create a branch for your contribution
 
-+ **Group:** Media-queries
-+ **Access:** public
+Follow the development guide below to get Herman running locally
+Write tests and documentation as necessary,
+and make sure all tests are passing
+Open a pull request on [Github](https://github.com/front-tech/design-system-utils/issues)
 
-## Examples
+## Development
+To install the necessary Node dependencies, run ```npm install```.
 
-```scss
-.test{
-   width: 100%;
-   @include screen-sm(){
-     width: auto;
-   }
-}
-```
-
-```css
-.test {
-   width: 100%;
- }
-
-@media only screen and (min-width: 360px) {
-   .test {
-     width: auto;
-   }
-}
-```
-
-<a id="media-queries-mixin-screen-md"></a>
-
-# @mixin screen-md
-
-Mixin whose objective is to create the media-query based on the cut points established in the configuration file
-
-+ **Group:** Media-queries
-+ **Access:** public
-
-## Examples
-
-```scss
-.test{
-   width: 100%;
-   @include screen-md(){
-     width: auto;
-   }
-}
-```
-
-```css
-.test {
-   width: 100%;
- }
-
-@media only screen and (min-width: 768px) {
-   .test {
-     width: auto;
-   }
-}
-```
-
-<a id="media-queries-mixin-screen-lg"></a>
-
-# @mixin screen-lg
-
-Mixin whose objective is to create the media-query based on the cut points established in the configuration file
-
-+ **Group:** Media-queries
-+ **Access:** public
-
-## Examples
-
-```scss
-.test{
-   width: 100%;
-   @include screen-lg(){
-     width: auto;
-   }
-}
-```
-
-```css
-.test {
-   width: 100%;
- }
-
-@media only screen and (min-width: 1440px) {
-   .test {
-     width: auto;
-   }
-}
-```
+You can start up a local development server with ```npm run serve```.
+Access the running server at ```http://localhost:3000```.

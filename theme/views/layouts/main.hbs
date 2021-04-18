@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Design Systems Utils</title>
     <link rel="stylesheet" type="text/css" href="./styles/css/style.css">
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="https://www.everis.com/sites/all/themes/everis/logo.png" type="image/x-icon">
 
 </head>
 
@@ -203,8 +205,8 @@
                         </p>
                         <p><code>design-systems-utils .frontech.json</code></p>
                         <p>And then import the following file to your sass
-                            style sheet:</p>
-                        <p><code>@use '~frontech-library/sass/abstracts.scss' with ($font-path:'public/assets/fonts/');</code>
+                            stylesheet:</p>
+                        <p><code>@use '~@front-tech/design-systems-utils/library/web/abstracts' with ($font-path:'public/assets/fonts/');</code>
                         </p>
 
                         <p>We can also generate a css output of the library specifying in the configuration file the
@@ -225,6 +227,7 @@
                 <div class="section__body">
                     <h3>1.0.0:2021-04-15</h3>
                     <ul>
+                        <li>Style dictionary (Android, IOS, Scss)</li>
                         <li>Color palette established in the configuration file where it generates custom properties
                             within the selector :root</li>
                         <li>Icon and text font</li>

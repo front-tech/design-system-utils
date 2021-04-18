@@ -5,10 +5,9 @@ const [express, exphbs, sassdoc, fs, path] = [
   require("fs"),
   require("path")
 ];
-require('dotenv').config();
 
 const app = express();
-const port = 'http://jsamper92-github.io/utility-sass' | 3000;
+const port = 3000;
 const publicPath = path.resolve(__dirname, "public");
 
 app.engine(

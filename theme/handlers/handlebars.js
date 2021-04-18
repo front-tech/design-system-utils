@@ -1,7 +1,4 @@
-/* module.exports.registerHelper("isDefined", function (value) {
-    console.log(value);
-    return value;
-  }); */
+
 
 module.exports = {
   isDefined: function (value) {
