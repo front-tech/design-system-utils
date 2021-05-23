@@ -134,7 +134,7 @@
       "context": {
         "type": "variable",
         "name": "font-path",
-        "value": "'assets/fonts/'",
+        "value": "\"assets/fonts/\"",
         "scope": "default",
         "line": {
           "start": 4,
@@ -490,6 +490,457 @@
       "file": {
         "path": "tools/_media-queries.scss",
         "name": "_media-queries.scss"
+      }
+    }
+  ],
+  "rem": [
+    {
+      "description": "Variable that defines the reference unit in order to transform px into rem. By default 16px. To modify the size, simply set the variable in the import as follows: @use '~@front-tech/design-systems-utils/library/web/abstracts' with ($rem-baseline: 10px);\n",
+      "commentRange": {
+        "start": 6,
+        "end": 7
+      },
+      "context": {
+        "type": "variable",
+        "name": "rem-baseline",
+        "value": "16px",
+        "scope": "default",
+        "line": {
+          "start": 8,
+          "end": 8
+        }
+      },
+      "group": [
+        "rem"
+      ],
+      "access": "public",
+      "file": {
+        "path": "settings/_general.scss",
+        "name": "_general.scss"
+      },
+      "usedBy": [
+        {
+          "description": "Mixin that based on the $rem-baseline variable returns the percentage to which the font-size must attend. By default it is declared in the html selector of the library\n\n",
+          "context": {
+            "type": "mixin",
+            "name": "rem-baseline",
+            "code": "\n  font-size: $zoom / 16px * general.$rem-baseline;\n",
+            "line": {
+              "start": 50,
+              "end": 52
+            }
+          }
+        },
+        {
+          "description": "Function that returns the value of the pixels in rem.\n\n",
+          "context": {
+            "type": "function",
+            "name": "rem-convert",
+            "code": "\n  $result: ();\n  $separator: rem-separator($values);\n  @debug $to;\n  @debug $values;\n  @each $value in $values {\n    @if meta.type-of($value) == \"number\" and math.unit($value) == \"rem\" and $to == \"px\" {\n      $result: list.append($result, $value / 1rem * general.$rem-baseline, $separator);\n    } @else if meta.type-of($value) == \"number\" and math.unit($value) == \"px\" and $to == \"rem\" {\n      $result: list.append($result, $value / general.$rem-baseline * 1rem, $separator);\n    } @else if meta.type-of($value) == \"list\" {\n      $value-separator: rem-separator($value);\n      $value: rem-convert($to, $value...);\n      $value: rem-separator($value, $value-separator);\n      $result: list.append($result, $value, $separator);\n    } @else {\n      $result: list.append($result, $value, $separator);\n    }\n  }\n\n  @return if(length($result) == 1, list.nth($result, 1), $result);\n",
+            "line": {
+              "start": 64,
+              "end": 85
+            }
+          }
+        }
+      ]
+    },
+    {
+      "description": "Variable that transforms pixels into rem for browsers that support rem as well as if they do not. By default false.\n",
+      "commentRange": {
+        "start": 10,
+        "end": 11
+      },
+      "context": {
+        "type": "variable",
+        "name": "rem-fallback",
+        "value": "false",
+        "scope": "default",
+        "line": {
+          "start": 12,
+          "end": 12
+        }
+      },
+      "group": [
+        "rem"
+      ],
+      "access": "public",
+      "file": {
+        "path": "settings/_general.scss",
+        "name": "_general.scss"
+      },
+      "usedBy": [
+        {
+          "description": "Mixin that transforms the pixels into rem of the CSS properties entered as arguments. If the $rem-px-only variable is set to true, Internet Explorer 9 compatibility applies.\n",
+          "context": {
+            "type": "mixin",
+            "name": "rem",
+            "code": "\n  @if meta.type-of($properties) == \"map\" {\n    @each $property in map.keys($properties) {\n      @include rem($property, map.get($properties, $property));\n    }\n  } @else {\n    @each $property in $properties {\n      @if general.$rem-fallback or general.$rem-px-only {\n        #{$property}: rem-convert(px, $values...);\n      }\n      @if not general.$rem-px-only {\n        #{$property}: rem-convert(rem, $values...);\n      }\n    }\n  }\n",
+            "line": {
+              "start": 129,
+              "end": 144
+            }
+          }
+        }
+      ]
+    },
+    {
+      "description": "Variable that provides compatibility with Internet Explorer 9 and does not convert pixels into rem, as it is not compatible. By default, it is false.\n",
+      "commentRange": {
+        "start": 14,
+        "end": 15
+      },
+      "context": {
+        "type": "variable",
+        "name": "rem-px-only",
+        "value": "false",
+        "scope": "default",
+        "line": {
+          "start": 16,
+          "end": 16
+        }
+      },
+      "group": [
+        "rem"
+      ],
+      "access": "public",
+      "file": {
+        "path": "settings/_general.scss",
+        "name": "_general.scss"
+      },
+      "usedBy": [
+        {
+          "description": "Function that transforms pixels into rem. If the $rem-px-only variable is set to true, Internet Explorer 9 compatibility applies.\n",
+          "context": {
+            "type": "function",
+            "name": "rem",
+            "code": "\n    @if $rem-px-only {\n      @return rem-convert(px, $values...);\n    } @else {\n      @return rem-convert(rem, $values...);\n    }\n",
+            "line": {
+              "start": 101,
+              "end": 107
+            }
+          }
+        },
+        {
+          "description": "Mixin that transforms the pixels into rem of the CSS properties entered as arguments. If the $rem-px-only variable is set to true, Internet Explorer 9 compatibility applies.\n",
+          "context": {
+            "type": "mixin",
+            "name": "rem",
+            "code": "\n  @if meta.type-of($properties) == \"map\" {\n    @each $property in map.keys($properties) {\n      @include rem($property, map.get($properties, $property));\n    }\n  } @else {\n    @each $property in $properties {\n      @if general.$rem-fallback or general.$rem-px-only {\n        #{$property}: rem-convert(px, $values...);\n      }\n      @if not general.$rem-px-only {\n        #{$property}: rem-convert(rem, $values...);\n      }\n    }\n  }\n",
+            "line": {
+              "start": 129,
+              "end": 144
+            }
+          }
+        }
+      ]
+    },
+    {
+      "description": "Function that, given a list of properties, returns them separated by the corresponding separator character\n\n",
+      "commentRange": {
+        "start": 8,
+        "end": 18
+      },
+      "context": {
+        "type": "function",
+        "name": "rem-separator",
+        "code": "\n  @if $separator == \"comma\" or $separator == \"space\" {\n    @return list.append($list, null, $separator);\n  }\n\n  @if meta.function-exists(\"list-separator\") == true {\n    @return list-separator($list);\n  }\n\n  $test-list: ();\n  @each $item in $list {\n    $test-list: list.append($test-list, $item, space);\n  }\n\n  @return if($test-list == $list, space, comma);\n",
+        "line": {
+          "start": 20,
+          "end": 35
+        }
+      },
+      "parameter": [
+        {
+          "type": "list",
+          "name": "list",
+          "description": "Property list"
+        },
+        {
+          "type": "string",
+          "name": "separator",
+          "default": "false",
+          "description": "Character separator"
+        }
+      ],
+      "example": [
+        {
+          "type": "scss",
+          "code": "\nrem-separator($list)"
+        }
+      ],
+      "group": [
+        "rem"
+      ],
+      "access": "public",
+      "require": [],
+      "file": {
+        "path": "tools/_rem.scss",
+        "name": "_rem.scss"
+      },
+      "usedBy": [
+        {
+          "description": "Function that returns the value of the pixels in rem.\n\n",
+          "context": {
+            "type": "function",
+            "name": "rem-convert",
+            "code": "\n  $result: ();\n  $separator: rem-separator($values);\n  @debug $to;\n  @debug $values;\n  @each $value in $values {\n    @if meta.type-of($value) == \"number\" and math.unit($value) == \"rem\" and $to == \"px\" {\n      $result: list.append($result, $value / 1rem * general.$rem-baseline, $separator);\n    } @else if meta.type-of($value) == \"number\" and math.unit($value) == \"px\" and $to == \"rem\" {\n      $result: list.append($result, $value / general.$rem-baseline * 1rem, $separator);\n    } @else if meta.type-of($value) == \"list\" {\n      $value-separator: rem-separator($value);\n      $value: rem-convert($to, $value...);\n      $value: rem-separator($value, $value-separator);\n      $result: list.append($result, $value, $separator);\n    } @else {\n      $result: list.append($result, $value, $separator);\n    }\n  }\n\n  @return if(length($result) == 1, list.nth($result, 1), $result);\n",
+            "line": {
+              "start": 64,
+              "end": 85
+            }
+          }
+        }
+      ]
+    },
+    {
+      "description": "Mixin that based on the $rem-baseline variable returns the percentage to which the font-size must attend. By default it is declared in the html selector of the library\n\n",
+      "commentRange": {
+        "start": 37,
+        "end": 49
+      },
+      "context": {
+        "type": "mixin",
+        "name": "rem-baseline",
+        "code": "\n  font-size: $zoom / 16px * general.$rem-baseline;\n",
+        "line": {
+          "start": 50,
+          "end": 52
+        }
+      },
+      "parameter": [
+        {
+          "type": "string",
+          "name": "zoom",
+          "default": "100%"
+        }
+      ],
+      "require": [
+        {
+          "type": "variable",
+          "name": "rem-baseline",
+          "external": false,
+          "description": "Variable that defines the reference unit in order to transform px into rem. [16px]"
+        }
+      ],
+      "example": [
+        {
+          "type": "scss",
+          "code": "html {\n    @include rem-baseline();\n}"
+        },
+        {
+          "type": "css",
+          "code": "html {\n    font-size: 100%;\n}"
+        }
+      ],
+      "group": [
+        "rem"
+      ],
+      "access": "public",
+      "file": {
+        "path": "tools/_rem.scss",
+        "name": "_rem.scss"
+      }
+    },
+    {
+      "description": "Function that returns the value of the pixels in rem.\n\n",
+      "commentRange": {
+        "start": 54,
+        "end": 62
+      },
+      "context": {
+        "type": "function",
+        "name": "rem-convert",
+        "code": "\n  $result: ();\n  $separator: rem-separator($values);\n  @debug $to;\n  @debug $values;\n  @each $value in $values {\n    @if meta.type-of($value) == \"number\" and math.unit($value) == \"rem\" and $to == \"px\" {\n      $result: list.append($result, $value / 1rem * general.$rem-baseline, $separator);\n    } @else if meta.type-of($value) == \"number\" and math.unit($value) == \"px\" and $to == \"rem\" {\n      $result: list.append($result, $value / general.$rem-baseline * 1rem, $separator);\n    } @else if meta.type-of($value) == \"list\" {\n      $value-separator: rem-separator($value);\n      $value: rem-convert($to, $value...);\n      $value: rem-separator($value, $value-separator);\n      $result: list.append($result, $value, $separator);\n    } @else {\n      $result: list.append($result, $value, $separator);\n    }\n  }\n\n  @return if(length($result) == 1, list.nth($result, 1), $result);\n",
+        "line": {
+          "start": 64,
+          "end": 85
+        }
+      },
+      "parameter": [
+        {
+          "type": "string",
+          "name": "to",
+          "description": "Relative unit"
+        },
+        {
+          "type": "list",
+          "name": "values",
+          "description": "Properties CSS to transform rem"
+        }
+      ],
+      "require": [
+        {
+          "type": "variable",
+          "name": "rem-baseline",
+          "external": false,
+          "description": "Variable that defines the unit of measure of the rem. [16px]"
+        },
+        {
+          "type": "function",
+          "name": "rem-separator",
+          "external": false,
+          "description": "Function that, given a list of properties, returns them separated by the corresponding separator character."
+        }
+      ],
+      "example": [
+        {
+          "type": "scss",
+          "code": "rem-convert(rem,(10px,5px))"
+        }
+      ],
+      "group": [
+        "rem"
+      ],
+      "access": "public",
+      "file": {
+        "path": "tools/_rem.scss",
+        "name": "_rem.scss"
+      },
+      "usedBy": [
+        {
+          "description": "Function that transforms pixels into rem. If the $rem-px-only variable is set to true, Internet Explorer 9 compatibility applies.\n",
+          "context": {
+            "type": "function",
+            "name": "rem",
+            "code": "\n    @if $rem-px-only {\n      @return rem-convert(px, $values...);\n    } @else {\n      @return rem-convert(rem, $values...);\n    }\n",
+            "line": {
+              "start": 101,
+              "end": 107
+            }
+          }
+        },
+        {
+          "description": "Mixin that transforms the pixels into rem of the CSS properties entered as arguments. If the $rem-px-only variable is set to true, Internet Explorer 9 compatibility applies.\n",
+          "context": {
+            "type": "mixin",
+            "name": "rem",
+            "code": "\n  @if meta.type-of($properties) == \"map\" {\n    @each $property in map.keys($properties) {\n      @include rem($property, map.get($properties, $property));\n    }\n  } @else {\n    @each $property in $properties {\n      @if general.$rem-fallback or general.$rem-px-only {\n        #{$property}: rem-convert(px, $values...);\n      }\n      @if not general.$rem-px-only {\n        #{$property}: rem-convert(rem, $values...);\n      }\n    }\n  }\n",
+            "line": {
+              "start": 129,
+              "end": 144
+            }
+          }
+        }
+      ]
+    },
+    {
+      "description": "Function that transforms pixels into rem. If the $rem-px-only variable is set to true, Internet Explorer 9 compatibility applies.\n",
+      "commentRange": {
+        "start": 87,
+        "end": 100
+      },
+      "context": {
+        "type": "function",
+        "name": "rem",
+        "code": "\n    @if $rem-px-only {\n      @return rem-convert(px, $values...);\n    } @else {\n      @return rem-convert(rem, $values...);\n    }\n",
+        "line": {
+          "start": 101,
+          "end": 107
+        }
+      },
+      "parameter": [
+        {
+          "type": "map",
+          "name": "properties",
+          "description": "Properties"
+        },
+        {
+          "type": "list",
+          "name": "values",
+          "description": "Values in px to transform rem"
+        }
+      ],
+      "require": [
+        {
+          "type": "variable",
+          "name": "rem-px-only",
+          "external": false,
+          "description": "Variable that provides compatibility to Internet Explorer 9. [false]"
+        },
+        {
+          "type": "function",
+          "name": "rem-convert",
+          "external": false,
+          "description": "Function that returns the value of the pixels in rem."
+        }
+      ],
+      "example": [
+        {
+          "type": "scss",
+          "code": ".test{\n    font-size: rem(16px);\n}"
+        },
+        {
+          "type": "css",
+          "code": ".test{\n    font-size: 1rem;\n}"
+        }
+      ],
+      "group": [
+        "rem"
+      ],
+      "access": "public",
+      "file": {
+        "path": "tools/_rem.scss",
+        "name": "_rem.scss"
+      }
+    },
+    {
+      "description": "Mixin that transforms the pixels into rem of the CSS properties entered as arguments. If the $rem-px-only variable is set to true, Internet Explorer 9 compatibility applies.\n",
+      "commentRange": {
+        "start": 109,
+        "end": 127
+      },
+      "context": {
+        "type": "mixin",
+        "name": "rem",
+        "code": "\n  @if meta.type-of($properties) == \"map\" {\n    @each $property in map.keys($properties) {\n      @include rem($property, map.get($properties, $property));\n    }\n  } @else {\n    @each $property in $properties {\n      @if general.$rem-fallback or general.$rem-px-only {\n        #{$property}: rem-convert(px, $values...);\n      }\n      @if not general.$rem-px-only {\n        #{$property}: rem-convert(rem, $values...);\n      }\n    }\n  }\n",
+        "line": {
+          "start": 129,
+          "end": 144
+        }
+      },
+      "parameter": [
+        {
+          "type": "list",
+          "name": "values",
+          "description": "Values in px to transform rem"
+        }
+      ],
+      "require": [
+        {
+          "type": "variable",
+          "name": "rem-fallback"
+        },
+        {
+          "type": "variable",
+          "name": "rem-px-only",
+          "external": false,
+          "description": "Variable that provides compatibility to Internet Explorer 9. [false]"
+        },
+        {
+          "type": "function",
+          "name": "rem-convert",
+          "external": false,
+          "description": "Function that returns the value of the pixels in rem"
+        }
+      ],
+      "example": [
+        {
+          "type": "scss",
+          "code": ".test{\n    @include rem((\n        margin: 10px 5px,\n        text-shadow: (1px 1px #eee, -1px -1px #eee),\n        padding: 5px\n    ));\n}"
+        },
+        {
+          "type": "css",
+          "code": ".test{\n     margin: 1rem 0.5rem;\n     text-shadow: 0.1rem 0.1rem #eee, -0.1rem -0.1rem #eee;\n     padding: 0.5rem;\n}"
+        }
+      ],
+      "group": [
+        "rem"
+      ],
+      "access": "public",
+      "file": {
+        "path": "tools/_rem.scss",
+        "name": "_rem.scss"
       }
     }
   ],

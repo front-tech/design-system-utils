@@ -53,6 +53,9 @@
                                 <a href="#{{posts.fonts.0.group}}">{{posts.fonts.0.group}}</a>
                             </li>
                             <li class="nav__item">
+                                <a href="#{{posts.rem.0.group}}">{{posts.rem.0.group}}</a>
+                            </li>
+                            <li class="nav__item">
                                 <a href="#{{posts.media-queries.0.group}}"
                                     data-nav="is-active">{{posts.media-queries.0.group}}</a>
                             </li>
@@ -194,8 +197,12 @@
           "type":"spacing"
       }
   },
-  "outputCSS":{
-    "path": "style.css"
+  "configuration": {
+    "outputCSS": {
+      "path": "assets/styles/style.css"
+    },
+    "platforms": ["scss", "ios", "android"],
+    "customPath": "assets/styles"
   }
 }
                 </code>
@@ -206,16 +213,20 @@
                         <p><code>design-systems-utils .frontech.json</code></p>
                         <p>And then import the following file to your sass
                             stylesheet:</p>
-                        <p><code>@use '~@front-tech/design-systems-utils/library/web/abstracts' with ($font-path:'public/assets/fonts/');</code>
+                        <p><code>`@use '~@front-tech/design-systems-utils/library/web/abstracts' with ($font-path:'public/assets/fonts/', $rem-baseline: 10px);`</code>
                         </p>
 
                         <p>We can also generate a css output of the library specifying in the configuration file the
                             path
                             where we want to export said file:
                         </p>
-                        <p><code>"outputCSS":{<br/>
-                              "path": "style.css"<br/>
-                        }</code></p>
+                        <p><code>"configuration":{<br/>
+                                <span style="padding-left: 50px;display:block">"outputCSS": {<br/>
+                              "path": "assets/styles/style.css"<br/>
+                              },<br/>
+                              "platforms": ["scss", "ios", "android"],<br/>
+                              "customPath": "assets/styles"<br/></span>}
+                        </code></p>
 
                     </div>
                 </div>
@@ -239,6 +250,13 @@
                             another</li>
                         <li>Path output to export the CSS stylesheet based on the configuration specified in the
                             .frontech.json file</li>
+                    </ul>
+
+                    <h3>1.0.1:2021-05-17</h3>
+                    <ul>
+                        <li>Utilities rem</li>
+                        <li>New configuration field in the .frontech.json file to determine the platforms from which you
+                            want to generate the architecture and expose the output where to generate it</li>
                     </ul>
                 </div>
             </div>
@@ -296,7 +314,7 @@
                                     <span>{{this.context.name}}(</span>
                                     <span>{{#each this.parameter}}{{#if @last}}{{this.name}}{{else}}${{this.name}}, {{/if}}{{/each}}</span>)
                                     {{else if (isCSS this.context.type)}}
-                                        <span>{{this.context.name}}:{</span>
+                                        <span>{{this.context.name}}: {</span>
                                         {{#if @last}}
                                         <span>{{this.context.value}} <p>}</p></span>
                                         {{else}}
@@ -346,6 +364,106 @@
 
                         {{/if}}
                         {{#if (isDefined)}}
+                        <h3 class="section__subtitle">
+                            Dependencias
+                        </h3>
+                        {{#each this.require}}
+                        <li class="section__require">
+                            <span>
+                                [{{this.type}}]
+                            </span>
+                            <span>
+                                {{this.name}}
+                            </span>
+                        </li>
+                        {{/each}}
+                        {{/if}}
+                    </div>
+                    {{/each}}
+                </div>
+            </div>
+            <div class="section" id="{{posts.rem.0.group}}">
+                <div class="section__header">
+                    <h2>{{posts.rem.0.group}}</h2>
+                </div>
+                <div class="section__body">
+                    {{#each posts.rem}}
+                    <h3 class="section__title">
+                        <span class="section__title--name">
+                            {{this.context.name}}
+                        </span>
+                        <span class="section__title--type">
+                            ({{this.context.type}})
+                        </span>
+                    </h3>
+                    <div class="section__information">
+                        <div class="section__code-wrapper" onclick="openCode('rem',{{@index}})">
+                            <pre id="rem-{{@index}}" aria-expanded="false" data-type="{{this.context.type}}">
+
+                                <span class="section__code-wrapper--title">
+                                    {{#if (isMixin this.context.type)}}
+                                    <span>@{{this.context.type}}</span>
+                                    <span>{{this.context.name}}(</span>
+                                    <span>{{#each this.parameter}}{{#if @last}}${{this.name}}{{else}}${{this.name}}, {{/if}}{{/each}}</span>)
+                                    {{else if (isFunction this.context.type)}}
+                                        <span >{{this.context.value}}</span>
+                                    {{else}}
+                                    <span>${{this.context.name}}:</span>
+                                    <span> {{this.context.value}}</span>
+                                    {{/if}}
+                                </span>
+                                <span id="rem-content-{{@index}}" class="section__code-wrapper--code">
+                                    <span>{{this.context.code}}</span>
+                                </span>
+                            </pre>
+
+                        </div>
+                        <h3 class="section__subtitle">
+                            Descripción
+                        </h3>
+                        <p class="section__description">
+                            {{this.description}}
+                        </p>
+                        {{#if (isDefined this.parameter) }}
+                        <h3 class="section__subtitle">
+                            Parametros
+                        </h3>
+                        <table class="section__parameters">
+                            <thead>
+                                <tr>
+                                    <th class="section__parameters--name">Nombre</th>
+                                    <th class="section__parameters--description">Descripción</th>
+                                    <th class="section__parameters--type">Tipo</th>
+                                    <th class="section__parameters--default">Valor por defecto</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {{#each this.parameter}}
+                                <tr>
+                                    <td class="section__parameters--name">${{this.name}}</td>
+                                    <td class="section__parameters--description">{{this.description}}</td>
+                                    <td class="section__parameters--type">{{this.type}}</td>
+                                    <td class="section__parameters--default">{{this.default}}</td>
+                                </tr>
+                                {{/each}}
+                            </tbody>
+                        </table>
+
+                        {{/if}}
+                        {{#if (isDefined this.example)}}
+                        <h3 class="section__subtitle">
+                            Example
+                        </h3>
+                        {{#each this.example}}
+                        <div class="section__code-wrapper example">
+                            <pre>
+                                    <span>{{this.code}}</span>
+                                </pre>
+                        </div>
+                        {{/each}}
+                        {{/if}}
+
+                        {{#if this.require.length}}
                         <h3 class="section__subtitle">
                             Dependencias
                         </h3>

@@ -1,3 +1,4 @@
+@use '../tools/rem';
 /*--------------------------------
 	#RESET
 --------------------------------*/
@@ -316,4 +317,8 @@ select {
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
+}
+
+html{
+	@include rem.rem-baseline;;
 }

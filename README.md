@@ -174,8 +174,12 @@ For the correct functioning of the library it is necessary to create a configura
         "type":"spacing"
     }
   },
-  "outputCSS":{
-    "path": "style.css"
+  "configuration": {
+    "outputCSS": {
+      "path": "style.css"
+    },
+    "platforms": ["scss", "ios", "android"],
+    "customPath": "assets/styles"
   }
 }
 ```
@@ -184,14 +188,18 @@ To use the library, it will simply be necessary to create an npm script with the
 `design-systems-utils .frontech.json`
 
 And then import the following file to your sass stylesheet:
-`@use '~@front-tech/design-systems-utils/library/web/abstracts' with ($font-path:'public/assets/fonts/');`
+`@use '~@front-tech/design-systems-utils/library/web/abstracts' with ($font-path:'public/assets/fonts/', $rem-baseline: 10px);`
 
 We can also generate a css output of the library specifying in the configuration file the path where we want to export said file:
 
 ```
-"outputCSS":{
-    "path": "style.css"
-  }
+"configuration": {
+    "outputCSS": {
+      "path": "style.css"
+    },
+    "platforms": ["scss", "ios", "android"],
+    "customPath": "assets/styles"
+}
 ```
 
 ## Contributing to Front-tech
