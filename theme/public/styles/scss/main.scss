@@ -1,0 +1,12 @@
+@use '../../../../library/web/base/reset';
+
+
+@use 'components/components.scss';
+@use 'elements/elements.scss';
+@use 'utilities/utilities.scss';
+
+html {
+    font-family: Arial, Helvetica, sans-serif;
+    scroll-behavior: smooth;
+
+} 

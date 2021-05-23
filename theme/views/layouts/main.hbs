@@ -1,0 +1,968 @@
+<html lang="en">
+
+<head>
+    <!-- <meta> tags> -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Design Systems Utils</title>
+    <link rel="stylesheet" type="text/css" href="./styles/css/style.css">
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="https://www.everis.com/sites/all/themes/everis/logo.png" type="image/x-icon">
+
+</head>
+
+<body>
+    <header class="header" id="header">
+
+        <h1 class="header__title"><a href="#top">Design Systems Utils</a></h1>
+
+    </header>
+    <div class="container">
+        <nav class="nav" id="sidenav">
+            <div class="nav__content">
+                {{!-- <div class="nav__header">
+                    <fieldset class="nav__fieldset">
+                        <legend class="nav__legend">Search</legend>
+                        <label for="search" class="nav__label"></label>
+                        <input id="search" type="text" autocomplete="off" class="nav__input" placeholder="Search">
+                    </fieldset>
+                </div> --}}
+                <div class="nav__body">
+                    <div class="nav__subsection">
+                        <h3 class="nav__title">
+                            <a href="#top">Design Systems Utils</a>
+                        </h3>
+                        <ul>
+                            <li class="nav__item">
+                                <a href="#configuration">Configuration</a>
+                            </li>
+                            <li class="nav__item">
+                                <a href="#changelog">Changelog</a>
+                            </li>
+                            <li class="nav__item">
+                                <a href="#contributing">Contributing</a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="nav__subsection">
+                        <h3 class="nav__title">
+                            <a href="#fonts">API Publica</a>
+                        </h3>
+                        <ul>
+                            <li class="nav__item">
+                                <a href="#{{posts.fonts.0.group}}">{{posts.fonts.0.group}}</a>
+                            </li>
+                            <li class="nav__item">
+                                <a href="#{{posts.rem.0.group}}">{{posts.rem.0.group}}</a>
+                            </li>
+                            <li class="nav__item">
+                                <a href="#{{posts.media-queries.0.group}}"
+                                    data-nav="is-active">{{posts.media-queries.0.group}}</a>
+                            </li>
+                            <li class="nav__item">
+                                <a href="#{{posts.grid.0.group}}">{{posts.grid.0.group}}</a>
+                            </li>
+                            <li class="nav__item">
+                                <a href="#{{posts.animations.0.group}}">{{posts.animations.0.group}}</a>
+                            </li>
+                            <li class="nav__item">
+                                <a href="#{{posts.spacing.0.group}}">{{posts.spacing.0.group}}</a>
+                            </li>
+                            <li class="nav__item">
+                                <a href="#{{posts.functions.0.group}}">{{posts.functions.0.group}}</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+        </nav>
+        <main class="main">
+            <div class="indice" id="configuration">
+                <div class="indice__body">
+                    <h3 class="indice__title">DESIGN SYSTEMS UTILS</h3>
+                    <p>Design Systems Utils aims to provide a series of common utilities at the beginning of any web
+                        project, which will facilitate and speed up the day-to-day development. For more information
+                        click on the following <a class="indice__link" href="#fonts">link</a>.
+                    </p>
+                </div>
+            </div>
+            <div class="section" id="configuration">
+                <div class="section__header">
+                    <h2>Configuration</h2>
+                </div>
+                <div class="section__body indice">
+                    <div>
+                        <p>
+                            Initially it will be necessary to install the <i>@front-tech/design-systems-utils</i>
+                            dependency
+                            by executing the following command <code>npm install @front-tech/design-systems-utils</code>
+                        </p>
+                        <p>For the correct functioning of the library it is necessary to create a configuration file in
+                            the
+                            project called <code>.frontech.json</code>, which will determine the utilities of margin,
+                            padding and custom grid. This configuration must maintain the following structure:</p>
+                        <pre>
+                <code>
+{
+  "colors": {
+    "secondary_3": {
+      "value": "rgba(203.00000309944153, 223.00000190734863, 144.00000661611557, 1)",
+      "type": "color"
+    },
+    "secondary_2": {
+      "value": "rgba(143.00000667572021, 173.00000488758087, 136.00000709295273, 1)",
+      "type": "color"
+    },
+    "secondary_1": {
+      "value": "rgba(127.00000002980232, 156.00000590085983, 150.0000062584877, 1)",
+      "type": "color"
+    },
+    "primary_3": {
+      "value": "rgba(155.00000596046448, 193.00000369548798, 219.0000021457672, 1)",
+      "type": "color"
+    },
+    "primary_2": {
+      "value": "rgba(20.000000707805157, 131.00000739097595, 187.00000405311584, 1)",
+      "type": "color"
+    },
+    "primary_1": {
+      "value": "rgba(0, 102.00000151991844, 153.00000607967377, 1)",
+      "type": "color"
+    }
+  },
+  "breakpoints": {
+    "sm": {
+      "gutter": {
+        "value": "30px",
+        "type": "grid"
+      },
+      "offset": {
+        "value": "50px",
+        "type": "grid"
+      },
+      "columns": {
+        "value": 4,
+        "type": "grid"
+      },
+      "width": {
+        "value": "360px",
+        "type": "grid"
+      }
+    },
+    "md": {
+      "gutter": {
+        "value": "30px",
+        "type": "grid"
+      },
+      "offset": {
+        "value": "50px",
+        "type": "grid"
+      },
+      "columns": {
+        "value": 6,
+        "type": "grid"
+      },
+      "width": {
+        "value": "768px",
+        "type": "grid"
+      }
+    },
+    "lg": {
+      "gutter": {
+        "value": "30px",
+        "type": "grid"
+      },
+      "offset": {
+        "value": "50px",
+        "type": "grid"
+      },
+      "columns": {
+        "value": 12,
+        "type": "grid"
+      },
+      "width": {
+        "value": "1440px",
+        "type": "grid"
+      }
+    }
+  },
+  "spacing":{
+      "increase":{
+          "value": 5,
+          "type":"spacing"
+      },
+      "limit": {
+          "value": 20,
+          "type":"spacing"
+      }
+  },
+  "configuration": {
+    "outputCSS": {
+      "path": "assets/styles/style.css"
+    },
+    "platforms": ["scss", "ios", "android"],
+    "customPath": "assets/styles"
+  }
+}
+                </code>
+        </pre>
+                        <p>To use the library, it will simply be necessary to create an npm script with the following
+                            syntax:
+                        </p>
+                        <p><code>design-systems-utils .frontech.json</code></p>
+                        <p>And then import the following file to your sass
+                            stylesheet:</p>
+                        <p><code>`@use '~@front-tech/design-systems-utils/library/web/abstracts' with ($font-path:'public/assets/fonts/', $rem-baseline: 10px);`</code>
+                        </p>
+
+                        <p>We can also generate a css output of the library specifying in the configuration file the
+                            path
+                            where we want to export said file:
+                        </p>
+                        <p><code>"configuration":{<br/>
+                                <span style="padding-left: 50px;display:block">"outputCSS": {<br/>
+                              "path": "assets/styles/style.css"<br/>
+                              },<br/>
+                              "platforms": ["scss", "ios", "android"],<br/>
+                              "customPath": "assets/styles"<br/></span>}
+                        </code></p>
+
+                    </div>
+                </div>
+            </div>
+            <div class="section introduction" id="changelog">
+                <div class="section__header">
+                    <h2>Changelog</h2>
+                </div>
+                <div class="section__body">
+                    <h3>1.0.0:2021-04-15</h3>
+                    <ul>
+                        <li>Style dictionary (Android, IOS, Scss)</li>
+                        <li>Color palette established in the configuration file where it generates custom properties
+                            within the selector :root</li>
+                        <li>Icon and text font</li>
+                        <li>Grid</li>
+                        <li>Margin utilities</li>
+                        <li>Mixin media queries</li>
+                        <li>Custom Animations</li>
+                        <li>Function str-replace whose objective is starting from a string to replace one character with
+                            another</li>
+                        <li>Path output to export the CSS stylesheet based on the configuration specified in the
+                            .frontech.json file</li>
+                    </ul>
+
+                    <h3>1.0.1:2021-05-17</h3>
+                    <ul>
+                        <li>Utilities rem</li>
+                        <li>New configuration field in the .frontech.json file to determine the platforms from which you
+                            want to generate the architecture and expose the output where to generate it</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="section introduction indice" id="contributing">
+                <div class="section__header">
+                    <h2>Contributing</h2>
+                </div>
+                <div class="section__body">
+                    <h3>Contributing to Front-tech
+                    </h3>
+                    <p>Thanks for contributing to front-tech<span class="widont">&nbsp;</span>development!</p>
+                    <p>Feature requests and bug reports
+                        can be filed on <a class="indice__link" target="_blank"
+                            href="https://github.com/front-tech/design-system-utils">GitHub</a>:
+                    </p>
+                    <p>If you are contributing code
+                        with new features or<span class="widont">&nbsp;</span>bug-fixes:</p>
+                    <ul>
+                        <li>Fork the project, and create a branch for your<span class="widont">&nbsp;</span>contribution
+                        </li>
+                        <li>Follow the development guide below to get design-systems-utils to work</li>
+                        <li>Write the necessary documentation in library/web/**/*.scss</li>
+                        <li>Open a pull request on <a class="indice__link" target="_blank"
+                                href="https://github.com/front-tech/design-system-utils/issues">GitHub</a></li>
+                    </ul>
+                    <h3>Development</h3>
+                    <p>To install the necessary Node dependencies, run
+                        <code>npm install</code>.
+                    </p>
+                    <p>You can start up a local development server with <code>npm run serve</code>.</p>
+                    <p>Access the running server at <code>http://localhost:3000</code>.</p>
+                </div>
+            </div>
+            <div class="section" id="{{posts.fonts.0.group}}">
+                <div class="section__header">
+                    <h2>{{posts.fonts.0.group}}</h2>
+                </div>
+                <div class="section__body">
+                    {{#each posts.fonts}}
+                    <h3 class="section__title">
+                        <span class="section__title--name">
+                            {{this.context.name}}
+                        </span>
+                        <span class="section__title--type">
+                            ({{this.context.type}})
+                        </span>
+                    </h3>
+                    <div class="section__information">
+                        <div class="section__code-wrapper" onclick="openCode('font',{{@index}})">
+                            <pre id="font-{{@index}}" aria-expanded="false" data-type="{{this.context.type}}">
+
+                                <span class="section__code-wrapper--title">
+                                    {{#if (isMixin this.context.type)}}
+                                    <span>${{this.context.type}}</span>
+                                    <span>{{this.context.name}}(</span>
+                                    <span>{{#each this.parameter}}{{#if @last}}{{this.name}}{{else}}${{this.name}}, {{/if}}{{/each}}</span>)
+                                    {{else if (isCSS this.context.type)}}
+                                        <span>{{this.context.name}}: {</span>
+                                        {{#if @last}}
+                                        <span>{{this.context.value}} <p>}</p></span>
+                                        {{else}}
+                                        <p>{{this.context.value}}</p>
+                                        {{/if}}
+                                    {{else}}
+                                    <span>${{this.context.name}}:</span>
+                                    <span> {{this.context.value}}</span>
+                                    {{/if}}
+                                </span>
+                                <span id="font-content-{{@index}}" class="section__code-wrapper--code">
+                                    <span>{{this.context.code}}</span>
+                                </span>
+                            </pre>
+
+                        </div>
+                        <h3 class="section__subtitle">
+                            Descripción
+                        </h3>
+                        <p class="section__description">
+                            {{this.description}}
+                        </p>
+                        {{#if (isDefined this.parameter) }}
+                        <h3 class="section__subtitle">
+                            Parametros
+                        </h3>
+                        <table class="section__parameters">
+                            <thead>
+                                <tr>
+                                    <th class="section__parameters--name">Nombre</th>
+                                    <th class="section__parameters--description">Descripción</th>
+                                    <th class="section__parameters--type">Tipo</th>
+                                    <th class="section__parameters--default">Valor por defecto</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {{#each this.parameter}}
+                                <tr>
+                                    <td class="section__parameters--name">${{this.name}}</td>
+                                    <td class="section__parameters--description">{{this.description}}</td>
+                                    <td class="section__parameters--type">{{this.type}}</td>
+                                    <td class="section__parameters--default">{{this.default}}</td>
+                                </tr>
+                                {{/each}}
+                            </tbody>
+                        </table>
+
+                        {{/if}}
+                        {{#if (isDefined)}}
+                        <h3 class="section__subtitle">
+                            Dependencias
+                        </h3>
+                        {{#each this.require}}
+                        <li class="section__require">
+                            <span>
+                                [{{this.type}}]
+                            </span>
+                            <span>
+                                {{this.name}}
+                            </span>
+                        </li>
+                        {{/each}}
+                        {{/if}}
+                    </div>
+                    {{/each}}
+                </div>
+            </div>
+            <div class="section" id="{{posts.rem.0.group}}">
+                <div class="section__header">
+                    <h2>{{posts.rem.0.group}}</h2>
+                </div>
+                <div class="section__body">
+                    {{#each posts.rem}}
+                    <h3 class="section__title">
+                        <span class="section__title--name">
+                            {{this.context.name}}
+                        </span>
+                        <span class="section__title--type">
+                            ({{this.context.type}})
+                        </span>
+                    </h3>
+                    <div class="section__information">
+                        <div class="section__code-wrapper" onclick="openCode('rem',{{@index}})">
+                            <pre id="rem-{{@index}}" aria-expanded="false" data-type="{{this.context.type}}">
+
+                                <span class="section__code-wrapper--title">
+                                    {{#if (isMixin this.context.type)}}
+                                    <span>@{{this.context.type}}</span>
+                                    <span>{{this.context.name}}(</span>
+                                    <span>{{#each this.parameter}}{{#if @last}}${{this.name}}{{else}}${{this.name}}, {{/if}}{{/each}}</span>)
+                                    {{else if (isFunction this.context.type)}}
+                                        <span >{{this.context.value}}</span>
+                                    {{else}}
+                                    <span>${{this.context.name}}:</span>
+                                    <span> {{this.context.value}}</span>
+                                    {{/if}}
+                                </span>
+                                <span id="rem-content-{{@index}}" class="section__code-wrapper--code">
+                                    <span>{{this.context.code}}</span>
+                                </span>
+                            </pre>
+
+                        </div>
+                        <h3 class="section__subtitle">
+                            Descripción
+                        </h3>
+                        <p class="section__description">
+                            {{this.description}}
+                        </p>
+                        {{#if (isDefined this.parameter) }}
+                        <h3 class="section__subtitle">
+                            Parametros
+                        </h3>
+                        <table class="section__parameters">
+                            <thead>
+                                <tr>
+                                    <th class="section__parameters--name">Nombre</th>
+                                    <th class="section__parameters--description">Descripción</th>
+                                    <th class="section__parameters--type">Tipo</th>
+                                    <th class="section__parameters--default">Valor por defecto</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {{#each this.parameter}}
+                                <tr>
+                                    <td class="section__parameters--name">${{this.name}}</td>
+                                    <td class="section__parameters--description">{{this.description}}</td>
+                                    <td class="section__parameters--type">{{this.type}}</td>
+                                    <td class="section__parameters--default">{{this.default}}</td>
+                                </tr>
+                                {{/each}}
+                            </tbody>
+                        </table>
+
+                        {{/if}}
+                        {{#if (isDefined this.example)}}
+                        <h3 class="section__subtitle">
+                            Example
+                        </h3>
+                        {{#each this.example}}
+                        <div class="section__code-wrapper example">
+                            <pre>
+                                    <span>{{this.code}}</span>
+                                </pre>
+                        </div>
+                        {{/each}}
+                        {{/if}}
+
+                        {{#if this.require.length}}
+                        <h3 class="section__subtitle">
+                            Dependencias
+                        </h3>
+                        {{#each this.require}}
+                        <li class="section__require">
+                            <span>
+                                [{{this.type}}]
+                            </span>
+                            <span>
+                                {{this.name}}
+                            </span>
+                        </li>
+                        {{/each}}
+                        {{/if}}
+                    </div>
+                    {{/each}}
+                </div>
+            </div>
+            <div class="section" id="{{posts.media-queries.0.group}}">
+                <div class="section__header">
+                    <h2>{{posts.media-queries.0.group}}</h2>
+                </div>
+                <div class="section__body">
+                    {{#each posts.media-queries}}
+                    <h3 class="section__title">
+                        <span class="section__title--name">
+                            {{this.context.name}}
+                        </span>
+                        <span class="section__title--type">
+                            ({{this.context.type}})
+                        </span>
+                    </h3>
+                    <div class="section__information">
+                        <div class="section__code-wrapper"
+                            onclick="openCode('mediaquerie',{{@index}},'{{this.context.type}}')">
+                            <pre id="mediaquerie-{{@index}}" aria-expanded="false">
+                                <span class="section__code-wrapper--title">
+                                    <span>@{{this.context.type}}</span>
+                                    <span>{{this.context.name}}(</span>
+                                    <span>{{#each this.parameter}}{{#if @last}}{{this.name}}{{else}}${{this.name}}, {{/if}}{{/each}}</span>)
+                                </span>
+                                <span id="mediaquerie-content-{{@index}}" class="section__code-wrapper--code">
+                                    {{this.context.code}}
+                                </span>
+                            </pre>
+
+                        </div>
+                        <h3 class="section__subtitle">
+                            Descripción
+                        </h3>
+                        <p class="section__description">
+                            {{this.description}}
+                        </p>
+
+                        {{#if (isDefined this.parameter) }}
+                        <h3 class="section__subtitle">
+                            Parametros
+                        </h3>
+                        <table class="section__parameters">
+                            <thead>
+                                <tr>
+                                    <th class="section__parameters--name">Nombre</th>
+                                    <th class="section__parameters--description">Descripción</th>
+                                    <th class="section__parameters--type">Tipo</th>
+                                    <th class="section__parameters--default">Valor por defecto</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {{#each this.parameter}}
+                                <tr>
+                                    <td class="section__parameters--name">${{this.name}}</td>
+                                    <td class="section__parameters--description">{{this.description}}</td>
+                                    <td class="section__parameters--type">{{this.type}}</td>
+                                    <td class="section__parameters--default">{{this.default}}</td>
+                                </tr>
+                                {{/each}}
+                            </tbody>
+                        </table>
+
+                        {{/if}}
+                        {{#if (isDefined this.example)}}
+                        <h3 class="section__subtitle">
+                            Example
+                        </h3>
+                        {{#each this.example}}
+                        <div class="section__code-wrapper example">
+                            <pre>
+                                <span>{{this.code}}</span>
+                            </pre>
+                        </div>
+                        {{/each}}
+                        {{/if}}
+                        {{#if (isDefined this.require)}}
+                        <h3 class="section__subtitle">
+                            Dependencias
+                        </h3>
+                        {{#each this.require}}
+                        <li class="section__require">
+                            <span>
+                                [{{this.type}}]
+                            </span>
+                            <span>
+                                {{this.name}}
+                            </span>
+                        </li>
+                        {{/each}}
+                        {{/if}}
+                    </div>
+                    {{/each}}
+                </div>
+            </div>
+            <div class="section" id="{{posts.grid.0.group}}">
+                <div class="section__header">
+                    <h2>{{posts.grid.0.group}}</h2>
+                </div>
+                <div class="section__body">
+                    {{#each posts.grid}}
+                    <h3 class="section__title">
+                        <span class="section__title--name">
+                            {{this.context.name}}
+                        </span>
+                        <span class="section__title--type">
+                            ({{this.context.type}})
+                        </span>
+                    </h3>
+                    <div class="section__information">
+                        <div class="section__code-wrapper"
+                            onclick="openCode('grid',{{@index}},'{{this.context.type}}')">
+                            <pre id="grid-{{@index}}" aria-expanded="false" data-type="{{this.context.type}}">
+                                <span class="section__code-wrapper--title">
+                                    {{#if (isMixin this.context.type)}}
+                                    <span>${{this.context.type}}</span>
+                                    <span>{{this.context.name}}(</span>
+                                    <span>{{#each this.parameter}}{{#if @last}}{{this.name}}{{else}}${{this.name}}, {{/if}}{{/each}}</span>)
+                                    {{else}}
+                                    <span>${{this.context.name}}:</span>
+                                    <span> {{this.context.value}}</span>
+                                    {{/if}}
+                                </span>
+                                <span id="grid-content-{{@index}}" class="section__code-wrapper--code">
+                                    <span>{{this.context.code}}</span>
+                                </span>
+                            </pre>
+
+                        </div>
+                        <h3 class="section__subtitle">
+                            Descripción
+                        </h3>
+                        <p class="section__description">
+                            {{this.description}}
+                        </p>
+
+                        {{#if (isDefined this.parameter) }}
+                        <h3 class="section__subtitle">
+                            Parametros
+                        </h3>
+                        <table class="section__parameters">
+                            <thead>
+                                <tr>
+                                    <th class="section__parameters--name">Nombre</th>
+                                    <th class="section__parameters--description">Descripción</th>
+                                    <th class="section__parameters--type">Tipo</th>
+                                    <th class="section__parameters--default">Valor por defecto</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {{#each this.parameter}}
+                                <tr>
+                                    <td class="section__parameters--name">${{this.name}}</td>
+                                    <td class="section__parameters--description">{{this.description}}</td>
+                                    <td class="section__parameters--type">{{this.type}}</td>
+                                    <td class="section__parameters--default">{{this.default}}</td>
+                                </tr>
+                                {{/each}}
+                            </tbody>
+                        </table>
+
+                        {{/if}}
+                        <h3 class="section__subtitle">
+                            Example
+                        </h3>
+                        {{#each this.example}}
+                        <div class="section__code-wrapper example">
+                            <pre>
+                                <span>{{this.code}}</span>
+                            </pre>
+                        </div>
+                        {{/each}}
+                        {{#if (isDefined this.require)}}
+                        <h3 class="section__subtitle">
+                            Dependencias
+                        </h3>
+                        {{#each this.require}}
+                        <li class="section__require">
+                            <span>
+                                [{{this.type}}]
+                            </span>
+                            <span>
+                                {{this.name}}
+                            </span>
+                        </li>
+                        {{/each}}
+                        {{/if}}
+                    </div>
+                    {{/each}}
+                </div>
+            </div>
+            <div class="section" id="{{posts.animations.0.group}}">
+                <div class="section__header">
+                    <h2>{{posts.animations.0.group}}</h2>
+                </div>
+                <div class="section__body">
+                    {{#each posts.animations}}
+                    <h3 class="section__title">
+                        <span class="section__title--name">
+                            {{this.context.name}}
+                        </span>
+                        <span class="section__title--type">
+                            ({{this.context.type}})
+                        </span>
+                    </h3>
+                    <div class="section__information">
+                        <div class="section__code-wrapper"
+                            onclick="openCode('animations',{{@index}},'{{this.context.type}}')">
+                            <pre id="animations-{{@index}}" aria-expanded="false" data-type="{{this.context.type}}">
+                                <span class="section__code-wrapper--title">
+                                    {{#if (isMixin this.context.type)}}
+                                    <span>@{{this.context.type}}</span>
+                                    <span>{{this.context.name}}(</span>
+                                    <span>{{#each this.parameter}}{{#if @last}}{{this.name}}{{else}}${{this.name}}, {{/if}}{{/each}}</span>)
+                                    {{else}}
+                                    {{this.context.value}}
+                                    {{/if}}
+                                </span>
+                                <span id="animations-content-{{@index}}" class="section__code-wrapper--code">
+                                    {{this.context.code}}
+                                </span>
+                            </pre>
+
+                        </div>
+                        <h3 class="section__subtitle">
+                            Descripción
+                        </h3>
+                        <p class="section__description">
+                            {{this.description}}
+                        </p>
+
+                        {{#if (isDefined this.parameter) }}
+                        <h3 class="section__subtitle">
+                            Parametros
+                        </h3>
+                        <table class="section__parameters">
+                            <thead>
+                                <tr>
+                                    <th class="section__parameters--name">Nombre</th>
+                                    <th class="section__parameters--description">Descripción</th>
+                                    <th class="section__parameters--type">Tipo</th>
+                                    <th class="section__parameters--default">Valor por defecto</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {{#each this.parameter}}
+                                <tr>
+                                    <td class="section__parameters--name">${{this.name}}</td>
+                                    <td class="section__parameters--description">{{this.description}}</td>
+                                    <td class="section__parameters--type">{{this.type}}</td>
+                                    <td class="section__parameters--default">{{this.default}}</td>
+                                </tr>
+                                {{/each}}
+                            </tbody>
+                        </table>
+
+                        {{/if}}
+
+                        {{#if (isMixin this.context.type)}}
+                        <h3 class="section__subtitle">
+                            Example
+                        </h3>
+                        <div class="section__code-wrapper example example--animation">
+                            <pre>
+                                <span class="demo-animation" style="animation: {{this.context.name}} 500ms ease alternate infinite"></span>
+                            </pre>
+                        </div>
+
+                        {{/if}}
+                        {{#if (isDefined this.require)}}
+                        <h3 class="section__subtitle">
+                            Dependencias
+                        </h3>
+                        {{#each this.require}}
+                        <li class="section__require">
+                            <span>
+                                [{{this.type}}]
+                            </span>
+                            <span>
+                                {{this.name}}
+                            </span>
+                        </li>
+                        {{/each}}
+                        {{/if}}
+                    </div>
+                    {{/each}}
+                </div>
+            </div>
+            <div class="section" id="{{posts.spacing.0.group}}">
+                <div class="section__header">
+                    <h2>{{posts.spacing.0.group}}</h2>
+                </div>
+                <div class="section__body">
+                    {{#each posts.spacing}}
+                    <h3 class="section__title">
+                        <span class="section__title--name">
+                            {{this.context.name}}
+                        </span>
+                        <span class="section__title--type">
+                            ({{this.context.type}})
+                        </span>
+                    </h3>
+                    <div class="section__information">
+                        <div class="section__code-wrapper"
+                            onclick="openCode('spacing',{{@index}},'{{this.context.type}}')">
+                            <pre id="spacing-{{@index}}" aria-expanded="false" data-type="{{this.context.type}}">
+                                <span class="section__code-wrapper--title">
+                                    {{#if (isMixin this.context.type)}}
+                                    <span>@{{this.context.type}}</span>
+                                    <span>{{this.context.name}}(</span>
+                                    <span>{{#each this.parameter}}{{#if @last}}{{this.name}}{{else}}${{this.name}}, {{/if}}{{/each}}</span>)
+                                    {{else}}
+                                    <span>${{this.context.name}}:</span>
+                                    <span>{{this.context.value}}</span>
+                                    {{/if}}
+                                </span>
+                                <span id="spacing-content-{{@index}}" class="section__code-wrapper--code">
+                                    {{this.context.code}}
+                                </span>
+                            </pre>
+
+                        </div>
+                        <h3 class="section__subtitle">
+                            Descripción
+                        </h3>
+                        <p class="section__description">
+                            {{this.description}}
+                        </p>
+
+                        {{#if (isDefined this.parameter) }}
+                        <h3 class="section__subtitle">
+                            Parametros
+                        </h3>
+                        <table class="section__parameters">
+                            <thead>
+                                <tr>
+                                    <th class="section__parameters--name">Nombre</th>
+                                    <th class="section__parameters--description">Descripción</th>
+                                    <th class="section__parameters--type">Tipo</th>
+                                    <th class="section__parameters--default">Valor por defecto</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {{#each this.parameter}}
+                                <tr>
+                                    <td class="section__parameters--name">${{this.name}}</td>
+                                    <td class="section__parameters--description">{{this.description}}</td>
+                                    <td class="section__parameters--type">{{this.type}}</td>
+                                    <td class="section__parameters--default">{{this.default}}</td>
+                                </tr>
+                                {{/each}}
+                            </tbody>
+                        </table>
+
+                        {{/if}}
+                        <h3 class="section__subtitle">
+                            Example
+                        </h3>
+                        {{#each this.example}}
+                        <div class="section__code-wrapper example">
+                            <pre>
+                                <span>{{this.code}}</span>
+                            </pre>
+                        </div>
+                        {{/each}}
+                        {{#if (isDefined this.require)}}
+                        <h3 class="section__subtitle">
+                            Dependencias
+                        </h3>
+                        {{#each this.require}}
+                        <li class="section__require">
+                            <span>
+                                [{{this.type}}]
+                            </span>
+                            <span>
+                                {{this.name}}
+                            </span>
+                        </li>
+                        {{/each}}
+                        {{/if}}
+                    </div>
+                    {{/each}}
+                </div>
+            </div>
+            <div class="section" id="{{posts.functions.0.group}}">
+                <div class="section__header">
+                    <h2>{{posts.functions.0.group}}</h2>
+                </div>
+                <div class="section__body">
+                    {{#each posts.functions}}
+                    <h3 class="section__title">
+                        <span class="section__title--name">
+                            {{this.context.name}}
+                        </span>
+                        <span class="section__title--type">
+                            ({{this.context.type}})
+                        </span>
+                    </h3>
+                    <div class="section__information">
+                        <div class="section__code-wrapper">
+                            <pre id="functions-{{@index}}" aria-expanded="false" data-type="{{this.context.type}}">
+                                <span class="section__code-wrapper--title">
+                                    {{#if (isMixin this.context.type)}}
+                                    <span>@{{this.context.type}}</span>
+                                    <span>{{this.context.name}}(</span>
+                                    <span>{{#each this.parameter}}{{#if @last}}{{this.name}}{{else}}${{this.name}}, {{/if}}{{/each}}</span>)
+                                    {{else}}
+                                    {{this.context.value}}
+                                    {{/if}}
+                                </span>
+                                <span id="functions-content-{{@index}}" class="section__code-wrapper--code">
+                                    {{this.context.code}}
+                                </span>
+                            </pre>
+
+                        </div>
+                        <h3 class="section__subtitle">
+                            Descripción
+                        </h3>
+                        <p class="section__description">
+                            {{this.description}}
+                        </p>
+
+                        {{#if (isDefined this.parameter) }}
+                        <h3 class="section__subtitle">
+                            Parametros
+                        </h3>
+                        <table class="section__parameters">
+                            <thead>
+                                <tr>
+                                    <th class="section__parameters--name">Nombre</th>
+                                    <th class="section__parameters--description">Descripción</th>
+                                    <th class="section__parameters--type">Tipo</th>
+                                    <th class="section__parameters--default">Valor por defecto</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {{#each this.parameter}}
+                                <tr>
+                                    <td class="section__parameters--name">${{this.name}}</td>
+                                    <td class="section__parameters--description">{{this.description}}</td>
+                                    <td class="section__parameters--type">{{this.type}}</td>
+                                    <td class="section__parameters--default">{{this.default}}</td>
+                                </tr>
+                                {{/each}}
+                            </tbody>
+                        </table>
+
+                        {{/if}}
+                        <h3 class="section__subtitle">
+                            Example
+                        </h3>
+                        {{#each this.example}}
+                        <div class="section__code-wrapper example">
+                            <pre>
+                                <span>{{this.code}}</span>
+                            </pre>
+                        </div>
+                        {{/each}}
+                        {{#if (isDefined this.require)}}
+                        <h3 class="section__subtitle">
+                            Dependencias
+                        </h3>
+                        {{#each this.require}}
+                        <li class="section__require">
+                            <span>
+                                [{{this.type}}]
+                            </span>
+                            <span>
+                                {{this.name}}
+                            </span>
+                        </li>
+                        {{/each}}
+                        {{/if}}
+                    </div>
+                    {{/each}}
+                </div>
+            </div>
+
+        </main>
+
+    </div>
+    <script src="scripts/script.js"></script>
+</body>
+
+</html>

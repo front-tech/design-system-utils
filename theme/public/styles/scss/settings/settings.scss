@@ -1,0 +1,14 @@
+$breakpoints: (
+  md: (
+    gutter:30px,
+    offset:50px,
+    columns:6,
+    width:768px
+  ),
+  lg: (
+    gutter:30px,
+    offset:50px,
+    columns:12,
+    width:1440px
+  )
+);
