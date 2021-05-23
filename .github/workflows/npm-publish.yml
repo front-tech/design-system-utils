@@ -23,7 +23,7 @@ jobs:
       run: npm run build
     - run: npm publish
       env:
-          NODE_AUTH_TOKEN: ${{secrets.NPM_AUTH_TOKEN}}
+          NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
     - name: Deploy to gh-pages
       uses: peaceiris/actions-gh-pages@v3
       with:
