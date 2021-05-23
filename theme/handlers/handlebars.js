@@ -5,11 +5,6 @@ module.exports = {
     if (typeof value === "object") return value.length > 0;
     return value !== undefined;
   },
-
-  isRem: function (value) {
-    console.log(typeof value)
-    return value !== undefined;
-  },
   isMixin: function (value) {
     return value === 'mixin';
   },

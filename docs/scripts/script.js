@@ -1,7 +1,7 @@
 let state = false;
 
 function openCode(event, index, type) {
-  if (type !== "variable") {
+  if (type !== "variable" || type !== 'function') {
     code = document.getElementById(`${event}-${index}`);
     codeContent = document
       .getElementById(`${event}-content-${index}`)
