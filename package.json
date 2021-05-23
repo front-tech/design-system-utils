@@ -1,6 +1,6 @@
 {
   "name": "@front-tech/design-systems-utils",
-  "version": "1.0.1",
+  "version": "1.0.0",
   "description": "Sass utility library",
   "main": "index.js",
   "bin": {
