@@ -28,6 +28,7 @@ module.exports.printMessage = (message) => {
 };
 
 module.exports.buildPlatforms = (configuration) => {
+  const platformsInput = configuration.platforms ? configuration.platforms : ['scss'];
   const ouput = (folder) =>
     configuration.customPath
       ? `${process.cwd()}/${configuration.customPath}/library/${folder}/`
@@ -125,7 +126,8 @@ module.exports.buildPlatforms = (configuration) => {
 
   const listPlatforms = () => {
     let listPlatforms = {};
-    configuration.platforms.forEach((item) => {
+    console.log(configuration)
+    platformsInput.forEach((item) => {
       listPlatforms[item] = platforms[item];
     });
     return listPlatforms;
@@ -138,6 +140,7 @@ module.exports.buildPlatforms = (configuration) => {
 };
 
 module.exports.buildChore = (path) => {
+  
   const paths = [
     {
       path: `${__dirname.slice(
@@ -167,6 +170,18 @@ module.exports.buildChore = (path) => {
     {
       path: `${__dirname.slice(0, __dirname.length - 10)}/library/web/tools/`,
       name: `_functions.scss`
+    },
+    {
+      path: `${__dirname.slice(0, __dirname.length - 10)}/library/web/base/`,
+      name: `_fonts.scss`
+    },
+    {
+      path: `${__dirname.slice(0, __dirname.length - 10)}/library/web/base/`,
+      name: `_reset.scss`
+    },
+    {
+      path: `${__dirname.slice(0, __dirname.length - 10)}/library/web/base/`,
+      name: `base.scss`
     },
     {
       path: `${__dirname.slice(

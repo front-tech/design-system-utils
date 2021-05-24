@@ -21,9 +21,10 @@ if (existData) {
   );
 
   styleDictionary.styleDictionary(data);
-  data.configuration.platforms.includes("scss")
+  utils.buildChore(data.configuration.customPath)
+  /* data.configuration.platforms.includes("scss")
     ? utils.buildChore(data.configuration.customPath)
-    : null;
+    : null; */
 } else {
   utils.errorConsole(`No .frontech.json configuration file specified`);
 }
