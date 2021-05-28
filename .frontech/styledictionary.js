@@ -4,11 +4,14 @@ const [utils, symbols, webfont, css] = [
   require("webfont").default,
   require("./postcss")
 ];
-module.exports.styleDictionary = (data) => {
+module.exports.styleDictionary = (data, file) => {
   let grid = [];
 
   const StyleDictionary = require("style-dictionary").extend(
-    utils.buildPlatforms(data.configuration)
+		{
+			source: [file],
+			...utils.buildPlatforms(data.configuration)
+		}
   );
 
   const generateIconFont = async (svg) => {
@@ -131,7 +134,7 @@ module.exports.styleDictionary = (data) => {
         }
 
         return (result += `/// Mixin whose objective is to create the media-query based on the cut points established in the configuration file\n///\n///\n/// @example scss\n///\n///      .test{\n///         width: 100%;\n///         @include screen-custom($screen){\n///           width: auto;\n///         }\n///      }\n///\n/// @example css\n///\n///      .test {\n///         width: 100%;\n///       }\n///\n///      @media only screen and (min-width: $screen) {\n///         .test {\n///           width: auto;\n///         }\n///      }\n///\n/// @group media-queries \n@mixin screen-custom($screen){\n   @media only screen and (min-width: $screen) {\n     @content\n   }\n};\n`);
-        
+
       } catch (err) {
         console.log(err)
         utils.errorConsole(
@@ -165,6 +168,7 @@ module.exports.styleDictionary = (data) => {
     name: "custom/properties-color",
     formatter: (dictionary) => {
       try {
+				console.log(dictionary)
         let key = Object.keys(dictionary.properties.color);
         let customProperties = "\n";
         key.forEach((item) => {
@@ -172,7 +176,8 @@ module.exports.styleDictionary = (data) => {
           customProperties += `--${item}:${value.value};\n`;
         });
         return `/// Color variables defined in the .frontech.json file\n///@group colors\n:root{${customProperties}};`;
-      } catch {
+      } catch(e) {
+      	console.log(e)
         utils.errorConsole(
           `${symbols.error}  No color settings have been specified. The file will be created without content. Please check the configuration file .frontech.json.`
         );

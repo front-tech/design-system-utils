@@ -126,21 +126,17 @@ module.exports.buildPlatforms = (configuration) => {
 
   const listPlatforms = () => {
     let listPlatforms = {};
-    console.log(configuration)
-    platformsInput.forEach((item) => {
-      listPlatforms[item] = platforms[item];
-    });
+    platformsInput.forEach((item) => listPlatforms[item] = platforms[item]);
     return listPlatforms;
   };
 
   return {
-    source: [".frontech.json"],
     platforms: listPlatforms()
   };
 };
 
-module.exports.buildChore = (path) => {
-  
+module.exports.buildCore = (path) => {
+
   const paths = [
     {
       path: `${__dirname.slice(
