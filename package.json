@@ -1,6 +1,6 @@
 {
   "name": "@front-tech/design-systems-utils",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "Sass utility library",
   "main": "./dist/index.js",
   "bin": {
@@ -25,7 +25,8 @@
   "author": "Everis Front Tech Team",
   "license": "ISC",
   "files": [
-    "dist/**/*"
+    ".frontech/",
+    "library/"
   ],
   "devDependencies": {
     "@hidoo/sassdoc-to-markdown": "^0.4.2",
