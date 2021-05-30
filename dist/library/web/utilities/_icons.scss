@@ -1,0 +1,140 @@
+@use '../settings/general' as *;
+
+  $icon-delete: "\ea01";
+
+  $icon-left: "\ea02";
+
+  $icon-next: "\ea03";
+
+  $icon-plus: "\ea04";
+
+  $icon-previous: "\ea05";
+
+
+@font-face {
+  font-family: "icomoon";
+  font-style: normal;
+  font-weight: 400;
+  font-display: auto;
+  src: url("#{$font-path}/icomoon.eot");
+  src: url("#{$font-path}/icomoon.eot?#iefix") format("embedded-opentype"), url("#{$font-path}/icomoon.woff2") format("woff2"), url("#{$font-path}/icomoon.woff") format("woff"), url("#{$font-path}/icomoon.ttf") format("truetype"), url("#{$font-path}/icomoon.svg#icomoon") format("svg");
+}
+
+%icon {
+display: inline-block;
+  font-family: "icomoon";
+  font-weight: 400;
+  font-style: normal;
+  font-variant: normal;
+  text-rendering: auto;
+  line-height: 1;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+}
+
+.icon {
+  @extend %icon;
+}
+
+.icon-lg {
+  font-size: 1.33333em;
+  line-height: 0.75em;
+  vertical-align: -0.0667em;
+}
+
+.icon-xs {
+  font-size: 0.75em;
+}
+
+.icon-sm {
+  font-size: 0.875em;
+}
+
+.icon-1x {
+  font-size: 1em;
+}
+
+.icon-2x {
+  font-size: 2em;
+}
+
+.icon-3x {
+  font-size: 3em;
+}
+
+.icon-4x {
+  font-size: 4em;
+}
+
+.icon-5x {
+  font-size: 5em;
+}
+
+.icon-6x {
+  font-size: 6em;
+}
+
+.icon-7x {
+  font-size: 7em;
+}
+
+.icon-8x {
+  font-size: 8em;
+}
+
+.icon-9x {
+  font-size: 9em;
+}
+
+.icon-10x {
+  font-size: 10em;
+}
+
+.icon-fw {
+  text-align: center;
+  width: 1.25em;
+}
+
+.icon-border {
+  border: solid 0.08em #eee;
+  border-radius: 0.1em;
+  padding: 0.2em 0.25em 0.15em;
+}
+
+.icon-pull-left {
+  float: left;
+}
+
+.icon-pull-right {
+  float: right;
+}
+
+.icon.icon-pull-left {
+  margin-right: 0.3em;
+}
+
+.icon.icon-pull-right {
+  margin-left: 0.3em;
+}
+
+
+.icon-delete::before {
+    content: "\ea01";
+}
+
+.icon-left::before {
+    content: "\ea02";
+}
+
+.icon-next::before {
+    content: "\ea03";
+}
+
+.icon-plus::before {
+    content: "\ea04";
+}
+
+.icon-previous::before {
+    content: "\ea05";
+}
+
