@@ -1,6 +1,6 @@
 {
   "name": "@front-tech/design-systems-utils",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "Sass utility library",
   "main": "dist/index.js",
   "bin": {
@@ -19,7 +19,7 @@
     "build:package": "cpx -v \"index.js\" \"./dist/\" && cpx -v \"README.md\" \"./dist/\" && cpx -v \"./library/web/**/*\" \"./dist/library/web\" && cpx -v \"./.frontech/*.js\" \"./dist/.frontech\" && cpx -v \"package.json\" \"./dist/\"",
     "serve": "concurrently 'nodemon theme/app.js' 'npm run sass:theme-watch'",
     "sass:theme": "sass --no-source-map theme/public/styles/scss/main.scss theme/public/styles/css/style.css",
-    "publish": "npm publish dist",
+    "publish:package": "npm publish dist",
     "sass:theme-watch": "sass --watch --no-source-map theme/public/styles/scss/main.scss theme/public/styles/css/style.css",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
