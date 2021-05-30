@@ -19,7 +19,7 @@
     "build:package": "cpx -v \"index.js\" \"./dist/\" && cpx -v \"README.md\" \"./dist/\" && cpx -v \"./library/web/**/*\" \"./dist/library/web\" && cpx -v \"./.frontech/*.js\" \"./dist/.frontech\" && cpx -v \"package.json\" \"./dist/\"",
     "serve": "concurrently 'nodemon theme/app.js' 'npm run sass:theme-watch'",
     "sass:theme": "sass --no-source-map theme/public/styles/scss/main.scss theme/public/styles/css/style.css",
-    "publish": "npm publish",
+    "publish": "npm publish dist",
     "sass:theme-watch": "sass --watch --no-source-map theme/public/styles/scss/main.scss theme/public/styles/css/style.css",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
