@@ -1,6 +1,6 @@
 {
   "name": "@front-tech/design-systems-utils",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Sass utility library",
   "main": "index.js",
   "bin": {
@@ -35,9 +35,6 @@
     "autoprefixer": "^10.2.5",
     "colors": "^1.4.0",
     "cpx": "^1.5.0",
-    "imagemin": "^8.0.0",
-    "imagemin-jpegtran": "^7.0.0",
-    "imagemin-pngquant": "^9.0.2",
     "log-symbols": "^4.0.0",
     "minimist": "^1.2.5",
     "postcss": "^8.2.9",

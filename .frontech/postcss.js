@@ -1,5 +1,4 @@
-const [fs, postcss, sass, autoprefixer, utils, symbols] = [
-  require("fs"),
+const [postcss, sass, autoprefixer, utils, symbols] = [
   require("postcss"),
   require("sass"),
   require("autoprefixer"),
@@ -47,7 +46,7 @@ module.exports.buildCSS = (config) => {
       `${symbols.success}  ${process.cwd()}/${config.configuration.outputCSS.path}`
     );
   } else {
-    utils.errorConsole(
+    utils.messages.error(
       `Revisa el fichero de configuración, has establecido la siguiente información:\n\n${JSON.stringify(
         { "outputCSS": config.configuration.outputCSS },
         null,

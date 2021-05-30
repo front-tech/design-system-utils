@@ -14,9 +14,20 @@
     text-transform: capitalize;
   }
 
-  &__link{
+  &__link {
     color: #dd5a6f;
     text-decoration: none;
+  }
+
+  ol {
+    list-style: decimal;
+    margin-left: 1.5rem;
+    code {
+      font-size: 16px;
+      color: #dd5a6f;
+      white-space: nowrap;
+      font-weight: normal;
+    }
   }
 
   p {

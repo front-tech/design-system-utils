@@ -16,21 +16,22 @@ if (existData) {
     fs.readFileSync(path.resolve(process.cwd(), file)).toString()
   );
 
+
   if(key){
   	data = data[key] || {};
-	}
+  }
+  
 
-  utils.printMessage("Settings creation process started");
+  utils.messages.print("Settings creation process started");
 
-  utils.warningConsole(
+  utils.messages.warning(
     `Based on the information provided in the configuration file ${file} the following files are generated: \n`
   );
 
   styleDictionary.styleDictionary(data, file);
-  utils.buildCore(data.configuration.customPath)
-  /* data.configuration.platforms.includes("scss")
-    ? utils.buildChore(data.configuration.customPath)
-    : null; */
+  data.configuration.platforms.includes("scss")
+    ? utils.buildCore(data.configuration.customPath)
+    : utils.messages.warning('You have not specified any platform.'); 
 } else {
-  utils.errorConsole(`No ${file} configuration file specified`);
+  utils.messages.error(`No ${file} configuration file specified`);
 }

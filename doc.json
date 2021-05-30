@@ -311,10 +311,10 @@
           "context": {
             "type": "mixin",
             "name": "get-grid",
-            "code": "\n  @each $break, $breakpoint in $breakpoints {\n    $columns: map.get($breakpoint, \"columns\");\n    @media only screen and (min-width: map.get($breakpoint,\"width\")) {\n      @for $i from 1 through $columns {\n        $valor: unquote((100 / $columns * $i) + \"%\");\n        .col-#{$break}-#{$i} {\n          box-sizing: border-box;\n          padding: 0 map.get($breakpoint, \"gutter\");\n          flex: 0 0 $valor;\n          min-width: $valor;\n          max-width: $valor;\n        }\n      }\n    }\n  }\n",
+            "code": "\n  @each $break, $breakpoint in $breakpoints {\n    $columns: map.get($breakpoint, \"columns\");\n    @media only screen and (min-width: map.get($breakpoint,\"width\")) {\n      @for $i from 1 through $columns {\n        $valor: unquote(((math.div(100,$columns)) * $i) + \"%\");\n        .col-#{$break}-#{$i} {\n          box-sizing: border-box;\n          padding: 0 map.get($breakpoint, \"gutter\");\n          flex: 0 0 $valor;\n          min-width: $valor;\n          max-width: $valor;\n        }\n      }\n    }\n  }\n",
             "line": {
-              "start": 44,
-              "end": 60
+              "start": 45,
+              "end": 61
             }
           }
         },
@@ -335,16 +335,16 @@
     {
       "description": "Mixin that, starting from the breakpoints established in the configuration file, generates the classes of the grid system.\n\n",
       "commentRange": {
-        "start": 4,
-        "end": 42
+        "start": 5,
+        "end": 43
       },
       "context": {
         "type": "mixin",
         "name": "get-grid",
-        "code": "\n  @each $break, $breakpoint in $breakpoints {\n    $columns: map.get($breakpoint, \"columns\");\n    @media only screen and (min-width: map.get($breakpoint,\"width\")) {\n      @for $i from 1 through $columns {\n        $valor: unquote((100 / $columns * $i) + \"%\");\n        .col-#{$break}-#{$i} {\n          box-sizing: border-box;\n          padding: 0 map.get($breakpoint, \"gutter\");\n          flex: 0 0 $valor;\n          min-width: $valor;\n          max-width: $valor;\n        }\n      }\n    }\n  }\n",
+        "code": "\n  @each $break, $breakpoint in $breakpoints {\n    $columns: map.get($breakpoint, \"columns\");\n    @media only screen and (min-width: map.get($breakpoint,\"width\")) {\n      @for $i from 1 through $columns {\n        $valor: unquote(((math.div(100,$columns)) * $i) + \"%\");\n        .col-#{$break}-#{$i} {\n          box-sizing: border-box;\n          padding: 0 map.get($breakpoint, \"gutter\");\n          flex: 0 0 $valor;\n          min-width: $valor;\n          max-width: $valor;\n        }\n      }\n    }\n  }\n",
         "line": {
-          "start": 44,
-          "end": 60
+          "start": 45,
+          "end": 61
         }
       },
       "parameter": [
@@ -524,7 +524,7 @@
           "context": {
             "type": "mixin",
             "name": "rem-baseline",
-            "code": "\n  font-size: $zoom / 16px * general.$rem-baseline;\n",
+            "code": "\n  font-size: (math.div($zoom,16px)) * general.$rem-baseline;\n",
             "line": {
               "start": 50,
               "end": 52
@@ -702,7 +702,7 @@
       "context": {
         "type": "mixin",
         "name": "rem-baseline",
-        "code": "\n  font-size: $zoom / 16px * general.$rem-baseline;\n",
+        "code": "\n  font-size: (math.div($zoom,16px)) * general.$rem-baseline;\n",
         "line": {
           "start": 50,
           "end": 52

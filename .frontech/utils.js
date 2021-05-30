@@ -1,30 +1,29 @@
 const [fs, colors] = [require("fs"), require("colors")];
 
-module.exports.errorConsole = (string) => console.log(colors.red(string));
-module.exports.warningConsole = (string) => console.log(colors.yellow(string));
-module.exports.successConsole = (string) => console.log(colors.green(string));
+module.exports.messages = {
+  error:(string) => console.log(colors.red(string)),
+  warning:(string) => console.log(colors.yellow(string)),
+  success:(string) => console.log(colors.green(string)),
+  print: (message) => {
+    console.log("");
+    console.log("-".repeat(message.length));
+    console.log(message.toUpperCase());
+    console.log("-".repeat(message.length));
+    console.log("");
+  }
+}
 
 module.exports.createFile = (folder, file, data) => {
   try {
     if (!fs.existsSync(folder)) {
       fs.mkdirSync(folder);
-      console.log(folder);
       fs.writeFileSync(`${folder}/${file}`, data, () => true);
     } else {
       fs.writeFileSync(`${folder}/${file}`, data, () => true);
     }
   } catch (error) {
-    console.log(error);
-    this.errorConsole("Ha ocurrido un error", error);
+    this.messages.error(error);
   }
-};
-
-module.exports.printMessage = (message) => {
-  console.log("");
-  console.log("-".repeat(message.length));
-  console.log(message.toUpperCase());
-  console.log("-".repeat(message.length));
-  console.log("");
 };
 
 module.exports.buildPlatforms = (configuration) => {
@@ -129,6 +128,8 @@ module.exports.buildPlatforms = (configuration) => {
     platformsInput.forEach((item) => listPlatforms[item] = platforms[item]);
     return listPlatforms;
   };
+
+
 
   return {
     platforms: listPlatforms()

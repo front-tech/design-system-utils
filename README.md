@@ -2,9 +2,12 @@
 
 Design Systems Utils aims to provide a series of common utilities at the beginning of any web project, which will facilitate and speed up the day-to-day development. For more information click on the following [link](https://front-tech.github.io/design-system-utils/).
 
-Initially it will be necessary to install the ***@front-tech/design-systems-utils*** dependency by executing the following command ```npm install @front-tech/design-systems-utils```
+To use the library we must follow the following steps:
+1. Insert the following line of code in the .npmrc file ```@front-tech:registry=https://npm.pkg.github.com```
+2. Run the command ```npm install @front-tech/design-systems-utils -D```
+3. Create a script in the package.json where we will pass the configuration file ```design-systems-utils --file=frontech.json```
 
-For the correct functioning of the library it is necessary to create a configuration file in the project called ```.frontech.json``` which will determine the utilities of margin, padding and custom grid. This configuration must maintain the following structure:
+For the proper functioning of the library, it is necessary to create a configuration file in the project that will determine the margin, padding and custom grid utilities. This configuration must maintain the following structure:
 
 ```
 {
@@ -184,11 +187,6 @@ For the correct functioning of the library it is necessary to create a configura
 }
 ```
 
-To use the library, it will simply be necessary to create an npm script with the following syntax:
-`design-systems-utils .frontech.json`
-
-And then import the following file to your sass stylesheet:
-`@use '~@front-tech/design-systems-utils/library/web/abstracts' with ($font-path:'public/assets/fonts/', $rem-baseline: 10px);`
 
 We can also generate a css output of the library specifying in the configuration file the path where we want to export said file:
 

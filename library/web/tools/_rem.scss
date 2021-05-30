@@ -48,7 +48,7 @@
 ///     }
 /// @group rem
 @mixin rem-baseline($zoom: 100%) {
-  font-size: $zoom / 16px * general.$rem-baseline;
+  font-size: (math.div($zoom,16px)) * general.$rem-baseline;
 }
 
 /// Function that returns the value of the pixels in rem.

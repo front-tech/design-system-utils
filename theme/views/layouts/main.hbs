@@ -94,14 +94,18 @@
                 <div class="section__body indice">
                     <div>
                         <p>
-                            Initially it will be necessary to install the <i>@front-tech/design-systems-utils</i>
-                            dependency
-                            by executing the following command <code>npm install @front-tech/design-systems-utils</code>
+                            To use the library we must follow the following steps:
                         </p>
-                        <p>For the correct functioning of the library it is necessary to create a configuration file in
-                            the
-                            project called <code>.frontech.json</code>, which will determine the utilities of margin,
-                            padding and custom grid. This configuration must maintain the following structure:</p>
+                        <ol>
+                            <li>Insert the following line of code in the .npmrc file
+                                <code>@front-tech:registry=https://npm.pkg.github.com</code></li>
+                            <li>Run the command <code>npm install @front-tech/design-systems-utils -D</code></li>
+                            <li>Create a script in the package.json where we will pass the configuration file
+                                <code>design-systems-utils --file=frontech.json</code></li>
+                        </ol>
+                        <p>For the proper functioning of the library, it is necessary to create a configuration file in
+                            the project that will determine the margin, padding and custom grid utilities. This
+                            configuration must maintain the following structure:</p>
                         <pre>
                 <code>
 {
@@ -207,14 +211,6 @@
 }
                 </code>
         </pre>
-                        <p>To use the library, it will simply be necessary to create an npm script with the following
-                            syntax:
-                        </p>
-                        <p><code>design-systems-utils .frontech.json</code></p>
-                        <p>And then import the following file to your sass
-                            stylesheet:</p>
-                        <p><code>`@use '~@front-tech/design-systems-utils/library/web/abstracts' with ($font-path:'public/assets/fonts/', $rem-baseline: 10px);`</code>
-                        </p>
 
                         <p>We can also generate a css output of the library specifying in the configuration file the
                             path
@@ -257,6 +253,12 @@
                         <li>Utilities rem</li>
                         <li>New configuration field in the .frontech.json file to determine the platforms from which you
                             want to generate the architecture and expose the output where to generate it</li>
+                    </ul>
+
+                    <h3>1.0.2:2021-05-30</h3>
+                    <ul>
+                        <li>File configuration dynamic</li>
+                        <li>Update README file for configuration in a project</li>
                     </ul>
                 </div>
             </div>
