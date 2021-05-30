@@ -199,6 +199,10 @@ module.exports.buildCore = (path) => {
       name: `tools.scss`
     },
     {
+      path: `${__dirname.slice(0, __dirname.length - 10)}/library/web/tools/`,
+      name: `_rem.scss`
+    },
+    {
       path: `${__dirname.slice(
         0,
         __dirname.length - 10
