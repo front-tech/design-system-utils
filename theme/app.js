@@ -62,7 +62,7 @@ sassdoc
   .parse(`${__dirname}/../library/web/**/*.scss`, { verbose: true })
   .then(function (data) {
     app.get("/", (req, res) => {
-      fs.writeFile('doc.json',JSON.stringify(groupData(data),null,2),() => true);
+      fs.writeFile('documentation.json',JSON.stringify(groupData(data),null,2),() => true);
       createKeyFrames(data);
         res.render(__dirname + "/views/layouts/main", {
           posts: groupData(data)
