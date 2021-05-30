@@ -3,9 +3,14 @@
 Design Systems Utils aims to provide a series of common utilities at the beginning of any web project, which will facilitate and speed up the day-to-day development. For more information click on the following [link](https://front-tech.github.io/design-system-utils/).
 
 To use the library we must follow the following steps:
-1. Insert the following line of code in the .npmrc file ```@front-tech:registry=https://npm.pkg.github.com```
-2. Run the command ```npm install @front-tech/design-systems-utils -D```
-3. Create a script in the package.json where we will pass the configuration file ```design-systems-utils --file=frontech.json```
+1. It will be necessary to create our own access token. More information on how to do it in the following **[link](https://docs.github.com/es/github/authenticating-to-github/keeping-your-account-and-data-secure/creating-a-personal-access-token)**
+2. Insert the following line of code in the .npmrc file 
+```
+//npm.pkg.github.com/:_authToken=TOKEN
+@front-tech:registry=https://npm.pkg.github.com
+```
+3. Run the command ```npm install @front-tech/design-systems-utils```
+4. Create a script in the package.json where we will pass the configuration file ```design-systems-utils --file=frontech.json```
 
 For the proper functioning of the library, it is necessary to create a configuration file in the project that will determine the margin, padding and custom grid utilities. This configuration must maintain the following structure:
 
