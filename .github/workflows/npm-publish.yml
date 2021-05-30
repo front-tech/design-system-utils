@@ -21,7 +21,9 @@ jobs:
       run: npm install
     - name: Build page
       run: npm run build
-    - run: npm publish
+    - name: Build package
+      run: npm run build:package
+    - run: npm publish dist
       env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
     - name: Deploy to gh-pages

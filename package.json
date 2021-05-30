@@ -16,6 +16,7 @@
   "scripts": {
     "start": "node theme/app.js",
     "build": "node .frontech/compile.js && cpx -v \"./theme/public/styles/css/*.css\" \"./docs/styles/css/\" && cpx -v \"./theme/public/scripts/*.js\" \"./docs/scripts\"",
+    "build:package": "cpx -v \"index.js\" \"./dist/\" && cpx -v \"README.md\" \"./dist/\" && cpx -v \"./library/web/**/*\" \"./dist/library/web\" && cpx -v \"./.frontech/*.js\" \"./dist/.frontech\" && cpx -v \"package.json\" \"./dist/\"",
     "serve": "concurrently 'nodemon theme/app.js' 'npm run sass:theme-watch'",
     "sass:theme": "sass --no-source-map theme/public/styles/scss/main.scss theme/public/styles/css/style.css",
     "sass:theme-watch": "sass --watch --no-source-map theme/public/styles/scss/main.scss theme/public/styles/css/style.css",
