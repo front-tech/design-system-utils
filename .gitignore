@@ -2,9 +2,7 @@
 package-lock.json
 
 node_modules/
-theme/
 docs/
-dist/
 
 .npmrc 
 .idea
