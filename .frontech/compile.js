@@ -25,7 +25,7 @@ function render(filename, data) {
 
 let data = JSON.parse(
   fs.readFileSync(
-    `${__dirname.slice(0, __dirname.length - 10)}/doc.json`,
+    `${__dirname.slice(0, __dirname.length - 10)}/documentation.json`,
     "utf8"
   )
 );

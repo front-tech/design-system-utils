@@ -287,6 +287,10 @@ select {
     scroll-behavior: auto !important;
   }
 }
+html {
+  font-size: 100%;
+}
+
 .sidebar {
   z-index: 2;
   width: 280px;
@@ -444,6 +448,16 @@ select {
 .indice__link {
   color: #dd5a6f;
   text-decoration: none;
+}
+.indice ol {
+  list-style: decimal;
+  margin-left: 1.5rem;
+}
+.indice ol code {
+  font-size: 16px;
+  color: #dd5a6f;
+  white-space: nowrap;
+  font-weight: normal;
 }
 .indice p {
   display: block;
