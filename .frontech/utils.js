@@ -1,4 +1,5 @@
-const [fs, colors] = [require("fs"), require("colors")];
+const [fs, colors, webfont,symbols,css] = [require("fs"), require("colors"), require("webfont").default, require("log-symbols"),  require("./postcss")
+];
 
 module.exports.messages = {
   error:(string) => console.log(colors.red(string)),
@@ -231,4 +232,75 @@ module.exports.buildCore = (path) => {
 
     this.createFile(finalPath, file.name, data);
   });
+};
+
+
+module.exports.generateIconFont = async (svg,data) => {
+  const { value, input, output } = svg;
+  webfont({
+    files: `${process.cwd()}/${input}/*.svg`,
+    fontName: value,
+    template: "scss",
+    dest: `${process.cwd()}/library/web/settings/_icons.scss`,
+    templateClassName: "icon",
+    templateFontPath: "#{$font-path}",
+    fontWeight: 800
+  })
+    .then((result) => {
+      const file = (folder, file, data) => {
+        this.createFile(folder, file, data);
+        console.log(`${symbols.success}  ${folder}/${file}`);
+      };
+      const pathFile = data.configuration.customPath
+        ? `${process.cwd()}/${
+            data.configuration.customPath
+          }/library/web/utilities`
+        : `${process.cwd()}/library/web/utilities`;
+      console.log(
+        `\nIconic font creation based on the svg files in the path ${input}`
+      );
+      file(
+        pathFile,
+        `_icons.scss`,
+        `@use '../settings/general' as *;\n${result.template}`
+      );
+      file(
+        `${process.cwd()}/${output}`,
+        `${result.config.fontName}.svg`,
+        result.svg
+      );
+      file(
+        `${process.cwd()}/${output}`,
+        `${result.config.fontName}.ttf`,
+        result.ttf
+      );
+      file(
+        `${process.cwd()}/${output}`,
+        `${result.config.fontName}.eot`,
+        result.eot
+      );
+      file(
+        `${process.cwd()}/${output}`,
+        `${result.config.fontName}.woff`,
+        result.woff
+      );
+      data.configuration.outputCSS ? css.buildCSS(data) : null;
+      this.messages.print("Settings creation process finished"); 
+    })
+    .catch((e) => {
+      console.log(e);
+      this.messages.error(
+        `\nCheck the configuration file, you have established the following information:\n\n${JSON.stringify(
+          svg,
+          null,
+          2
+        )}`
+      );
+      this.createFile(
+        `${process.cwd()}/library/web/utilities`,
+        `_icons.scss`,
+        `// To generate the iconic font, check the configuration file ${file}`
+      );
+    });
+   
 };

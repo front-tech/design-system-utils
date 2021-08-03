@@ -12,6 +12,14 @@ To use the library we must follow the following steps:
 3. Run the command ```npm install @front-tech/design-systems-utils```
 4. Create a script in the package.json where we will pass the configuration file ```design-systems-utils --file=frontech.json```
 
+Options flags command line:
+
+| Flags | Description                                                    |
+| ----- | -------------------------------------------------------------- |
+| file  | File Configuration                                                                |
+| icons | It will only affect the iconic font section. The rest of the script will not run. |
+
+
 For the proper functioning of the library, it is necessary to create a configuration file in the project that will determine the margin, padding and custom grid utilities. This configuration must maintain the following structure:
 
 ```

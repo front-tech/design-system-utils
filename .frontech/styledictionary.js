@@ -1,8 +1,6 @@
-const [utils, symbols, webfont, css] = [
+const [utils, symbols] = [
   require("./utils"),
-  require("log-symbols"),
-  require("webfont").default,
-  require("./postcss")
+  require("log-symbols")
 ];
 
 
@@ -17,73 +15,7 @@ module.exports.styleDictionary = (data, file) => {
 		}
   );
 
-  const generateIconFont = async (svg) => {
-    const { name, input, output } = svg;
-    webfont({
-      files: `${process.cwd()}/${input}/*.svg`,
-      fontName: name,
-      template: "scss",
-      dest: `${process.cwd()}/library/web/settings/_icons.scss`,
-      templateClassName: "icon",
-      templateFontPath: "#{$font-path}",
-      fontWeight: 800
-    })
-      .then((result) => {
-        const file = (folder, file, data) => {
-          utils.createFile(folder, file, data);
-          console.log(`${symbols.success}  ${folder}/${file}`);
-        };
-        const pathFile = data.configuration.customPath
-          ? `${process.cwd()}/${
-              data.configuration.customPath
-            }/library/web/utilities`
-          : `${process.cwd()}/library/web/utilities`;
-        console.log(
-          `\nIconic font creation based on the svg files in the path ${input}`
-        );
-        file(
-          pathFile,
-          `_icons.scss`,
-          `@use '../settings/general' as *;\n${result.template}`
-        );
-        file(
-          `${process.cwd()}/${output}`,
-          `${result.config.fontName}.svg`,
-          result.svg
-        );
-        file(
-          `${process.cwd()}/${output}`,
-          `${result.config.fontName}.ttf`,
-          result.ttf
-        );
-        file(
-          `${process.cwd()}/${output}`,
-          `${result.config.fontName}.eot`,
-          result.eot
-        );
-        file(
-          `${process.cwd()}/${output}`,
-          `${result.config.fontName}.woff`,
-          result.woff
-        );
-        data.configuration.outputCSS ? css.buildCSS(data) : null;
-        utils.messages.print("Settings creation process finished");
-      })
-      .catch((e) => {
-        utils.messages.error(
-          `\nCheck the configuration file, you have established the following information:\n\n${JSON.stringify(
-            svg,
-            null,
-            2
-          )}`
-        );
-        utils.createFile(
-          `${process.cwd()}/library/web/utilities`,
-          `_icons.scss`,
-          `// To generate the iconic font, check the configuration file ${file}`
-        );
-      });
-  };
+  
   StyleDictionary.registerFormat({
     name: "custom/grid",
     formatter: (dictionary) => {
@@ -222,7 +154,7 @@ module.exports.styleDictionary = (data, file) => {
           value = property.typography[font];
           value.family.input && value.family.output
             ? (icon = {
-                name: font,
+                value: font,
                 input: value.family.input,
                 output: value.family.output
               })
@@ -230,7 +162,7 @@ module.exports.styleDictionary = (data, file) => {
                 `${symbols.warning}  Review the configuration file. For the creation of the iconic source you have entered the source path ${value.family.input} and the exit route ${value.family.output}`
               );
         });
-        generateIconFont(icon);
+        utils.generateIconFont(icon,data);
       } catch (error) {
         utils.messages.error(
           `${symbols.error}  No iconic font settings have been specified. The file will be created without content. Please check the configuration file ${file}.`
