@@ -1,10 +1,10 @@
-const [fs, colors, webfont,symbols,css] = [require("fs"), require("colors"), require("webfont").default, require("log-symbols"),  require("./postcss")
+const [fs, colors, webfont, symbols, css] = [require("fs"), require("colors"), require("webfont").default, require("log-symbols"), require("./postcss")
 ];
 
 module.exports.messages = {
-  error:(string) => console.log(colors.red(string)),
-  warning:(string) => console.log(colors.yellow(string)),
-  success:(string) => console.log(colors.green(string)),
+  error: (string) => console.log(colors.red(string)),
+  warning: (string) => console.log(colors.yellow(string)),
+  success: (string) => console.log(colors.green(string)),
   print: (message) => {
     console.log("");
     console.log("-".repeat(message.length));
@@ -218,13 +218,13 @@ module.exports.buildCore = (path) => {
   paths.forEach((file) => {
     const finalPath = path
       ? `${file.path.replace(
-          __dirname.slice(0, __dirname.length - 10),
-          process.cwd() + "/" + path
-        )}`
+        __dirname.slice(0, __dirname.length - 10),
+        process.cwd() + "/" + path
+      )}`
       : file.path.replace(
-          __dirname.slice(0, __dirname.length - 10),
-          process.cwd()
-        );
+        __dirname.slice(0, __dirname.length - 10),
+        process.cwd()
+      );
 
     let data = fs
       .readFileSync(`${file.path}${file.name}`, () => true)
@@ -235,7 +235,7 @@ module.exports.buildCore = (path) => {
 };
 
 
-module.exports.generateIconFont = async (svg,data) => {
+module.exports.generateIconFont = async (svg, data) => {
   const { value, input, output } = svg;
   webfont({
     files: `${process.cwd()}/${input}/*.svg`,
@@ -252,9 +252,8 @@ module.exports.generateIconFont = async (svg,data) => {
         console.log(`${symbols.success}  ${folder}/${file}`);
       };
       const pathFile = data.configuration.customPath
-        ? `${process.cwd()}/${
-            data.configuration.customPath
-          }/library/web/utilities`
+        ? `${process.cwd()}/${data.configuration.customPath
+        }/library/web/utilities`
         : `${process.cwd()}/library/web/utilities`;
       console.log(
         `\nIconic font creation based on the svg files in the path ${input}`
@@ -285,7 +284,7 @@ module.exports.generateIconFont = async (svg,data) => {
         result.woff
       );
       data.configuration.outputCSS ? css.buildCSS(data) : null;
-      this.messages.print("Settings creation process finished"); 
+      this.messages.print("Settings creation process finished");
     })
     .catch((e) => {
       console.log(e);
@@ -302,5 +301,5 @@ module.exports.generateIconFont = async (svg,data) => {
         `// To generate the iconic font, check the configuration file ${file}`
       );
     });
-   
+
 };
