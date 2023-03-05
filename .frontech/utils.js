@@ -1,7 +1,18 @@
-const [fs, colors, webfont, symbols, css] = [require("fs"), require("colors"), require("webfont").default, require("log-symbols"), require("./postcss")
+const [fs, route, colors, translateTokens, svgSpreact, webfont, figma] = [
+  require("fs"),
+  require('path'),
+  require("colors"),
+  require("./tokens"),
+  require('svg-spreact'),
+  require("webfont").default,
+  require('figma-icons-tokens'),
 ];
 
-module.exports.messages = {
+const { tokensResolved } = translateTokens;
+const { figmaIconsTokens } = figma;
+
+
+const messages = {
   error: (string) => console.log(colors.red(string)),
   warning: (string) => console.log(colors.yellow(string)),
   success: (string) => console.log(colors.green(string)),
@@ -13,293 +24,316 @@ module.exports.messages = {
     console.log("");
   }
 }
+const handleCreateFile = (folder, file, data, force) => {
 
-module.exports.createFile = (folder, file, data) => {
-  try {
-    if (!fs.existsSync(folder)) {
-      fs.mkdirSync(folder);
-      fs.writeFileSync(`${folder}/${file}`, data, () => true);
+  return new Promise((resolve, reject) => {
+    const _file = route.resolve(folder, file);
+    if (fs.existsSync(_file)) {
+      const _previewFile = fs.readFileSync(_file, (err) => {
+        if (err) {
+          console.error(err)
+          reject(err);
+        }
+      }).toString();
+      const isDiff = JSON.stringify(data) === JSON.stringify(_previewFile);
+      if (isDiff || force) {
+        fs.writeFile(route.resolve(folder, file), data, (err) => {
+          if (err) {
+            console.error(err)
+            reject(err);
+          } else {
+            resolve(`File ${_file} created successfully`)
+          }
+        });
+      }
     } else {
-      fs.writeFileSync(`${folder}/${file}`, data, () => true);
+      fs.writeFile(route.resolve(folder, file), data, (err) => {
+        if (err) {
+          console.error(err)
+          reject(err);
+        } else {
+          resolve(`File ${_file} created successfully`)
+        }
+      });
     }
-  } catch (error) {
-    this.messages.error(error);
-  }
+  })
+
+}
+
+const createFile = (folder, file, data, force = false) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+
+      if (!fs.existsSync(folder)) {
+        fs.mkdir(folder, { recursive: true }, async (err) => {
+          if (err) {
+            console.error(err);
+          } else {
+            const response = await handleCreateFile(folder, file, data, force);
+            resolve(response);
+          }
+        });
+      } else {
+        const response = await handleCreateFile(folder, file, data, force);
+        resolve(response);
+      }
+    } catch (error) {
+      messages.error(error);
+      reject(error);
+    }
+  })
 };
 
-module.exports.buildPlatforms = (configuration) => {
-  const platformsInput = configuration.platforms ? configuration.platforms : ['scss'];
-  const ouput = (folder) =>
-    configuration.customPath
-      ? `${process.cwd()}/${configuration.customPath}/library/${folder}/`
-      : `${process.cwd()}/library/${folder}/`;
-  const platforms = {
-    scss: {
-      transformGroup: "scss",
-      buildPath: ouput("web"),
-      files: [
-        {
-          destination: "settings/_color.scss",
-          format: "custom/properties-color",
-          filter: {
-            type: "color"
-          }
-        },
-        {
-          destination: "settings/_typography.scss",
-          format: "custom/properties-typography",
-          filter: {
-            type: "typography"
-          }
-        },
-        {
-          destination: "utilities/_icons.scss",
-          format: "custom/properties-icons",
-          filter: {
-            type: "icons"
-          }
-        },
-        {
-          destination: "settings/_grid.scss",
-          format: "custom/grid",
-          filter: {
-            type: "grid"
-          }
-        },
-        {
-          destination: "tools/_media-queries.scss",
-          format: "custom/mediaqueries",
-          filter: {
-            type: "grid"
-          }
-        },
-        {
-          destination: "settings/_spacing.scss",
-          format: "custom/spacing",
-          filter: {
-            type: "spacing"
-          }
-        }
-      ]
-    },
-    android: {
-      transformGroup: "android",
-      buildPath: ouput("android"),
-      files: [
-        {
-          destination: "tokens.colors.xml",
-          format: "android/colors",
-          filter: {
-            type: "color"
-          }
-        }
-      ]
-    },
-    ios: {
-      transformGroup: "ios",
-      buildPath: ouput("ios"),
-      files: [
-        {
-          destination: "tokens.color.h",
-          format: "ios/macros",
-          filter: {
-            type: "color"
-          }
-        },
-        {
-          destination: "tokens.font.h",
-          format: "ios/singleton.h",
-          filter: {
-            type: "typography"
-          }
-        },
-        {
-          destination: "tokens.font.m",
-          format: "ios/singleton.m",
-          filter: {
-            type: "typography"
-          }
-        }
-      ]
-    }
-  };
-
-  const listPlatforms = () => {
-    let listPlatforms = {};
-    platformsInput.forEach((item) => listPlatforms[item] = platforms[item]);
-    return listPlatforms;
-  };
+const buildCore = (path) => {
 
 
-
-  return {
-    platforms: listPlatforms()
-  };
-};
-
-module.exports.buildCore = (path) => {
-
+  const root = __dirname.replace('.frontech', '');
   const paths = [
     {
-      path: `${__dirname.slice(
-        0,
-        __dirname.length - 10
-      )}/library/web/utilities/`,
+      root,
+      path: route.resolve(root, `library/web/utilities/`),
       name: `_grid.scss`
     },
     {
-      path: `${__dirname.slice(
-        0,
-        __dirname.length - 10
-      )}/library/web/utilities/`,
-      name: `_spacing.scss`
-    },
-    {
-      path: `${__dirname.slice(
-        0,
-        __dirname.length - 10
-      )}/library/web/utilities/`,
+      root,
+      path: route.resolve(root, `library/web/utilities/`),
       name: `utilities.scss`
     },
     {
-      path: `${__dirname.slice(0, __dirname.length - 10)}/library/web/tools/`,
+      root,
+      path: route.resolve(root, `library/web/tools/`),
       name: `_animations.scss`
     },
     {
-      path: `${__dirname.slice(0, __dirname.length - 10)}/library/web/tools/`,
+      root,
+      path: route.resolve(root, `library/web/tools/`),
       name: `_functions.scss`
     },
     {
-      path: `${__dirname.slice(0, __dirname.length - 10)}/library/web/base/`,
+      root,
+      path: route.resolve(root, `library/web/base/`),
       name: `_fonts.scss`
     },
     {
-      path: `${__dirname.slice(0, __dirname.length - 10)}/library/web/base/`,
+      root,
+      path: route.resolve(root, `library/web/base/`),
       name: `_reset.scss`
     },
     {
-      path: `${__dirname.slice(0, __dirname.length - 10)}/library/web/base/`,
+      root,
+      path: route.resolve(root, `library/web/base/`),
       name: `base.scss`
     },
     {
-      path: `${__dirname.slice(
-        0,
-        __dirname.length - 10
-      )}/library/web/settings/`,
+      root,
+      path: route.resolve(root, `library/web/settings/`),
+      name: `_color.scss`
+    },
+    {
+      root,
+      path: route.resolve(root, `library/web/settings/`),
+      name: `_typography.scss`
+    },
+    {
+      root,
+      path: route.resolve(root, `library/web/settings/`),
       name: `_general.scss`
     },
     {
-      path: `${__dirname.slice(
-        0,
-        __dirname.length - 10
-      )}/library/web/settings/`,
+      root,
+      path: route.resolve(root, `library/web/settings/`),
+      name: `_general.scss`
+    },
+    {
+      root,
+      path: route.resolve(root, `library/web/settings/`),
       name: `settings.scss`
     },
     {
-      path: `${__dirname.slice(0, __dirname.length - 10)}/library/web/tools/`,
+      root,
+      path: route.resolve(root, `library/web/tools/`),
       name: `tools.scss`
     },
     {
-      path: `${__dirname.slice(0, __dirname.length - 10)}/library/web/tools/`,
+      root,
+      path: route.resolve(root, `library/web/tools/`),
       name: `_rem.scss`
     },
     {
-      path: `${__dirname.slice(
-        0,
-        __dirname.length - 10
-      )}/library/web/utilities/`,
+      root,
+      path: route.resolve(root, `library/web/utilities/`),
       name: `utilities.scss`
     },
     {
-      path: `${__dirname.slice(0, __dirname.length - 10)}/library/web/`,
+      root,
+      path: route.resolve(root, `library/web/`),
       name: `abstracts.scss`
     }
   ];
   paths.forEach((file) => {
-    const finalPath = path
-      ? `${file.path.replace(
-        __dirname.slice(0, __dirname.length - 10),
-        process.cwd() + "/" + path
-      )}`
-      : file.path.replace(
-        __dirname.slice(0, __dirname.length - 10),
-        process.cwd()
-      );
 
-    let data = fs
-      .readFileSync(`${file.path}${file.name}`, () => true)
+    const origin = route.resolve(route.resolve(process.cwd(), path), file.path.replace(file.root, ''))
+    const data = fs
+      .readFileSync(route.resolve(file.path, file.name))
       .toString();
 
-    this.createFile(finalPath, file.name, data);
+    createFile(origin, file.name, data);
   });
 };
 
+const generateIconFont = async (path) => {
+  return new Promise(async (resolve, reject) => {
+    const files = route.resolve(process.cwd(), path, 'fonts', 'icomoon');
+    const assets = route.resolve(process.cwd(), path, 'images', 'icons');
+    const utilities = route.resolve(process.cwd(), path, 'library/scss/utilities');
+    const dest = route.resolve(process.cwd(), path, 'library/scss/settings/_icons.scss');
 
-module.exports.generateIconFont = async (svg, data) => {
-  const { value, input, output } = svg;
-  webfont({
-    files: `${process.cwd()}/${input}/*.svg`,
-    fontName: value,
-    template: "scss",
-    dest: `${process.cwd()}/library/web/settings/_icons.scss`,
-    templateClassName: "icon",
-    templateFontPath: "#{$font-path}",
-    fontWeight: 800
-  })
-    .then((result) => {
-      const file = (folder, file, data) => {
-        this.createFile(folder, file, data);
-        console.log(`${symbols.success}  ${folder}/${file}`);
-      };
-      const pathFile = data.configuration.customPath
-        ? `${process.cwd()}/${data.configuration.customPath
-        }/library/web/utilities`
-        : `${process.cwd()}/library/web/utilities`;
-      console.log(
-        `\nIconic font creation based on the svg files in the path ${input}`
-      );
-      file(
-        pathFile,
-        `_icons.scss`,
-        `@use '../settings/general' as *;\n${result.template}`
-      );
-      file(
-        `${process.cwd()}/${output}`,
-        `${result.config.fontName}.svg`,
-        result.svg
-      );
-      file(
-        `${process.cwd()}/${output}`,
-        `${result.config.fontName}.ttf`,
-        result.ttf
-      );
-      file(
-        `${process.cwd()}/${output}`,
-        `${result.config.fontName}.eot`,
-        result.eot
-      );
-      file(
-        `${process.cwd()}/${output}`,
-        `${result.config.fontName}.woff`,
-        result.woff
-      );
-      data.configuration.outputCSS ? css.buildCSS(data) : null;
-      this.messages.print("Settings creation process finished");
+    await webfont({
+      dest,
+      files: `${assets}/*.svg`,
+      fontName: 'icomoon',
+      template: "scss",
+      templateClassName: "icon",
+      templateFontPath: "#{$font-path}",
+      fontWeight: 800
     })
-    .catch((e) => {
-      console.log(e);
-      this.messages.error(
-        `\nCheck the configuration file, you have established the following information:\n\n${JSON.stringify(
-          svg,
-          null,
-          2
-        )}`
-      );
-      this.createFile(
-        `${process.cwd()}/library/web/utilities`,
-        `_icons.scss`,
-        `// To generate the iconic font, check the configuration file ${file}`
-      );
-    });
+      .then((result) => {
+        const _files = [
+          {
+            folder: utilities,
+            file: `_icons.scss`,
+            data: `@use '../settings/general' as *;\n${result.template}`
+          },
+          {
+            folder: files,
+            file: `${result.config.fontName}.svg`,
+            data: result.svg
+          },
+          {
+            folder: files,
+            file: `${result.config.fontName}.ttf`,
+            data: result.ttf
+          },
+          {
+            folder: files,
+            file: `${result.config.fontName}.eot`,
+            data: result.eot
+          }
+        ]
+
+        resolve(_files);
+      })
+      .catch((e) => {
+        console.log(e);
+        messages.error(
+          `\nCheck the configuration file, you have established the following information:\n\n${JSON.stringify(
+            svg,
+            null,
+            2
+          )}`
+        );
+
+        createFile(
+          `${process.cwd()}/library/scss/utilities`,
+          `_icons.scss`,
+          `// To generate the iconic font, check the configuration file ${file}`
+        );
+        reject('error');
+      });
+  })
 
 };
+
+const buildTokens = (tokens, file, path) => {
+  return new Promise(async (resolve) => {
+    const _tokens = await tokensResolved(tokens, file, path);
+
+    if (_tokens) {
+      const _path = route.resolve(__dirname, '..', 'build', 'tokens');
+      const _file = await createFile(_path, 'tokens-parsed.json', JSON.stringify(_tokens), true);
+      if (_file) resolve(_tokens)
+    }
+  })
+
+}
+
+const generateSvgSprites = (icons, path) => {
+  return new Promise((resolve) => {
+    try {
+      const _icons = icons.map(({ data }) => data);
+      const names = icons.map(({ name }) => name);
+      const processId = n => `${names[n]}`;
+
+      svgSpreact(_icons, { tidy: true, optimize: true, processId })
+        .then(async ({ defs }) => {
+          const files = await createFile(route.resolve(path, 'images/sprites'), 'sprites.svg', defs);
+
+          if (files) {
+            messages.print('process import icons tokens finished');
+            messages.print('icon sprit svg process started');
+            messages.success(`✔︎ file ${path}/images/sprites/sprites.svg successfully created`);
+            messages.print('icon sprit svg process finished');
+            resolve(true);
+          }
+        })
+        .catch(error => console.error(error))
+    } catch (error) {
+      console.error(error)
+    }
+  })
+}
+
+const getIcons = async (data, theme, path) => {
+  return new Promise(async (resolve, reject) => {
+    messages.print('process import icons tokens started');
+
+    await figmaIconsTokens({ theme, path: route.resolve(path, 'images/icons'), file: null, key: 'icons', data })
+      .then(async (response) => {
+        const _iconsPath = route.resolve(process.cwd(), path, 'images', 'icons');
+        const existIcons = fs.existsSync(_iconsPath);
+
+        if (!existIcons) {
+          generateSvgSprites(response, path);
+        } else {
+          const icons = fs.readdirSync(_iconsPath)
+            .map(file => {
+              const _file = route.resolve(_iconsPath, file);
+              const data = fs.readFileSync(_file).toString();
+              const name = file;
+              return { data, name };
+            })
+            .map(({ name, data }) => {
+              if (response.find(file => file.name === name)) {
+                const _data = response.filter(file => file.name === name)[0].data;
+                return {
+                  name,
+                  data: _data
+                }
+              }
+
+              return {
+                name,
+                data
+              }
+            });
+
+          const sprite = await generateSvgSprites(icons, path);
+          if (sprite) resolve(true);
+        }
+      })
+      .catch(error => {
+        console.error(error)
+      })
+
+  })
+}
+
+module.exports = {
+  getIcons,
+  messages,
+  buildCore,
+  createFile,
+  buildTokens,
+  generateIconFont,
+  generateSvgSprites
+}

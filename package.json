@@ -1,7 +1,7 @@
 {
-  "name": "@front-tech/design-systems-utils",
-  "version": "1.0.3",
-  "description": "Sass utility library",
+  "name": "design-systems-utils",
+  "version": "1.0.0",
+  "description": "Builder tokens library",
   "main": "dist/index.js",
   "bin": {
     "design-systems-utils": "./index.js"
@@ -10,16 +10,8 @@
     "type": "git",
     "url": "https://github.com/front-tech/design-system-utils.git"
   },
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com"
-  },
   "scripts": {
-    "start": "node theme/app.js",
-    "build": "node .frontech/compile.js && cpx -v \"./theme/public/styles/css/*.css\" \"./docs/styles/css/\" && cpx -v \"./theme/public/scripts/*.js\" \"./docs/scripts\"",
-    "build:package": "cpx -v \"index.js\" \"./dist/\" && cpx -v \"README.md\" \"./dist/\" && cpx -v \"./library/web/**/*\" \"./dist/library/web\" && cpx -v \"./.frontech/*.js\" \"./dist/.frontech\" && cpx -v \"package.json\" \"./dist/\"",
-    "serve": "concurrently 'nodemon theme/app.js' 'npm run sass:theme-watch'",
-    "sass:theme": "sass --no-source-map theme/public/styles/scss/main.scss theme/public/styles/css/style.css",
-    "sass:theme-watch": "sass --watch --no-source-map theme/public/styles/scss/main.scss theme/public/styles/css/style.css",
+    "build": "node theme/app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Everis Front Tech Team",
@@ -37,14 +29,13 @@
     "sassdoc": "^2.7.3"
   },
   "dependencies": {
-    "autoprefixer": "^10.2.5",
     "colors": "1.4.0",
-    "cpx": "^1.5.0",
+    "figma-icons-tokens": "^1.3.1",
     "log-symbols": "^4.0.0",
     "minimist": "^1.2.5",
-    "postcss": "^8.2.9",
-    "sass": "^1.32.8",
-    "style-dictionary": "^2.10.2",
+    "style-dictionary": "^3.7.2",
+    "svg-spreact": "^1.3.2",
+    "token-transformer": "^0.0.30",
     "webfont": "^9.0.0"
   }
 }

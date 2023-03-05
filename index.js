@@ -1,45 +1,83 @@
 #!/usr/bin/env node
 
-const [fs, path, utils, styleDictionary, argv] = [
+const [fs, route, utils, styleDictionary, argv] = [
   require("fs"),
-	require("path"),
+  require("path"),
   require("./.frontech/utils"),
   require("./.frontech/styledictionary"),
-	require('minimist')(process.argv.slice(2))
+  require('minimist')(process.argv.slice(2)),
 ];
 
-const {file, key, icons} = argv;
-const existData = fs.existsSync(path.resolve(process.cwd(), file));
+const { buildArchitecture } = styleDictionary;
+const { file, theme, path, tokens } = argv;
+const { messages, createFile, generateIconFont, getIcons, buildTokens } = utils;
+
+const existData = fs.existsSync(route.resolve(process.cwd(), tokens));
+
+const createTokens = async (data) => {
+
+  const tokens = await buildTokens(data, file, path);
+
+  if (Object.keys(tokens).includes('icons')) {
+    await getIcons(tokens.icons, theme, path)
+      .then(async (response) => {
+        if (response) {
+          messages.print('process transformation icons to icon font started');
+          await generateIconFont(path)
+            .then((response) => {
+              if (response) {
+                console.log(
+                  `\nIconic font creation based on the svg files in the path ${path}`
+                );
+                response.forEach(async ({ folder, file, data }, index) => {
+                  messages.success(`✔︎ ${folder}/${file}`);
+                  createFile(folder, file, data);
+                });
+
+                messages.print('process transformation icons to icon font finished');
+                buildArchitecture(file, path);
+              }
+            })
+            .catch((error) => {
+              console.error(error);
+            })
+        }
+      })
+  } else {
+    if (tokens) buildArchitecture(file, path);
+  }
+}
 
 if (existData) {
   let data = JSON.parse(
-    fs.readFileSync(path.resolve(process.cwd(), file)).toString()
+    fs.readFileSync(route.resolve(process.cwd(), tokens)).toString()
   );
 
 
-  if(key){
-  	data = data[key] || {};
-  }
-  
+  if (theme) {
+    data = data[theme] || {};
 
-  utils.messages.print("Settings creation process started");
-
-  utils.messages.warning(
-    `Based on the information provided in the configuration file ${file} the following files are generated: \n`
-  );
-  if(icons){
-    let fontIcons = [];
-    for (const key in data.typography) {
-      if(data.typography[key].family.type === 'icons') fontIcons = {...data.typography[key].family};
-    };
-    utils.generateIconFont(fontIcons,data);
+    createTokens(data);
   } else {
-    styleDictionary.styleDictionary(data, file);
-    data.configuration.platforms.includes("scss")
-      ? utils.buildCore(data.configuration.customPath)
-      : utils.messages.warning('You have not specified any platform.'); 
-  }
+    const isThemeTokensStudio = '$metadata' in data;
+    if (isThemeTokensStudio) {
+      const themesTokensStudio = data['$metadata']['tokenSetOrder'];
 
+      const dataTokensStudio = themesTokensStudio
+        .map((alias) => ({ tokens: data[alias], alias }))
+        .reduce((acc, cur) => {
+          const { alias, tokens } = cur;
+
+          if (!acc[alias]) acc[alias] = {};
+          acc[alias] = tokens;
+
+          return acc
+        }, {});
+
+      createTokens(dataTokensStudio);
+    }
+  }
 } else {
-  utils.messages.error(`No ${file} configuration file specified`);
+  messages.error(`No ${file} configuration file specified`);
 }
+

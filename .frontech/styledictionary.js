@@ -1,43 +1,134 @@
-const [utils, symbols] = [
+const [utils, symbols, route] = [
   require("./utils"),
-  require("log-symbols")
+  require("log-symbols"),
+  require("path")
 ];
 
 
-
-module.exports.styleDictionary = (data, file) => {
+/**
+ * This function is used to build tokens platforms by styledictionary
+ * @param {string} file - name file tokens
+ * @param {string} path - path export tokens
+ */
+const styleDictionary = (file, path) => {
+  
+  const _path = route.resolve(__dirname, '..', 'build', 'tokens', 'tokens-parsed.json');
+  const buildPath = route.resolve(process.cwd(), path);
   let grid = [];
-  const checkStencilUtils = (property,type) => property.sassConfig ? {[type]: property.sassConfig[type]} : {[type]:property[type]};
+  const checkStencilUtils = (property, type) => ({ [type]: property[type] });
+
   const StyleDictionary = require("style-dictionary").extend(
-		{
-			source: [file],
-			...utils.buildPlatforms(data.configuration)
-		}
+    {
+      source: [_path],
+      platforms: {
+        scss: {
+          transformGroup: "scss",
+          buildPath: `${buildPath}/library/scss/`,
+          files: [
+            {
+              destination: "settings/_color.scss",
+              format: "css/variables",
+              filter: {
+                type: "color"
+              }
+            },
+            {
+              destination: "settings/_typography.scss",
+              format: "css/variables",
+              filter: {
+                attributes: {
+                  category: 'font',
+                }
+              },
+            },
+            {
+              destination: "settings/_grid.scss",
+              format: "custom/grid",
+              filter: {
+                type: "sizing"
+              }
+            },
+            {
+              destination: "tools/_media-queries.scss",
+              format: "custom/mediaqueries",
+              filter: {
+                type: "sizing"
+              }
+            },
+            {
+              destination: "settings/_spacing.scss",
+              format: "css/variables",
+              filter: {
+                type: "spacing"
+              }
+            }
+          ]
+        },
+      }
+    }
   );
 
-  
+  StyleDictionary.registerTransform({
+    name: 'attribute/font',
+    type: 'attribute',
+    transformer: prop => ({
+      category: prop.path[0],
+      type: prop.path[1],
+      family: prop.path[2],
+      weight: prop.path[3],
+      style: prop.path[4]
+    })
+  });
+
+  // Register a custom format to generate @font-face rules.
+  StyleDictionary.registerFormat({
+    name: 'font-face',
+    formatter: ({ dictionary: { allTokens }, options }) => {
+      const fontPathPrefix = options.fontPathPrefix || '../';
+
+      // https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/src
+      const formatsMap = {
+        'woff2': 'woff2',
+        'woff': 'woff',
+        'ttf': 'truetype',
+        'otf': 'opentype',
+        'svg': 'svg',
+        'eot': 'embedded-opentype'
+      };
+
+      console.log(allTokens);
+      return allTokens.reduce((fontList, prop) => {
+
+        return fontList;
+      }, []).join('\n');
+    }
+  });
+
   StyleDictionary.registerFormat({
     name: "custom/grid",
     formatter: (dictionary) => {
-      const property = checkStencilUtils(dictionary.properties,'grid');
+
       try {
         let result = [];
-        for (const key in property.grid) {
-          let value = property.grid[key];
-          grid.push(key);
-          layout = value.gutter.attributes.type;
-          const [gutter, offset, columns, width] = [
-            value.gutter,
-            value.offset,
-            value.columns,
-            value.width
-          ];
-          result += `${layout}:(
-              ${gutter.path[2]}:${gutter.value},
-              ${offset.path[2]}:${offset.value},
-              ${columns.path[2]}:${columns.value},
-              ${width.path[2]}:${width.value}
-            ),`;
+        for (const key in dictionary.properties.size) {
+
+          if (key !== 'scale') {
+            let value = dictionary.properties.size[key];
+            /*           grid.push(dictionary.properties.size);
+                      layout = value.gutter.attributes.type;
+                      const [gutter, offset, columns, width] = [
+                        value.gutter,
+                        value.offset,
+                        value.columns,
+                        value.width
+                      ];
+                      result += `${layout}:(
+                          ${gutter.path[2]}:${gutter.value},
+                          ${offset.path[2]}:${offset.value},
+                          ${columns.path[2]}:${columns.value},
+                          ${width.path[2]}:${width.value}
+                        ),`; */
+          }
 
         }
 
@@ -55,7 +146,6 @@ module.exports.styleDictionary = (data, file) => {
   StyleDictionary.registerFormat({
     name: "custom/mediaqueries",
     formatter: (dictionary) => {
-      const property = checkStencilUtils(dictionary.properties,'grid');
       try {
         let result = [];
         for (const key in property.grid) {
@@ -77,53 +167,13 @@ module.exports.styleDictionary = (data, file) => {
       }
     }
   });
-  StyleDictionary.registerFormat({
-    name: "custom/spacing",
-    formatter: (dictionary) => {
-      try {
-        const property = checkStencilUtils(dictionary.properties,'spacing');
-        const { increase, limit } = property.spacing;
-
-        return `/// Dynamically created map based on the configuration file. Define the attributes to create the margin and padding utility classes\n/// @type number\n/// @group spacing
-          $spacing: (
-              increase:${increase.value},
-              limit:${limit.value}
-          );
-        `;
-      } catch {
-        utils.messages.error(
-          `${symbols.error}  No margin and padding utility settings are specified. The file will be created without content. Please check the configuration file ${file}.`
-        );
-        return `// To generate the margin and padding utilities, check the configuration file ${file}\n$spacing:() !default;`;
-      }
-    }
-  });
-  StyleDictionary.registerFormat({
-    name: "custom/properties-color",
-    formatter: (dictionary) => {
-      try {
-        const property = checkStencilUtils(dictionary.properties,'color');
-        let key = Object.keys(property.color);
-        let customProperties = "\n";
-        key.forEach((item) => {
-          value = property.color[item];
-          customProperties += `--${item}:${value.value};\n`;
-        });
-        return `/// Color variables defined in the ${file} file\n///@group colors\n:root{${customProperties}};`;
-      } catch(e) {
-        utils.messages.error(
-          `${symbols.error}  No color settings have been specified. The file will be created without content. Please check the configuration file ${file}.`
-        );
-        return `// To generate the custom properties of colors, check the configuration file ${file}`;
-      }
-    }
-  });
 
   StyleDictionary.registerFormat({
     name: "custom/properties-typography",
     formatter: (dictionary) => {
       try {
-        const property = checkStencilUtils(dictionary.properties,'typography');
+        console.log(dictionary);
+        const property = checkStencilUtils(dictionary.properties, 'typography');
         let key = Object.keys(property.typography);
         let fonts = "";
         let customProperties = "";
@@ -146,7 +196,7 @@ module.exports.styleDictionary = (data, file) => {
     name: "custom/properties-icons",
     formatter: (dictionary) => {
       try {
-        const property = checkStencilUtils(dictionary.properties,'typography');
+        const property = checkStencilUtils(dictionary.properties, 'typography');
         let key = Object.keys(property.typography);
         let icon;
 
@@ -154,15 +204,16 @@ module.exports.styleDictionary = (data, file) => {
           value = property.typography[font];
           value.family.input && value.family.output
             ? (icon = {
-                value: font,
-                input: value.family.input,
-                output: value.family.output
-              })
+              value: font,
+              input: value.family.input,
+              output: value.family.output
+            })
             : utils.messages.warning(
-                `${symbols.warning}  Review the configuration file. For the creation of the iconic source you have entered the source path ${value.family.input} and the exit route ${value.family.output}`
-              );
+              `${symbols.warning}  Review the configuration file. For the creation of the iconic source you have entered the source path ${value.family.input} and the exit route ${value.family.output}`
+            );
         });
-        utils.generateIconFont(icon,data);
+        // TODO: Check build icon font
+        // utils.generateIconFont(icon,data);
       } catch (error) {
         utils.messages.error(
           `${symbols.error}  No iconic font settings have been specified. The file will be created without content. Please check the configuration file ${file}.`
@@ -173,4 +224,22 @@ module.exports.styleDictionary = (data, file) => {
   });
 
   StyleDictionary.buildAllPlatforms();
+  utils.messages.print("Settings creation process finished");
+
 };
+
+const buildArchitecture = (file, path) => {
+  utils.messages.print("Settings creation process started");
+
+  
+  utils.messages.warning(
+    `\nBased on the information provided in the configuration file ${file} the following files are generated: \n`
+  );
+  styleDictionary(file, path);
+  /* utils.buildCore(path); */
+}
+
+module.exports = {
+  styleDictionary,
+  buildArchitecture
+}
