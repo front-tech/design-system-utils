@@ -2,9 +2,9 @@
   "name": "design-systems-utils",
   "version": "1.0.0",
   "description": "Builder tokens library",
-  "main": "dist/index.js",
+  "main": "./lib/index.js",
   "bin": {
-    "design-systems-utils": "./index.js"
+    "design-systems-utils": "./bin/index.js"
   },
   "repository": {
     "type": "git",
@@ -18,7 +18,8 @@
   "license": "ISC",
   "files": [
     ".frontech/",
-    "library/"
+    "library/",
+    "index.js"
   ],
   "devDependencies": {
     "@hidoo/sassdoc-to-markdown": "^0.4.2",
@@ -30,7 +31,8 @@
   },
   "dependencies": {
     "colors": "1.4.0",
-    "figma-icons-tokens": "^1.3.1",
+    "fantasticon": "^2.0.0",
+    "figma-icons-tokens": "^1.4.0",
     "log-symbols": "^4.0.0",
     "minimist": "^1.2.5",
     "style-dictionary": "^3.7.2",

@@ -1,17 +1,22 @@
-const [fs, route, colors, translateTokens, svgSpreact, webfont, figma] = [
+
+const [fs, route, colors, translateTokens, svgSpreact, webfont, figma, argv] = [
   require("fs"),
   require('path'),
   require("colors"),
   require("./tokens"),
   require('svg-spreact'),
-  require("webfont").default,
+  require("fantasticon"),
   require('figma-icons-tokens'),
+  require('minimist')(process.argv.slice(2)),
 ];
 
+const { generateFonts, FontAssetType, OtherAssetType } = webfont;
 const { tokensResolved } = translateTokens;
 const { figmaIconsTokens } = figma;
 
-
+/**
+ * @descriptions This util is used to print types of messages
+ */
 const messages = {
   error: (string) => console.log(colors.red(string)),
   warning: (string) => console.log(colors.yellow(string)),
@@ -24,6 +29,15 @@ const messages = {
     console.log("");
   }
 }
+
+/**
+ * @description This function is used to check if exists any change in file and create him
+ * @param {String} folder 
+ * @param {String} file 
+ * @param {*} data 
+ * @param {Boolean} force 
+ * @returns {Promise}
+ */
 const handleCreateFile = (folder, file, data, force) => {
 
   return new Promise((resolve, reject) => {
@@ -59,7 +73,14 @@ const handleCreateFile = (folder, file, data, force) => {
   })
 
 }
-
+/**
+ * @description This function is used to check if exists folder and create file
+ * @param {String} folder 
+ * @param {String} file 
+ * @param {*} data 
+ * @param {Boolean} force 
+ * @returns {Promise}
+ */
 const createFile = (folder, file, data, force = false) => {
   return new Promise(async (resolve, reject) => {
     try {
@@ -84,140 +105,176 @@ const createFile = (folder, file, data, force = false) => {
   })
 };
 
+/**
+ * @description This function is used to create core utils sass
+ * @param {String} path 
+ */
 const buildCore = (path) => {
-
 
   const root = __dirname.replace('.frontech', '');
   const paths = [
     {
       root,
-      path: route.resolve(root, `library/web/utilities/`),
+      path: route.resolve(root, `library/scss/utilities/`),
       name: `_grid.scss`
     },
     {
       root,
-      path: route.resolve(root, `library/web/utilities/`),
+      path: route.resolve(root, `library/scss/utilities/`),
       name: `utilities.scss`
     },
     {
       root,
-      path: route.resolve(root, `library/web/tools/`),
+      path: route.resolve(root, `library/scss/tools/`),
       name: `_animations.scss`
     },
     {
       root,
-      path: route.resolve(root, `library/web/tools/`),
+      path: route.resolve(root, `library/scss/tools/`),
       name: `_functions.scss`
     },
     {
       root,
-      path: route.resolve(root, `library/web/base/`),
+      path: route.resolve(root, `library/scss/base/`),
       name: `_fonts.scss`
     },
     {
       root,
-      path: route.resolve(root, `library/web/base/`),
+      path: route.resolve(root, `library/scss/base/`),
       name: `_reset.scss`
     },
     {
       root,
-      path: route.resolve(root, `library/web/base/`),
+      path: route.resolve(root, `library/scss/base/`),
       name: `base.scss`
     },
     {
       root,
-      path: route.resolve(root, `library/web/settings/`),
+      path: route.resolve(root, `library/scss/settings/`),
       name: `_color.scss`
     },
     {
       root,
-      path: route.resolve(root, `library/web/settings/`),
+      path: route.resolve(root, `library/scss/settings/`),
       name: `_typography.scss`
     },
     {
       root,
-      path: route.resolve(root, `library/web/settings/`),
+      path: route.resolve(root, `library/scss/settings/`),
       name: `_general.scss`
     },
     {
       root,
-      path: route.resolve(root, `library/web/settings/`),
+      path: route.resolve(root, `library/scss/settings/`),
       name: `_general.scss`
     },
     {
       root,
-      path: route.resolve(root, `library/web/settings/`),
+      path: route.resolve(root, `library/scss/settings/`),
       name: `settings.scss`
     },
     {
       root,
-      path: route.resolve(root, `library/web/tools/`),
+      path: route.resolve(root, `library/scss/tools/`),
       name: `tools.scss`
     },
     {
       root,
-      path: route.resolve(root, `library/web/tools/`),
+      path: route.resolve(root, `library/scss/tools/`),
       name: `_rem.scss`
     },
     {
       root,
-      path: route.resolve(root, `library/web/utilities/`),
+      path: route.resolve(root, `library/scss/utilities/`),
       name: `utilities.scss`
     },
     {
       root,
-      path: route.resolve(root, `library/web/`),
+      path: route.resolve(root, `library/scss/`),
       name: `abstracts.scss`
     }
   ];
-  paths.forEach((file) => {
-
+  const files = paths.map((file) => {
+    const { name } = file;
     const origin = route.resolve(route.resolve(process.cwd(), path), file.path.replace(file.root, ''))
-    const data = fs
+    const data = `${setCreationTimeFile()}${fs
       .readFileSync(route.resolve(file.path, file.name))
-      .toString();
-
-    createFile(origin, file.name, data);
+      .toString()}`;
+    return {
+      origin,
+      name,
+      data
+    }
   });
+
+  Promise.all(files.map(({ origin, name, data }) => createFile(origin, name, data)));
 };
 
-const generateIconFont = async (path) => {
+/**
+ * This function is used to create an icon font using figma icons defined in the configuration file.
+ * @param {String} path 
+ * @returns {Promise<{folder: String; file: String; data: String}[]>}
+ */
+const generateIconFont = async (path, mediaqueries) => {
   return new Promise(async (resolve, reject) => {
-    const files = route.resolve(process.cwd(), path, 'fonts', 'icomoon');
-    const assets = route.resolve(process.cwd(), path, 'images', 'icons');
+    const outputDir = route.resolve(process.cwd(), path, 'fonts', 'icomoon');
+    const inputDir = route.resolve(process.cwd(), path, 'images', 'icons');
     const utilities = route.resolve(process.cwd(), path, 'library/scss/utilities');
     const dest = route.resolve(process.cwd(), path, 'library/scss/settings/_icons.scss');
 
-    await webfont({
-      dest,
-      files: `${assets}/*.svg`,
-      fontName: 'icomoon',
-      template: "scss",
-      templateClassName: "icon",
-      templateFontPath: "#{$font-path}",
-      fontWeight: 800
+    await generateFonts({
+      inputDir,
+      name: 'icomoon',
+      fontTypes: [
+        FontAssetType.EOT,
+        FontAssetType.TTF,
+        FontAssetType.SVG,
+        FontAssetType.WOFF,
+        FontAssetType.WOFF2,
+      ],
+      assetTypes: [OtherAssetType.SCSS],
+      formatOptions: { json: { indent: 2 } },
+      templates: {
+        'scss': route.resolve(__dirname, '..', 'templates', 'icomoon.hbs')
+      },
+      fontHeight: '800',
+      tag: 'i',
+      prefix: 'icon',
+      fontsUrl: '#{$font-path}',
     })
-      .then((result) => {
+      .then((response) => {
+        const { assetsOut } = response;
+        const { scss, svg, eot, ttf, woff2, woff } = assetsOut;
         const _files = [
           {
             folder: utilities,
             file: `_icons.scss`,
-            data: `@use '../settings/general' as *;\n${result.template}`
+            data: scss
           },
           {
-            folder: files,
-            file: `${result.config.fontName}.svg`,
-            data: result.svg
+            folder: outputDir,
+            file: `iconmoon.svg`,
+            data: svg
           },
           {
-            folder: files,
-            file: `${result.config.fontName}.ttf`,
-            data: result.ttf
+            folder: outputDir,
+            file: `iconmoon.ttf`,
+            data: ttf.toString()
           },
           {
-            folder: files,
-            file: `${result.config.fontName}.eot`,
-            data: result.eot
+            folder: outputDir,
+            file: `iconmoon.eot`,
+            data: eot.toString()
+          },
+          {
+            folder: outputDir,
+            file: `iconmoon.woff`,
+            data: woff.toString()
+          },
+          {
+            folder: outputDir,
+            file: `iconmoon.woff2`,
+            data: woff2.toString()
           }
         ]
 
@@ -225,18 +282,11 @@ const generateIconFont = async (path) => {
       })
       .catch((e) => {
         console.log(e);
-        messages.error(
-          `\nCheck the configuration file, you have established the following information:\n\n${JSON.stringify(
-            svg,
-            null,
-            2
-          )}`
-        );
 
         createFile(
           `${process.cwd()}/library/scss/utilities`,
           `_icons.scss`,
-          `// To generate the iconic font, check the configuration file ${file}`
+          `// To generate the iconic font, check the configuration file`
         );
         reject('error');
       });
@@ -283,8 +333,35 @@ const generateSvgSprites = (icons, path) => {
   })
 }
 
+const getKeyIcons = (data, tokens, themes) => {
+  const _keyIcons = themes.filter(icon => icon.includes('icon'));
+  const _icons = Object.entries(data)
+    .reduce((acc, cur) => {
+      const [key, value] = cur;
+      if (_keyIcons.includes(key)) acc['icons'] = value;
+
+      return acc;
+    }, {});
+
+  const icons = Object.entries(_icons.icons)
+    .reduce((acc, cur) => {
+      const [key, value] = cur;
+
+      if (key === 'size') acc['size'] = tokens['size'];
+      if (key !== 'size') {
+        acc['icons'] = {
+          ...acc['icons'],
+          [key]: value
+        };
+      }
+      return acc
+    }, {})
+
+  return icons;
+}
+
 const getIcons = async (data, theme, path) => {
-  return new Promise(async (resolve, reject) => {
+  return new Promise(async (resolve) => {
     messages.print('process import icons tokens started');
 
     await figmaIconsTokens({ theme, path: route.resolve(path, 'images/icons'), file: null, key: 'icons', data })
@@ -292,34 +369,39 @@ const getIcons = async (data, theme, path) => {
         const _iconsPath = route.resolve(process.cwd(), path, 'images', 'icons');
         const existIcons = fs.existsSync(_iconsPath);
 
-        if (!existIcons) {
-          generateSvgSprites(response, path);
-        } else {
-          const icons = fs.readdirSync(_iconsPath)
-            .map(file => {
-              const _file = route.resolve(_iconsPath, file);
-              const data = fs.readFileSync(_file).toString();
-              const name = file;
-              return { data, name };
-            })
-            .map(({ name, data }) => {
-              if (response.find(file => file.name === name)) {
-                const _data = response.filter(file => file.name === name)[0].data;
+        if (typeof response === 'object') {
+          if (!existIcons) {
+            generateSvgSprites(response, path);
+          } else {
+            const icons = fs.readdirSync(_iconsPath)
+              .map(file => {
+                const _file = route.resolve(_iconsPath, file);
+                const data = fs.readFileSync(_file).toString();
+                const name = file;
+                return { data, name };
+              })
+              .map(({ name, data }) => {
+                if (response.find(file => file.name === name)) {
+                  const _data = response.filter(file => file.name === name)[0].data;
+                  return {
+                    name,
+                    data: _data
+                  }
+                }
+
                 return {
                   name,
-                  data: _data
+                  data
                 }
-              }
+              });
 
-              return {
-                name,
-                data
-              }
-            });
-
-          const sprite = await generateSvgSprites(icons, path);
-          if (sprite) resolve(true);
+            const sprite = await generateSvgSprites(icons, path);
+            if (sprite) resolve(true);
+          }
+        } else {
+          resolve('no_icons');
         }
+
       })
       .catch(error => {
         console.error(error)
@@ -328,12 +410,24 @@ const getIcons = async (data, theme, path) => {
   })
 }
 
+/**
+ * @description This function is used to return config to init script design systems utils
+ * @param {{theme: string; path: string; file: string; key: string;}} args 
+ * @returns {{theme: string; path: string; file: string; key: string;}}
+ */
+const config = (args) => args ? { ...args } : argv
+
+const setCreationTimeFile = () => `/**\n* Do not edit directly\n* Generated on ${new Date().toUTCString()}\n*/\n`;
+
 module.exports = {
+  config,
   getIcons,
   messages,
   buildCore,
   createFile,
   buildTokens,
+  getKeyIcons,
   generateIconFont,
-  generateSvgSprites
+  generateSvgSprites,
+  setCreationTimeFile
 }

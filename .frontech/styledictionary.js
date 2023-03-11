@@ -1,9 +1,113 @@
-const [utils, symbols, route] = [
+
+const [fs, utils, symbols, route] = [
+  require('fs'),
   require("./utils"),
   require("log-symbols"),
   require("path")
 ];
+const { createFile } = utils;
+const setCreationTimeFile = () => `/**\n* Do not edit directly\n* Generated on ${new Date().toUTCString()}\n*/\n`;
 
+const buildCore = (path) => {
+
+  const root = __dirname.replace('.frontech', '');
+  const paths = [
+    {
+      root,
+      path: route.resolve(root, `library/scss/utilities/`),
+      name: `_grid.scss`
+    },
+    {
+      root,
+      path: route.resolve(root, `library/scss/utilities/`),
+      name: `utilities.scss`
+    },
+    {
+      root,
+      path: route.resolve(root, `library/scss/tools/`),
+      name: `_animations.scss`
+    },
+    {
+      root,
+      path: route.resolve(root, `library/scss/tools/`),
+      name: `_functions.scss`
+    },
+    {
+      root,
+      path: route.resolve(root, `library/scss/base/`),
+      name: `_fonts.scss`
+    },
+    {
+      root,
+      path: route.resolve(root, `library/scss/base/`),
+      name: `_reset.scss`
+    },
+    {
+      root,
+      path: route.resolve(root, `library/scss/base/`),
+      name: `base.scss`
+    },
+    {
+      root,
+      path: route.resolve(root, `library/scss/settings/`),
+      name: `_color.scss`
+    },
+    {
+      root,
+      path: route.resolve(root, `library/scss/settings/`),
+      name: `_typography.scss`
+    },
+    {
+      root,
+      path: route.resolve(root, `library/scss/settings/`),
+      name: `_general.scss`
+    },
+    {
+      root,
+      path: route.resolve(root, `library/scss/settings/`),
+      name: `_general.scss`
+    },
+    {
+      root,
+      path: route.resolve(root, `library/scss/settings/`),
+      name: `settings.scss`
+    },
+    {
+      root,
+      path: route.resolve(root, `library/scss/tools/`),
+      name: `tools.scss`
+    },
+    {
+      root,
+      path: route.resolve(root, `library/scss/tools/`),
+      name: `_rem.scss`
+    },
+    {
+      root,
+      path: route.resolve(root, `library/scss/utilities/`),
+      name: `utilities.scss`
+    },
+    {
+      root,
+      path: route.resolve(root, `library/scss/`),
+      name: `abstracts.scss`
+    }
+  ];
+  const files = paths.map((file) => {
+    const { name } = file;
+    const origin = route.resolve(route.resolve(process.cwd(), path), file.path.replace(file.root, ''))
+    const data = `${setCreationTimeFile()}${fs
+      .readFileSync(route.resolve(file.path, file.name))
+      .toString()}`;
+    return {
+      origin,
+      name,
+      data
+    }
+  });
+
+  Promise.all(files.map(({ origin, name, data }) => createFile(origin, name, data)));
+};
 
 /**
  * This function is used to build tokens platforms by styledictionary
@@ -11,7 +115,7 @@ const [utils, symbols, route] = [
  * @param {string} path - path export tokens
  */
 const styleDictionary = (file, path) => {
-  
+
   const _path = route.resolve(__dirname, '..', 'build', 'tokens', 'tokens-parsed.json');
   const buildPath = route.resolve(process.cwd(), path);
   let grid = [];
@@ -22,6 +126,7 @@ const styleDictionary = (file, path) => {
       source: [_path],
       platforms: {
         scss: {
+          /* transforms: ['attribute/font'], */
           transformGroup: "scss",
           buildPath: `${buildPath}/library/scss/`,
           files: [
@@ -57,7 +162,7 @@ const styleDictionary = (file, path) => {
             },
             {
               destination: "settings/_spacing.scss",
-              format: "css/variables",
+              format: "custom/spacing",
               filter: {
                 type: "spacing"
               }
@@ -84,23 +189,38 @@ const styleDictionary = (file, path) => {
   StyleDictionary.registerFormat({
     name: 'font-face',
     formatter: ({ dictionary: { allTokens }, options }) => {
-      const fontPathPrefix = options.fontPathPrefix || '../';
+      try {
+        const fontPathPrefix = options.fontPathPrefix || '../';
 
-      // https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/src
-      const formatsMap = {
-        'woff2': 'woff2',
-        'woff': 'woff',
-        'ttf': 'truetype',
-        'otf': 'opentype',
-        'svg': 'svg',
-        'eot': 'embedded-opentype'
-      };
+        // https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/src
+        const formatsMap = {
+          'woff2': 'woff2',
+          'woff': 'woff',
+          'ttf': 'truetype',
+          'otf': 'opentype',
+          'svg': 'svg',
+          'eot': 'embedded-opentype'
+        };
 
-      console.log(allTokens);
-      return allTokens.reduce((fontList, prop) => {
-
-        return fontList;
-      }, []).join('\n');
+        /* console.log(allTokens); */
+        return allTokens.reduce((fontList, prop) => {
+          const { attributes, name } = prop;
+          const { type, item } = attributes;
+          const attrs = ['family', 'weight'];
+          const sizes = ['xs', 'sm', 'md', 'lg'];
+          if (attrs.includes(type)) {
+            console.log(prop);
+            if (type === 'family' && item) {
+              if (!fontList[item]) fontList[item] = {}
+            }
+            /* if (!fontList[type]) fontList[type] = {}
+            console.log(type); */
+          }
+          return fontList;
+        }, []).join('\n');
+      } catch (error) {
+        console.error(error)
+      }
     }
   });
 
@@ -169,6 +289,33 @@ const styleDictionary = (file, path) => {
   });
 
   StyleDictionary.registerFormat({
+    name: "custom/spacing",
+    formatter: ({ dictionary: { allTokens } }) => {
+      const spacing = allTokens.reduce((acc, cur) => {
+        const { path, value, name } = cur;
+        let spacings = [];
+
+        if (path.some(type => type.includes('inset')) && /\s/g.test(value)) {
+          const values = value.split(' ');
+          const spacingCss = values.reduce((acc, cur) => (acc += cur !== 'auto' ? `calc(${cur} - 1px)` : cur), '');
+          const item = `--${name}: ${spacingCss};`
+          spacings.push(item);
+        } else {
+          const item = `--${name}: ${value};`
+          spacings.push(item);
+        }
+
+        acc.push(spacings.map(space => space))
+
+        return acc;
+      }, []).join('\n');
+
+
+      return `${setCreationTimeFile()}:root{\n${spacing}\n}`
+    }
+  });
+
+  StyleDictionary.registerFormat({
     name: "custom/properties-typography",
     formatter: (dictionary) => {
       try {
@@ -192,54 +339,26 @@ const styleDictionary = (file, path) => {
       }
     }
   });
-  StyleDictionary.registerFormat({
-    name: "custom/properties-icons",
-    formatter: (dictionary) => {
-      try {
-        const property = checkStencilUtils(dictionary.properties, 'typography');
-        let key = Object.keys(property.typography);
-        let icon;
-
-        key.forEach((font) => {
-          value = property.typography[font];
-          value.family.input && value.family.output
-            ? (icon = {
-              value: font,
-              input: value.family.input,
-              output: value.family.output
-            })
-            : utils.messages.warning(
-              `${symbols.warning}  Review the configuration file. For the creation of the iconic source you have entered the source path ${value.family.input} and the exit route ${value.family.output}`
-            );
-        });
-        // TODO: Check build icon font
-        // utils.generateIconFont(icon,data);
-      } catch (error) {
-        utils.messages.error(
-          `${symbols.error}  No iconic font settings have been specified. The file will be created without content. Please check the configuration file ${file}.`
-        );
-        return `// To generate the iconic font, check the configuration file ${file}`;
-      }
-    }
-  });
 
   StyleDictionary.buildAllPlatforms();
   utils.messages.print("Settings creation process finished");
 
 };
 
-const buildArchitecture = (file, path) => {
+const buildStyleDictionary = (file, path) => {
   utils.messages.print("Settings creation process started");
 
-  
+
   utils.messages.warning(
     `\nBased on the information provided in the configuration file ${file} the following files are generated: \n`
   );
   styleDictionary(file, path);
-  /* utils.buildCore(path); */
+  buildCore(path);
 }
+
+
 
 module.exports = {
   styleDictionary,
-  buildArchitecture
+  buildStyleDictionary
 }
