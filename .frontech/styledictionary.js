@@ -49,11 +49,6 @@ const buildCore = (path) => {
     },
     {
       root,
-      path: route.resolve(root, `library/scss/settings/`),
-      name: `_general.scss`
-    },
-    {
-      root,
       path: route.resolve(root, `library/scss/tools/`),
       name: `tools.scss`
     },
@@ -111,7 +106,7 @@ const buildCore = (path) => {
     {
       origin: route.resolve(route.resolve(process.cwd(), path, `library/scss/`, 'settings')),
       name: '_general.scss',
-      data: `${setCreationTimeFile()}/// Variable path by default of the sources defined in the .frontech.json file.\n/// To modify the path, simply set the variable in the import as follows: @use '~@front-tech/design-systems-utils/library/web/abstracts' with ($font-path:'public/assets/fonts/');\n/// @group fonts\n$font-path: "${path}/fonts/" !default;\n/// Variable that defines the reference unit in order to transform px into rem. By default 16px. To modify the size, simply set the variable in the import as follows: @use '~@front-tech/design-systems-utils/library/web/abstracts' with ($rem-baseline: 10px);\n/// @group rem\n$rem-baseline: 16px !default;\n/// Variable that transforms pixels into rem for browsers that support rem as well as if they do not. By default false.\n/// @group rem\n$rem-fallback: false !default;\n/// Variable that provides compatibility with Internet Explorer 9 and does not convert pixels into rem, as it is not compatible. By default, it is false.\n/// @group rem\n$rem-px-only: false !default;     \n`,
+      data: `${setCreationTimeFile()}/// Variable path by default of the sources defined in the .frontech.json file.\n/// To modify the path, simply set the variable in the import as follows: @use '~@front-tech/design-systems-utils/library/web/abstracts' with ($font-path:'public/assets/fonts/');\n/// @group fonts\n$font-path: "${path}/fonts/" !default;\n/// Variable that defines the reference unit in order to transform px into rem. By default 16px. To modify the size, simply set the variable in the import as follows: @use '~@front-tech/design-systems-utils/library/web/abstracts' with ($rem-baseline: 10px);\n/// @group rem\n$rem-baseline: 16px !default;\n/// Variable that transforms pixels into rem for browsers that support rem as well as if they do not. By default false.\n/// @group rem\n$rem-fallback: false !default;\n/// Variable that provides compatibility with Internet Explorer 9 and does not convert pixels into rem, as it is not compatible. By default, it is false.\n/// @group rem\n$rem-px-only: false !default;`,
       force: true
     }
   ]
