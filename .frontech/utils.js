@@ -281,7 +281,7 @@ const generateIconFont = async (path, mediaqueries) => {
         resolve(_files);
       })
       .catch((e) => {
-        console.log(e);
+        console.error(e);
 
         createFile(
           `${process.cwd()}/library/scss/utilities`,
@@ -316,9 +316,9 @@ const generateSvgSprites = (icons, path) => {
 
       svgSpreact(_icons, { tidy: true, optimize: true, processId })
         .then(async ({ defs }) => {
-          const files = await createFile(route.resolve(path, 'images/sprites'), 'sprites.svg', defs);
+          const files = await createFile(route.resolve(path, 'images/sprites'), 'sprites.svg', defs, true);
 
-          if (files) {
+          if(files){
             messages.print('process import icons tokens finished');
             messages.print('icon sprit svg process started');
             messages.success(`✔︎ file ${path}/images/sprites/sprites.svg successfully created`);
@@ -373,6 +373,7 @@ const getIcons = async (data, theme, path) => {
           if (!existIcons) {
             generateSvgSprites(response, path);
           } else {
+
             const icons = fs.readdirSync(_iconsPath)
               .map(file => {
                 const _file = route.resolve(_iconsPath, file);
@@ -381,11 +382,13 @@ const getIcons = async (data, theme, path) => {
                 return { data, name };
               })
               .map(({ name, data }) => {
-                if (response.find(file => file.name === name)) {
-                  const _data = response.filter(file => file.name === name)[0].data;
-                  return {
-                    name,
-                    data: _data
+                if (response.length) {
+                  if (response.find(file => file.name === name)) {
+                    const _data = response.filter(file => file.name === name)[0].data;
+                    return {
+                      name,
+                      data: _data
+                    }
                   }
                 }
 

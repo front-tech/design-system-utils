@@ -1,14 +1,14 @@
 {
-  "name": "design-systems-utils",
+  "name": "design-tokens-utils",
   "version": "1.0.0",
   "description": "Builder tokens library",
   "main": "./lib/index.js",
   "bin": {
-    "design-systems-utils": "./bin/index.js"
+    "design-tokens-utils": "./bin/index.js"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/front-tech/design-system-utils.git"
+    "url": "https://github.com/front-tech/design-tokens-utils.git"
   },
   "scripts": {
     "build": "node theme/app.js",
@@ -32,7 +32,7 @@
   "dependencies": {
     "colors": "1.4.0",
     "fantasticon": "^2.0.0",
-    "figma-icons-tokens": "^1.4.0",
+    "figma-icons-tokens": "^1.4.2",
     "log-symbols": "^4.0.0",
     "minimist": "^1.2.5",
     "style-dictionary": "^3.7.2",

@@ -50,27 +50,7 @@ const buildCore = (path) => {
     {
       root,
       path: route.resolve(root, `library/scss/settings/`),
-      name: `_color.scss`
-    },
-    {
-      root,
-      path: route.resolve(root, `library/scss/settings/`),
-      name: `_typography.scss`
-    },
-    {
-      root,
-      path: route.resolve(root, `library/scss/settings/`),
       name: `_general.scss`
-    },
-    {
-      root,
-      path: route.resolve(root, `library/scss/settings/`),
-      name: `_general.scss`
-    },
-    {
-      root,
-      path: route.resolve(root, `library/scss/settings/`),
-      name: `settings.scss`
     },
     {
       root,
@@ -105,8 +85,38 @@ const buildCore = (path) => {
       data
     }
   });
-
-  Promise.all(files.map(({ origin, name, data }) => createFile(origin, name, data)));
+  const _nameSettingsPartials = fs.readdirSync(route.resolve(process.cwd(), path, 'library/scss', 'settings'))
+    .filter(file => file.includes('_'));
+  const _settingsPartials = [..._nameSettingsPartials]
+    .map(file => {
+      const origin = route.resolve(route.resolve(process.cwd(), path, `library/scss/`, 'settings'))
+      const data = `${setCreationTimeFile()}${fs
+        .readFileSync(route.resolve(origin, file))
+        .toString()}`;
+      return {
+        origin,
+        name: file,
+        data
+      }
+    });
+  const _settingsPartialsRequired = [
+    {
+      origin: route.resolve(route.resolve(process.cwd(), path, `library/scss/`, 'settings')),
+      name: 'settings.scss',
+      data: `${setCreationTimeFile()}${[..._nameSettingsPartials, '_general.scss']
+        .map(file => file.replace('_', '').replace('.scss', ''))
+        .reduce((acc, current) => (acc += `@forward '${current}';\n`), '')}`,
+      force: true
+    },
+    {
+      origin: route.resolve(route.resolve(process.cwd(), path, `library/scss/`, 'settings')),
+      name: '_general.scss',
+      data: `${setCreationTimeFile()}/// Variable path by default of the sources defined in the .frontech.json file.\n/// To modify the path, simply set the variable in the import as follows: @use '~@front-tech/design-systems-utils/library/web/abstracts' with ($font-path:'public/assets/fonts/');\n/// @group fonts\n$font-path: "${path}/fonts/" !default;\n/// Variable that defines the reference unit in order to transform px into rem. By default 16px. To modify the size, simply set the variable in the import as follows: @use '~@front-tech/design-systems-utils/library/web/abstracts' with ($rem-baseline: 10px);\n/// @group rem\n$rem-baseline: 16px !default;\n/// Variable that transforms pixels into rem for browsers that support rem as well as if they do not. By default false.\n/// @group rem\n$rem-fallback: false !default;\n/// Variable that provides compatibility with Internet Explorer 9 and does not convert pixels into rem, as it is not compatible. By default, it is false.\n/// @group rem\n$rem-px-only: false !default;     \n`,
+      force: true
+    }
+  ]
+  Promise.all([...files, ..._settingsPartials, ..._settingsPartialsRequired]
+    .map(({ origin, name, data, force = false }) => createFile(origin, name, data, force)));
 };
 
 /**
@@ -139,7 +149,7 @@ const styleDictionary = (file, path) => {
             },
             {
               destination: "settings/_typography.scss",
-              format: "css/variables",
+              format: "custom/variables",
               filter: {
                 attributes: {
                   category: 'font',
@@ -166,12 +176,59 @@ const styleDictionary = (file, path) => {
               filter: {
                 type: "spacing"
               }
-            }
+            },
+            {
+              destination: "settings/_opacity.scss",
+              format: "css/variables",
+              filter: {
+                type: "opacity"
+              }
+            },
+            {
+              destination: "settings/_border.scss",
+              format: "custom/variables",
+              filter: "isBorder"
+            },
           ]
         },
       }
     }
   );
+
+  StyleDictionary.registerFilter({
+    name: 'isBorder',
+    matcher: function (token) {
+      return token.attributes.category.includes('border');
+    }
+  })
+
+  StyleDictionary.registerFormat({
+    name: 'custom/variables',
+    formatter: ({ dictionary: { allTokens }, options }) => {
+
+      const _tokens = allTokens.reduce((tokens, prop) => {
+        const { name, value } = prop;
+        const _tokenCompositionLenght = Object.values(value).length === 1;
+        const isString = typeof value === 'string';
+
+        let customVar = '';
+        let customVarAdvanced = '';
+
+        if (!isString) {
+          if (_tokenCompositionLenght) {
+            customVarAdvanced += `--${name}: ${Object.values(value).map((item) => item).join('')};\n`
+          } else {
+            customVarAdvanced += Object.entries(value)
+              .reduce((acc, [key, _value]) => (acc += `--${name}-${key}: ${_value};\n`), '')
+          }
+        }
+        customVar += `--${name}:${value};\n`;
+        return tokens += isString ? customVar : customVarAdvanced;
+      }, '');
+
+      return `:root{\n${_tokens}}`
+    }
+  });
 
   StyleDictionary.registerTransform({
     name: 'attribute/font',
