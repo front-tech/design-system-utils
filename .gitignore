@@ -1,6 +1,4 @@
 
-package-lock.json
-
 node_modules/
 docs/
 dist/
@@ -8,4 +6,6 @@ dist/
 .npmrc 
 .idea
 
+assets/
 build/
+.frontech.json

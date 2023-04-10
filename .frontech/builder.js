@@ -10,13 +10,13 @@ const { buildStyleDictionary } = styleDictionary;
 /**
  * @description This function is used to create tokens by refs to configuration file
  * @param {Object} data 
- * @param {String} file 
+ * @param {String} dictionary 
  * @param {String} path 
  * @param {String} theme 
  */
-const createTokens = async (data, file, path, theme) => {
+const createTokens = async (data, dictionary, path, theme) => {
     try {
-        const tokens = await buildTokens(data, file, path);
+        const tokens = await buildTokens(data);
         const icons = getKeyIcons(data, tokens, theme);
         if (icons) {
             await getIcons(icons.icons, theme, path)
@@ -29,24 +29,25 @@ const createTokens = async (data, file, path, theme) => {
                                     console.log(
                                         `\nIconic font creation based on the svg files in the path ${path}`
                                     );
-                                    response.forEach(async ({ folder, file, data }, index) => {
+                                    response.forEach(async ({ folder, file, data }) => {
                                         messages.success(`✔︎ ${folder}/${file}`);
                                         createFile(folder, file, data, true);
                                     });
 
                                     messages.print('process transformation icons to icon font finished');
-                                    buildStyleDictionary(file, path);
+                                    buildStyleDictionary(dictionary, path);
                                 }
                             })
                             .catch((error) => {
                                 console.error(error);
                             })
                     } else {
-                        buildStyleDictionary(file, path);
+                        buildStyleDictionary(dictionary, path);
                     }
                 })
         } else {
-            if (tokens) buildStyleDictionary(file, path);
+            console.log(dictionary, path);
+            if (tokens) buildStyleDictionary(dictionary, path);
         }
     } catch (error) {
         console.error(error)

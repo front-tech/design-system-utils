@@ -294,9 +294,9 @@ const generateIconFont = async (path, mediaqueries) => {
 
 };
 
-const buildTokens = (tokens, file, path) => {
+const buildTokens = (tokens) => {
   return new Promise(async (resolve) => {
-    const _tokens = await tokensResolved(tokens, file, path);
+    const _tokens = await tokensResolved(tokens);
 
     if (_tokens) {
       const _path = route.resolve(__dirname, '..', 'build', 'tokens');
@@ -305,6 +305,47 @@ const buildTokens = (tokens, file, path) => {
     }
   })
 
+}
+
+const handlelocalSvgSprites = async (_iconsPath, response, path) => {
+
+  return new Promise(async (resolve, reject) => {
+    const icons = fs.readdirSync(_iconsPath)
+      .map(file => {
+        const _file = route.resolve(_iconsPath, file);
+        const data = fs.readFileSync(_file).toString();
+        const name = file;
+        return { data, name };
+      })
+      .map(({ name, data }) => {
+        if (response.length) {
+          if (response.find(file => file.name === name)) {
+            const _data = response.filter(file => file.name === name)[0].data;
+            return {
+              name,
+              data: _data
+            }
+          }
+        }
+
+        return {
+          name,
+          data
+        }
+      });
+
+    if (icons.length) {
+      const sprite = await generateSvgSprites(icons, path);
+      if (sprite) resolve(true);
+    } else {
+      messages.error('✖ There are no new icons to import');
+      messages.print('process import icons tokens finished');
+      messages.print('icon sprit svg process started');
+      messages.error(`✖ There are no icons to create file ${path}/images/sprites/sprites.svg`);
+      messages.print('icon sprit svg process finished');
+      resolve(true);
+    }
+  })
 }
 
 const generateSvgSprites = (icons, path) => {
@@ -318,7 +359,7 @@ const generateSvgSprites = (icons, path) => {
         .then(async ({ defs }) => {
           const files = await createFile(route.resolve(path, 'images/sprites'), 'sprites.svg', defs, true);
 
-          if(files){
+          if (files) {
             messages.print('process import icons tokens finished');
             messages.print('icon sprit svg process started');
             messages.success(`✔︎ file ${path}/images/sprites/sprites.svg successfully created`);
@@ -328,14 +369,14 @@ const generateSvgSprites = (icons, path) => {
         })
         .catch(error => console.error(error))
     } catch (error) {
-      console.error(error)
+      console.error('error');
     }
   })
 }
 
 const getKeyIcons = (data, tokens, themes) => {
-  const _keyIcons = themes.filter(icon => icon.includes('icon'));
-  const _icons = Object.entries(data)
+  const _keyIcons = typeof themes !== 'string' && themes.filter(icon => icon.includes('icon'));
+  const _icons = _keyIcons && Object.entries(data)
     .reduce((acc, cur) => {
       const [key, value] = cur;
       if (_keyIcons.includes(key)) acc['icons'] = value;
@@ -343,21 +384,25 @@ const getKeyIcons = (data, tokens, themes) => {
       return acc;
     }, {});
 
-  const icons = Object.entries(_icons.icons)
-    .reduce((acc, cur) => {
-      const [key, value] = cur;
+  if (Object.keys(_icons).length > 0) {
+    const icons = Object.entries(_icons.icons)
+      .reduce((acc, cur) => {
+        const [key, value] = cur;
 
-      if (key === 'size') acc['size'] = tokens['size'];
-      if (key !== 'size') {
-        acc['icons'] = {
-          ...acc['icons'],
-          [key]: value
-        };
-      }
-      return acc
-    }, {})
+        if (key === 'size') acc['size'] = tokens['size'];
+        if (key !== 'size') {
+          acc['icons'] = {
+            ...acc['icons'],
+            [key]: value
+          };
+        }
+        return acc
+      }, {})
 
-  return icons;
+    return icons;
+  }
+
+  return null;
 }
 
 const getIcons = async (data, theme, path) => {
@@ -369,40 +414,24 @@ const getIcons = async (data, theme, path) => {
         const _iconsPath = route.resolve(process.cwd(), path, 'images', 'icons');
         const existIcons = fs.existsSync(_iconsPath);
 
-        if (typeof response === 'object') {
+        if (typeof response === 'object' && response.length) {
           if (!existIcons) {
             generateSvgSprites(response, path);
           } else {
-
-            const icons = fs.readdirSync(_iconsPath)
-              .map(file => {
-                const _file = route.resolve(_iconsPath, file);
-                const data = fs.readFileSync(_file).toString();
-                const name = file;
-                return { data, name };
-              })
-              .map(({ name, data }) => {
-                if (response.length) {
-                  if (response.find(file => file.name === name)) {
-                    const _data = response.filter(file => file.name === name)[0].data;
-                    return {
-                      name,
-                      data: _data
-                    }
-                  }
-                }
-
-                return {
-                  name,
-                  data
-                }
-              });
-
-            const sprite = await generateSvgSprites(icons, path);
-            if (sprite) resolve(true);
+            const icons = await handlelocalSvgSprites(_iconsPath, response, path);
+            if (icons) resolve(true);
           }
         } else {
-          resolve('no_icons');
+          if (existIcons) {
+            const icons = await handlelocalSvgSprites(_iconsPath, [], path);
+            if (icons) resolve('no_icons');
+          } else {
+            messages.print('process import icons tokens finished');
+            messages.print('icon sprit svg process started');
+            messages.error(`✖ There are no icons to create file ${path}/images/sprites/sprites.svg`);
+            messages.print('icon sprit svg process finished');
+            resolve('no_icons');
+          }
         }
 
       })

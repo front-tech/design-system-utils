@@ -1,90 +1,88 @@
 
-const [fs, utils, symbols, route] = [
+const [fs, utils, route] = [
   require('fs'),
   require("./utils"),
-  require("log-symbols"),
   require("path")
 ];
 const { createFile } = utils;
-const setCreationTimeFile = () => `/**\n* Do not edit directly\n* Generated on ${new Date().toUTCString()}\n*/\n`;
+const setCreationTimeFile = () => `// Do not edit directly\n// Generated on ${new Date().toLocaleString()}\n\n`;
 
 const buildCore = (path) => {
 
   const root = __dirname.replace('.frontech', '');
+
   const paths = [
     {
       root,
+      force: true,
+      name: `_grid.scss`,
       path: route.resolve(root, `library/scss/utilities/`),
-      name: `_grid.scss`
     },
     {
       root,
+      force: false,
+      name: `utilities.scss`,
       path: route.resolve(root, `library/scss/utilities/`),
-      name: `utilities.scss`
     },
     {
       root,
+      force: false,
+      name: `_functions.scss`,
       path: route.resolve(root, `library/scss/tools/`),
-      name: `_animations.scss`
     },
     {
       root,
-      path: route.resolve(root, `library/scss/tools/`),
-      name: `_functions.scss`
-    },
-    {
-      root,
+      force: false,
+      name: `_reset.scss`,
       path: route.resolve(root, `library/scss/base/`),
-      name: `_fonts.scss`
     },
     {
       root,
-      path: route.resolve(root, `library/scss/base/`),
-      name: `_reset.scss`
-    },
-    {
-      root,
-      path: route.resolve(root, `library/scss/base/`),
-      name: `base.scss`
-    },
-    {
-      root,
+      force: false,
+      name: `tools.scss`,
       path: route.resolve(root, `library/scss/tools/`),
-      name: `tools.scss`
     },
     {
       root,
+      force: false,
+      name: `_rem.scss`,
       path: route.resolve(root, `library/scss/tools/`),
-      name: `_rem.scss`
     },
     {
       root,
-      path: route.resolve(root, `library/scss/utilities/`),
-      name: `utilities.scss`
-    },
-    {
-      root,
+      force: false,
+      name: `abstracts.scss`,
       path: route.resolve(root, `library/scss/`),
-      name: `abstracts.scss`
     }
   ];
+
   const files = paths.map((file) => {
-    const { name } = file;
+    const { name, force } = file;
     const origin = route.resolve(route.resolve(process.cwd(), path), file.path.replace(file.root, ''))
     const data = `${setCreationTimeFile()}${fs
       .readFileSync(route.resolve(file.path, file.name))
       .toString()}`;
     return {
-      origin,
       name,
-      data
+      data,
+      force,
+      origin,
     }
   });
-  const _nameSettingsPartials = fs.readdirSync(route.resolve(process.cwd(), path, 'library/scss', 'settings'))
+  const partials = createImportDynamicPartials(path);
+
+  Promise.all([...files, ...partials]
+    .map(({ origin, name, data, force }) => createFile(origin, name, data, force)));
+
+};
+
+const createSettingsPartials = (path) => {
+  const _root = route.resolve(process.cwd(), path, 'library/scss', 'settings');
+  const _nameSettingsPartials = fs.readdirSync(_root)
     .filter(file => file.includes('_'));
   const _settingsPartials = [..._nameSettingsPartials]
     .map(file => {
-      const origin = route.resolve(route.resolve(process.cwd(), path, `library/scss/`, 'settings'))
+      const origin = route.resolve(_root)
       const data = `${setCreationTimeFile()}${fs
         .readFileSync(route.resolve(origin, file))
         .toString()}`;
@@ -96,7 +94,7 @@ const buildCore = (path) => {
     });
   const _settingsPartialsRequired = [
     {
-      origin: route.resolve(route.resolve(process.cwd(), path, `library/scss/`, 'settings')),
+      origin: route.resolve(_root),
       name: 'settings.scss',
       data: `${setCreationTimeFile()}${[..._nameSettingsPartials, '_general.scss']
         .map(file => file.replace('_', '').replace('.scss', ''))
@@ -104,15 +102,84 @@ const buildCore = (path) => {
       force: true
     },
     {
-      origin: route.resolve(route.resolve(process.cwd(), path, `library/scss/`, 'settings')),
+      origin: route.resolve(_root),
       name: '_general.scss',
-      data: `${setCreationTimeFile()}/// Variable path by default of the sources defined in the .frontech.json file.\n/// To modify the path, simply set the variable in the import as follows: @use '~@front-tech/design-systems-utils/library/web/abstracts' with ($font-path:'public/assets/fonts/');\n/// @group fonts\n$font-path: "${path}/fonts/" !default;\n/// Variable that defines the reference unit in order to transform px into rem. By default 16px. To modify the size, simply set the variable in the import as follows: @use '~@front-tech/design-systems-utils/library/web/abstracts' with ($rem-baseline: 10px);\n/// @group rem\n$rem-baseline: 16px !default;\n/// Variable that transforms pixels into rem for browsers that support rem as well as if they do not. By default false.\n/// @group rem\n$rem-fallback: false !default;\n/// Variable that provides compatibility with Internet Explorer 9 and does not convert pixels into rem, as it is not compatible. By default, it is false.\n/// @group rem\n$rem-px-only: false !default;`,
-      force: true
+      data: `${setCreationTimeFile()}/// Variable path by default of the sources defined in the .frontech.json file.\n/// To modify the path, simply set the variable in the import as follows: @use '~@front-tech/design-systems-utils/library/web/abstracts' with ($font-path:'public/assets/fonts/');\n/// @group fonts\n$font-path: "/${path}/fonts/" !default;\n/// Variable that defines the reference unit in order to transform px into rem. By default 16px. To modify the size, simply set the variable in the import as follows: @use '~@front-tech/design-systems-utils/library/web/abstracts' with ($rem-baseline: 10px);\n/// @group rem\n$rem-baseline: 16px !default;\n/// Variable that transforms pixels into rem for browsers that support rem as well as if they do not. By default false.\n/// @group rem\n$rem-fallback: false !default;\n/// Variable that provides compatibility with Internet Explorer 9 and does not convert pixels into rem, as it is not compatible. By default, it is false.\n/// @group rem\n$rem-px-only: false !default;`,
+      force: false
     }
   ]
-  Promise.all([...files, ..._settingsPartials, ..._settingsPartialsRequired]
-    .map(({ origin, name, data, force = false }) => createFile(origin, name, data, force)));
+
+  return [..._settingsPartials, ..._settingsPartialsRequired];
+}
+
+const createBasePartials = (path) => {
+  const _root = route.resolve(process.cwd(), path, 'library/scss', 'base');
+  const _nameBasePartials = fs.readdirSync(_root)
+    .filter(file => file.includes('_'));
+  const _basePartials = [..._nameBasePartials]
+    .map(file => {
+      const origin = route.resolve(_root)
+      const data = `${setCreationTimeFile()}${fs
+        .readFileSync(route.resolve(origin, file))
+        .toString()}`;
+      return {
+        origin,
+        name: file,
+        data
+      }
+    });
+
+  const _basePartialsRequired = [
+    {
+      origin: route.resolve(_root),
+      name: 'base.scss',
+      data: `${setCreationTimeFile()}@forward 'reset';\n${[..._nameBasePartials]
+        .filter(file => !file.includes('_reset.scss'))
+        .map(file => file.replace('_', '').replace('.scss', ''))
+        .reduce((acc, current) => (acc += `@forward '${current}';\n`), '')}`,
+      force: false
+    }
+  ]
+
+  return [..._basePartials, ..._basePartialsRequired];
+}
+
+const createImportDynamicPartials = (path) => {
+  const settings = createSettingsPartials(path);
+  const base = createBasePartials(path);
+
+  return [...settings, ...base];
 };
+
+/**
+ * This function is used to create custom properties by array of tokens.
+ * @param {Array<StyleDictionaryToken>} tokens 
+ * @returns {string}
+ */
+const createCustomProperties = (tokens) => {
+  return tokens.reduce((tokens, prop) => {
+    const { name, value } = prop;
+    const _tokenCompositionLenght = Object.values(value).length === 1;
+    const isString = typeof value === 'string';
+
+    let customVar = '';
+    let customVarAdvanced = '';
+
+
+    if (!isString) {
+      if (_tokenCompositionLenght) {
+        customVarAdvanced += `--${name}: ${Object.values(value).map((item) => item).join('')};\n`
+      } else {
+        customVarAdvanced += Object.entries(value)
+          .reduce((acc, [key, _value]) => (acc += `--${name}-${key}: ${_value};\n`), '')
+      }
+    }
+    customVar += `--${name}:${value};\n`;
+    return tokens += isString ? customVar : customVarAdvanced;
+  }, '');
+
+}
+
 
 /**
  * This function is used to build tokens platforms by styledictionary
@@ -123,156 +190,190 @@ const styleDictionary = (file, path) => {
 
   const _path = route.resolve(__dirname, '..', 'build', 'tokens', 'tokens-parsed.json');
   const buildPath = route.resolve(process.cwd(), path);
-  let grid = [];
-  const checkStencilUtils = (property, type) => ({ [type]: property[type] });
-
+  const dictionary = file && fs.readFileSync(route.resolve(process.cwd(), file)).toString();
+  const scss = {
+    scss: {
+      transformGroup: "scss",
+      buildPath: `${buildPath}/library/scss/`,
+      files: [
+        {
+          destination: "settings/_color.scss",
+          format: "css/variables",
+          filter: {
+            type: "color"
+          }
+        },
+        {
+          destination: "settings/_typography.scss",
+          format: "custom/variables-fonts",
+          filter: {
+            attributes: {
+              category: 'font',
+            }
+          },
+        },
+        {
+          destination: "base/_fonts.scss",
+          format: "custom/fonts",
+          filter: ({ type }) => ['typography', 'fontWeights'].includes(type),
+        },
+        {
+          destination: "base/_font-face.scss",
+          format: "custom/font-face",
+          filter: ({ type }) => ['fontFamilies', 'fontWeights'].includes(type),
+        },
+        {
+          destination: "settings/_grid.scss",
+          format: "custom/grid",
+          filter: {
+            type: "sizing"
+          }
+        },
+        {
+          destination: "tools/_media-queries.scss",
+          format: "custom/mediaqueries",
+          filter: {
+            type: "sizing"
+          }
+        },
+        {
+          destination: "settings/_opacity.scss",
+          format: "css/variables",
+          filter: {
+            type: "opacity"
+          }
+        },
+        {
+          destination: "settings/_border.scss",
+          format: "custom/variables",
+          filter: ({ attributes }) => attributes.category.includes('border')
+        },
+      ]
+    }
+  };
+  const platforms = dictionary ? { scss, ...(JSON.parse(dictionary)) } : scss;
   const StyleDictionary = require("style-dictionary").extend(
     {
       source: [_path],
-      platforms: {
-        scss: {
-          /* transforms: ['attribute/font'], */
-          transformGroup: "scss",
-          buildPath: `${buildPath}/library/scss/`,
-          files: [
-            {
-              destination: "settings/_color.scss",
-              format: "css/variables",
-              filter: {
-                type: "color"
-              }
-            },
-            {
-              destination: "settings/_typography.scss",
-              format: "custom/variables",
-              filter: {
-                attributes: {
-                  category: 'font',
-                }
-              },
-            },
-            {
-              destination: "settings/_grid.scss",
-              format: "custom/grid",
-              filter: {
-                type: "sizing"
-              }
-            },
-            {
-              destination: "tools/_media-queries.scss",
-              format: "custom/mediaqueries",
-              filter: {
-                type: "sizing"
-              }
-            },
-            {
-              destination: "settings/_spacing.scss",
-              format: "custom/spacing",
-              filter: {
-                type: "spacing"
-              }
-            },
-            {
-              destination: "settings/_opacity.scss",
-              format: "css/variables",
-              filter: {
-                type: "opacity"
-              }
-            },
-            {
-              destination: "settings/_border.scss",
-              format: "custom/variables",
-              filter: "isBorder"
-            },
-          ]
-        },
-      }
+      platforms
     }
   );
 
-  StyleDictionary.registerFilter({
-    name: 'isBorder',
-    matcher: function (token) {
-      return token.attributes.category.includes('border');
+  StyleDictionary.registerFormat({
+    name: 'custom/variables-fonts',
+    formatter: ({ dictionary: { allTokens } }) => {
+
+      const filterTokens = allTokens.filter(({ type }) => !['fontFamilies', 'typography'].includes(type));
+      const _tokens = createCustomProperties(filterTokens);
+
+      return `${setCreationTimeFile()}:root{\n${_tokens}}`
     }
-  })
+  });
+
 
   StyleDictionary.registerFormat({
     name: 'custom/variables',
-    formatter: ({ dictionary: { allTokens }, options }) => {
+    formatter: ({ dictionary: { allTokens } }) => {
 
-      const _tokens = allTokens.reduce((tokens, prop) => {
-        const { name, value } = prop;
-        const _tokenCompositionLenght = Object.values(value).length === 1;
-        const isString = typeof value === 'string';
+      const _tokens = createCustomProperties(allTokens);
 
-        let customVar = '';
-        let customVarAdvanced = '';
-
-        if (!isString) {
-          if (_tokenCompositionLenght) {
-            customVarAdvanced += `--${name}: ${Object.values(value).map((item) => item).join('')};\n`
-          } else {
-            customVarAdvanced += Object.entries(value)
-              .reduce((acc, [key, _value]) => (acc += `--${name}-${key}: ${_value};\n`), '')
-          }
-        }
-        customVar += `--${name}:${value};\n`;
-        return tokens += isString ? customVar : customVarAdvanced;
-      }, '');
-
-      return `:root{\n${_tokens}}`
+      return `${setCreationTimeFile()}:root{\n${_tokens}}`
     }
   });
 
-  StyleDictionary.registerTransform({
-    name: 'attribute/font',
-    type: 'attribute',
-    transformer: prop => ({
-      category: prop.path[0],
-      type: prop.path[1],
-      family: prop.path[2],
-      weight: prop.path[3],
-      style: prop.path[4]
-    })
+  StyleDictionary.registerFormat({
+    name: 'custom/fonts',
+    formatter: ({ dictionary: { allTokens } }) => {
+      const _weights = allTokens
+        .filter(({ type }) => type === 'fontWeights')
+        .reduce((acc, { path, value }) => ({ ...acc, [value]: [path[path.length - 1]] }), {});
+
+      const _tokens = allTokens
+        .filter(({ type }) => type === 'typography')
+        .reduce((classes, prop) => {
+          const { value, name } = prop;
+          const { fontFamily, fontWeight, fontSize, letterSpacing, lineHeight } = value;
+
+          const pathFolder = route.resolve(process.cwd(), path, 'fonts', fontFamily.split(',')[0]);
+          const isFolder = fs.existsSync(pathFolder);
+          const [_font, ...callbacks] = fontFamily.split(',');
+          const _fontName = `'${_font}-${_weights[fontWeight]}'`.toLocaleLowerCase();
+          const _fontFamily = `${_fontName},${callbacks.join(',')}`
+          const isIcon = prop.path.includes('icon');
+          const _classesIcon = `\nfont-size: ${fontSize};\nline-height: ${lineHeight};\n`;
+          const _classesFont = `\nfont-family:${_fontFamily};\nfont-weight:${fontWeight};\nfont-size:${fontSize};\nletter-spacing: ${letterSpacing};\nline-height: ${lineHeight};\n`;
+          const _properties = isIcon ? _classesIcon : _classesFont;
+
+          const classCSS = `\n.${name} {${_properties}}\n`;
+          classes += !isFolder && !isIcon ? `\n// The font-face of this font has not been created as it is not found in the project.\n// Include the font file in /${path}/fonts. ${classCSS}` : classCSS;
+
+          return classes;
+        }, '');
+
+      return `${setCreationTimeFile()}${_tokens}`
+    }
   });
 
-  // Register a custom format to generate @font-face rules.
   StyleDictionary.registerFormat({
-    name: 'font-face',
-    formatter: ({ dictionary: { allTokens }, options }) => {
-      try {
-        const fontPathPrefix = options.fontPathPrefix || '../';
+    name: 'custom/font-face',
+    formatter: ({ dictionary: { allTokens } }) => {
 
-        // https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/src
-        const formatsMap = {
-          'woff2': 'woff2',
-          'woff': 'woff',
-          'ttf': 'truetype',
-          'otf': 'opentype',
-          'svg': 'svg',
-          'eot': 'embedded-opentype'
-        };
-
-        /* console.log(allTokens); */
-        return allTokens.reduce((fontList, prop) => {
-          const { attributes, name } = prop;
-          const { type, item } = attributes;
-          const attrs = ['family', 'weight'];
-          const sizes = ['xs', 'sm', 'md', 'lg'];
-          if (attrs.includes(type)) {
-            console.log(prop);
-            if (type === 'family' && item) {
-              if (!fontList[item]) fontList[item] = {}
-            }
-            /* if (!fontList[type]) fontList[type] = {}
-            console.log(type); */
-          }
-          return fontList;
-        }, []).join('\n');
-      } catch (error) {
-        console.error(error)
+      const _formats = {
+        '.woff': 'woff',
+        '.woff2': 'woff2',
+        '.ttf': 'truetype',
+        '.otf': 'opentype',
+        '.svg': 'svg',
       }
+
+      const _families = allTokens
+        .filter(({ type }) => type === 'fontFamilies')
+        .map(({ value }) => value.split(',')[0]);
+
+      const _weights = allTokens
+        .filter(({ type }) => type === 'fontWeights')
+        .reduce((acc, { path, value }) => ({ ...acc, [path[path.length - 1]]: value }), {});
+
+      const _fonts = _families
+        .map((family) => {
+          return Object.entries(_weights).reduce((acc, [key, value]) => {
+            const name = `${family}-${key}`;
+            const pathFolder = route.resolve(process.cwd(), path, 'fonts', family);
+            const isFolder = fs.existsSync(pathFolder);
+            const files = isFolder && fs.readdirSync(pathFolder)
+            const isFile = files.length && files.some((file) => file.toLocaleLowerCase().includes(name.toLocaleLowerCase()));
+            const file = files.length && files
+              .map((file) => file.replace(/\.[^/.]+$/, "").toLocaleLowerCase() === name.toLocaleLowerCase() ? file : null)
+              .filter(Boolean);
+
+            if (Boolean(isFile)) {
+              return ({ ...acc, [file]: value })
+            }
+          }, {})
+        })
+        .filter(Boolean)
+
+
+      const _tokens = _fonts.reduce((fontFace, prop, index) => {
+        fontFace += Object.entries(prop)
+          .filter(Boolean)
+          .reduce((acc, [key, value]) => {
+            const name = key.split(',');
+            const _name = name[0].replace(/\.[^/.]+$/, "").toLocaleLowerCase();
+            const extensions = name
+              .reduce((acc, value) => {
+                const _extension = new RegExp(/\.[^/.]+$/).exec(value)[0];
+                return acc += `url('#{$font-path}/${_families[index]}/${value}') format('${_formats[_extension]}'),\n`;
+              }, '');
+
+            return acc += `\n\n@font-face {\nfont-family: '${_name}';\nfont-weight: ${value};\nsrc: ${extensions}}\n`;
+          }, '');
+
+        return fontFace
+      }, '');
+
+      const content = _tokens.length ? `@use '../settings/general' as *;${_tokens}` : `\n// Please include the source file in the ${path}/fonts to create the font-faces.`;
+      return `${setCreationTimeFile()}${content}`
     }
   });
 
@@ -309,7 +410,7 @@ const styleDictionary = (file, path) => {
               );`;
       } catch {
         utils.messages.error(
-          `${symbols.error}  No grid utility configuration specified. The file will be created without content. Please check the configuration file ${file}.`
+          `✖ No grid utility configuration specified. The file will be created without content. Please check the configuration file ${file}.`
         );
         return `// To generate the grid configuration, check the configuration file ${file}\n$breakpoints:()!default;`;
       }
@@ -333,61 +434,9 @@ const styleDictionary = (file, path) => {
 
       } catch (err) {
         utils.messages.error(
-          `${symbols.error}  No grid utility configuration specified. The file will be created without content. Please check the configuration file ${file}.`
+          `✖ No grid utility configuration specified. The file will be created without content. Please check the configuration file ${file}.`
         );
         return `// To generate the mixin of mediaqueries, check the configuration file ${file}`;
-      }
-    }
-  });
-
-  StyleDictionary.registerFormat({
-    name: "custom/spacing",
-    formatter: ({ dictionary: { allTokens } }) => {
-      const spacing = allTokens.reduce((acc, cur) => {
-        const { path, value, name } = cur;
-        let spacings = [];
-
-        if (path.some(type => type.includes('inset')) && /\s/g.test(value)) {
-          const values = value.split(' ');
-          const spacingCss = values.reduce((acc, cur) => (acc += cur !== 'auto' ? `calc(${cur} - 1px)` : cur), '');
-          const item = `--${name}: ${spacingCss};`
-          spacings.push(item);
-        } else {
-          const item = `--${name}: ${value};`
-          spacings.push(item);
-        }
-
-        acc.push(spacings.map(space => space))
-
-        return acc;
-      }, []).join('\n');
-
-
-      return `${setCreationTimeFile()}:root{\n${spacing}\n}`
-    }
-  });
-
-  StyleDictionary.registerFormat({
-    name: "custom/properties-typography",
-    formatter: (dictionary) => {
-      try {
-        console.log(dictionary);
-        const property = checkStencilUtils(dictionary.properties, 'typography');
-        let key = Object.keys(property.typography);
-        let fonts = "";
-        let customProperties = "";
-
-        key.forEach((font) => {
-          value = property.typography[font];
-          fonts += `\n${font}: (\nname:${value.family.value},\nweight:${value.weight.value},\nstyle:${value.style.value}\n),`;
-          customProperties += `--${font}:${value.family.value};\n`;
-        });
-        return `/// Font map defined in the ${file} file\n///@group fonts\n$fonts:(${fonts});\n\n/// Custom properties cuyo valor es el nombre aportado en el fichero ${file}\n/// @group fonts\n:root{\n${customProperties}};`;
-      } catch (error) {
-        utils.messages.error(
-          `${symbols.error}  No font settings have been specified. The file will be created without content. Please check the configuration file ${file}.`
-        );
-        return `// To generate the text sources, check the configuration file ${file}\n$fonts:() !default;`;
       }
     }
   });
@@ -398,12 +447,16 @@ const styleDictionary = (file, path) => {
 };
 
 const buildStyleDictionary = (file, path) => {
+  const _tokens = route.resolve(process.cwd(), path, 'library/scss', 'settings');
+  const isSettings = fs.existsSync(_tokens);
   utils.messages.print("Settings creation process started");
 
 
   utils.messages.warning(
     `\nBased on the information provided in the configuration file ${file} the following files are generated: \n`
   );
+
+  if (isSettings) fs.rmSync(_tokens, { recursive: true });
   styleDictionary(file, path);
   buildCore(path);
 }
@@ -414,3 +467,4 @@ module.exports = {
   styleDictionary,
   buildStyleDictionary
 }
+
